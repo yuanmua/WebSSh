@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <title>WebSSH</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../css/xterm.css"/>
+    <link rel="stylesheet" href="../css/webssh.css"/>
+</head>
+<body>
+<form action="javascript:" class="form-inline" id="ssh-service">
+    <div>服务器SSH参数：</div>
+    <label for="host">IP</label>
+    <input type="text" id="host" name="host" value="127.0.0.1">
+    <label for="port">端口</label>
+    <input type="text" id="port" name="port" value="22">
+    <label for="username">登录名</label>
+    <input type="text" id="username" name="username" value="star">
+    <label for="password">密码</label>
+    <input type="text" id="password" name="password" value="star">
+    <button type="submit">连接到SSH</button>
+    <button type="button" id="close">关闭连接</button>
+</form>
+<div id="terminal"></div>
+</body>
+</html>
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../js/xterm.js" charset="utf-8"></script>
+<script src="../js/webssh.js" charset="utf-8"></script>
+<script>
+    let client = new WSSHClient();
+    let term = undefined
+    init(client)
+    $('#ssh-service').submit(function () {
+        connect(client, {
+            operate: 'connect',
+            host: $('#ssh-service [name="host"]').val(),//IP
+            port: $('#ssh-service [name="port"]').val(),//端口号
+            username: $('#ssh-service [name="username"]').val(),//用户名
+            password: $('#ssh-service [name="password"]').val()//密码
+        });
+        return false
+    })
+    $('#ssh-service #close').click(function () {
+        close(client)
+    })
+
+    function init(client) {
+        term = new Terminal({
+            cols: 97,
+            rows: 37,
+            cursorBlink: true, // 光标闪烁
+            cursorStyle: "block", // 光标样式  null | 'block' | 'underline' | 'bar'
+            // scrollback: 800, // 回滚
+            tabStopWidth: 8, // 制表宽度
+            screenKeys: true
+        });
+        term.open(document.getElementById('terminal'));
+        term.on('data', function (data) {
+            //键盘输入时的回调函数
+            client.sendClientData(data);
+        });
+    }
+
+    function connect(client, options) {
+        //执行连接操作
+        client.connect({
+            onError: function (error) {
+                //连接失败回调
+                term.write('错误: ' + error + '\r\n');
+            },
+            onConnect: function () {
+                //连接回调
+                client.sendInitData(options);
+                //在页面上显示连接中...
+                term.write('连接中...\r\n');
+            },
+            onClose: function () {
+                //连接关闭回调
+                term.write("\r\n连接已关闭\r\n");
+            },
+            onData: function (data) {
+                //收到数据时回调
+                term.write(data);
+            }
+        });
+    }
+
+    function close(client) {
+        client.close()
+    }
+</script>

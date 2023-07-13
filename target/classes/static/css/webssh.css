@@ -1,0 +1,9 @@
+body{
+    margin: 0;
+}
+
+.form-inline{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}

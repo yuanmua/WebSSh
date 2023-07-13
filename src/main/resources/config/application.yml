@@ -1,0 +1,11 @@
+server:
+  port: 8000
+#spring:
+#  mvc:
+#    view:
+#      prefix: /page/
+#      suffix: .html
+com:
+  star:
+    webssh:
+      web-socket-handler: /webssh

@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "com.star.webssh",
+      "type": "com.star.webssh.config.WebSSHParameter",
+      "sourceType": "com.star.webssh.config.WebSSHParameter"
+    }
+  ],
+  "properties": [
+    {
+      "name": "com.star.webssh.web-socket-handler",
+      "type": "java.lang.String",
+      "sourceType": "com.star.webssh.config.WebSSHParameter"
+    }
+  ],
+  "hints": []
+}
