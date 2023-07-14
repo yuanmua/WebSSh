@@ -59,16 +59,11 @@ export default {
     data (){
         return {
             options:{
-              /*  operate: 'connect',
+                operate: 'connect',
                 host: '192.168.130.128',//IP
                 port: 22,//端口号
                 username: 'yuanmua',//用户名
-                password: '123s123s'//密码*/
-                operate: 'connect',
-                host: '43.248.189.18',//IP
-                port: 51010,//端口号
-                username: 'administrator',//用户名
-                password: '1066196112_vps'//密码
+                password: '123s123s'//密码
             }
         }
 
