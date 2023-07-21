@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
+import java.time.LocalDateTime;
+
 /**
  * WebSSH的WebSocket处理器
  */
@@ -27,6 +29,8 @@ public class WebSSHWebSocketHandler implements WebSocketHandler {
         logger.info("用户:{},连接WebSSH", webSocketSession.getAttributes().get(ConstantPool.USER_UUID_KEY));
         //调用初始化连接
         webSSHService.initConnection(webSocketSession);
+
+
     }
 
     /**
@@ -41,6 +45,18 @@ public class WebSSHWebSocketHandler implements WebSocketHandler {
             logger.info("用户:{},发送命令:{}", webSocketSession.getAttributes().get(ConstantPool.USER_UUID_KEY), webSocketMessage.toString());
             //调用service接收消息
             webSSHService.recvHandle(((TextMessage) webSocketMessage).getPayload(), webSocketSession);
+            //创建日志对象
+            String user = webSocketSession.getAttributes().get(ConstantPool.USER_UUID_KEY).toString();
+            String url = webSocketSession.getUri().toString();
+            String userId = webSocketSession.getId();
+
+            String localAddress = webSocketSession.getLocalAddress().getAddress().toString();
+            String remoteAddress = webSocketSession.getRemoteAddress().toString();
+            String operator = webSocketMessage.toString();
+            logger.info("localAddress{}",localAddress);
+            logger.info("remoteAddress{}",remoteAddress);
+            SshInfo operatorInfo = new SshInfo(null,userId, user,operator, url,localAddress, remoteAddress, LocalDateTime.now(), LocalDateTime.now());
+            infoService.save(operatorInfo);
         } else if (webSocketMessage instanceof BinaryMessage) {
 
         } else if (webSocketMessage instanceof PongMessage) {
