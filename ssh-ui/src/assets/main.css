@@ -1,4 +1,7 @@
 @import './base.css';
+@import './common.css';
+
+
 body{
   margin: 0;
 }

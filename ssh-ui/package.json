@@ -8,9 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "element-plus": "^2.3.7",
+    "axios": "^1.4.0",
+    "crypto-js": "^4.1.1",
+    "element-plus": "^2.3.8",
     "jquery": "^3.4.1",
     "vue": "^3.3.2",
+    "vue-router": "^4.2.4",
     "xterm": "^5.2.1"
   },
   "devDependencies": {
