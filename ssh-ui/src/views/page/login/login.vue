@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { loginApi } from '../../../api/login'
 export default {
   name: "loginVive",
   data() {
@@ -65,13 +66,14 @@ export default {
   methods: {
     async handleLogin() {
       console.log(123)
+      // window.location.href= '/#/index'
       this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
           this.loading = true
           let res = await loginApi(this.loginForm)
           if (String(res.code) === '1') {//1表示登录成功
             localStorage.setItem('userInfo',JSON.stringify(res.data))
-            window.location.href= '/backend/index.html'
+            window.location.href= '/index'
           } else {
             this.$message.error(res.msg)
             this.loading = false

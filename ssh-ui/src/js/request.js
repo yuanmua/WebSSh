@@ -1,6 +1,5 @@
 import axios from "axios";
 
-(function (win) {
   axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
   // 创建axios实例
   const service = axios.create({
@@ -78,7 +77,5 @@ import axios from "axios";
         duration: 5 * 1000
       })
       return Promise.reject(error)
-    }
-  )
-  win.$axios = service
-})(window);
+    })
+export default service

@@ -15,18 +15,12 @@ import LoginVive from "./views/page/login/login.vue";
  <div class="terminal-main">
   <Terminal></Terminal>
  </div>-->
-<!--  <router-view></router-view>-->
+  <router-view></router-view>
+<!--
 <loginVive></loginVive>
+-->
 </template>
 
 <style scoped>
-.sidebar{
- float: left;
- width: 20%;
-}
-.terminal-main{
 
- float: left;
- width: 60%;
-}
 </style>

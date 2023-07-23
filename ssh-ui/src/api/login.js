@@ -1,12 +1,14 @@
-function loginApi(data) {
-  return $axios({
-    'url': '/employee/login',
-    'method': 'post',
-    data
+import request from "../../src/js/request";
+
+export function loginApi(data) {
+  return request({
+    url: '/employee/login',
+    method: 'post',
+    data: data
   })
 }
 
-function logoutApi(){
+export function logoutApi(){
   return $axios({
     'url': '/employee/logout',
     'method': 'post',
