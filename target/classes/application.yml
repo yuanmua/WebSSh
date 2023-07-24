@@ -1,0 +1,21 @@
+server:
+  port: 8000
+#spring:
+#  mvc:
+#    view:
+#      prefix: /page/
+#      suffix: .html
+com:
+  star:
+    webssh:
+      web-socket-handler: /webssh
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ssh_project
+    username: root
+    password: abc123
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
