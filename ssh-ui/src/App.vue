@@ -9,12 +9,12 @@ import LoginVive from "./views/page/login/login.vue";
 <template><!--
  <ElFormAbc></ElFormAbc>
  <FormView></FormView>-->
-<!-- <div class="sidebar">
-  <MenuSidebar></MenuSidebar>
- </div>
- <div class="terminal-main">
-  <Terminal></Terminal>
- </div>-->
+<!-- <div class="sidebar">-->
+<!--  <MenuSidebar></MenuSidebar>-->
+<!-- </div>-->
+<!-- <div class="terminal-main">-->
+<!--  <Terminal></Terminal>-->
+<!-- </div>-->
   <router-view></router-view>
 <!--
 <loginVive></loginVive>
