@@ -35,7 +35,8 @@ public class EmployeeController {
      */
     @PostMapping("/login")
     public R<Employee> login(HttpServletRequest request, @RequestBody Employee emp) {
-        System.out.println("qqq");
+
+        System.out.println(emp);
         //1 将页面提交的用户名username进行md5加密处理
         String password = emp.getPassword();
         password = DigestUtils.md5DigestAsHex(password.getBytes());
@@ -46,10 +47,13 @@ public class EmployeeController {
         Employee emp1 = empService.getOne(lqw);
         //3如果没有查到返回登陆失败结果
         if (emp1 == null) {
+            System.out.println("登陆失败1");
+            System.out.println("登陆失败1");
             return R.error("登陆失败");
         }
         //4进行密码比对
         if (!emp1.getPassword().equals(password)) {
+            System.out.println("登陆失败2");
             return R.error("登陆失败");
         }
         //5 查看员工状态，如果是已禁用，返回已禁用结果

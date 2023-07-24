@@ -13,11 +13,18 @@
           <el-form-item prop="password">
             <el-input v-model="loginForm.password" type="password" placeholder="密码"/>
           </el-form-item>
-          <el-form-item style="width:100%;">
+          <el-form-item style="width:100%;margin-bottom: 10px;">
             <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
                        @click.native.prevent="handleLogin">
               <span v-if="!loading">登录</span>
               <span v-else>登录中...</span>
+            </el-button>
+          </el-form-item>
+
+          <el-form-item style="width:100%;">
+            <el-button  class="login-btn" size="default" type="primary" style="width:100%;"
+                        onclick='window.open("/#/register")'>
+              <span>注册</span>
             </el-button>
           </el-form-item>
         </el-form>
@@ -73,7 +80,7 @@ export default {
           let res = await loginApi(this.loginForm)
           if (String(res.code) === '1') {//1表示登录成功
             localStorage.setItem('userInfo', JSON.stringify(res.data))
-            window.location.href = '/index'
+            window.location.href = '/#/index'
           } else {
             this.$message.error(res.msg)
             this.loading = false
@@ -164,12 +171,14 @@ export default {
   border-radius: 17px;
   padding: 11px 20px !important;
   margin-top: 10px;
+  margin-right: 0;
   font-weight: 500;
   font-size: 14px;
   border: 0;
   background-color: #ffc200;
 }
 .login-btn:hover,
+
 .login-btn:focus {
   /* background: #FFC200; */
   /* color: #ffffff; */
