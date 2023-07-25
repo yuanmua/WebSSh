@@ -12,7 +12,7 @@ export function loginApi(data) {
 // 注册方法
 export function register(data) {
   return request({
-    url: '/register',
+    url: '/employee/register',
     headers: {
       isToken: false
     },

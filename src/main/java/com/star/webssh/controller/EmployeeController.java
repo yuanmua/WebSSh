@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 /**
  * @author Mr.Wang
@@ -80,4 +81,29 @@ public class EmployeeController {
         return R.success("退出成功");
     }
 
+    @PostMapping("/register")
+    public R<String> register(@RequestBody Employee employee){
+        log.info("注册");
+        //将密码加密
+        employee.setPassword(DigestUtils.md5DigestAsHex(employee.getPassword().getBytes()));
+
+        //设置用户创建时间和更新时间
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+
+
+
+        //这些字段均无用，应当在数据库中删去
+        employee.setCreateUser((long)1);
+        employee.setUpdateUser((long)1);
+        employee.setName("这个字段应该删去");
+        employee.setSex("1");
+        employee.setStatus(1);
+        employee.setPhone("13812312312");
+        employee.setIdNumber("110101199001010047");
+
+        empService.save(employee);
+
+        return R.success("注册成功");
+    }
 }
