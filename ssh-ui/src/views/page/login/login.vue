@@ -80,7 +80,6 @@ export default {
           this.loading = true
           let res = await login(this.loginForm.username,this.loginForm.password)
           store.commit('SET_ID',res.data.id)
-          console.log(this.$store.state.user.id)
           if (String(res.code) === '1') {//1表示登录成功
             localStorage.setItem('userInfo', JSON.stringify(res.data))
             window.location.href = '/#/index'

@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import {updateUser} from "@/api/SSH_c";
+import {addSSh, updateUser} from "@/api/SSH_c";
 import Terminal from "@/views/Terminal.vue";
 
 export default {
@@ -112,6 +112,7 @@ export default {
       title: "",
       // 表单参数
       form: {
+        ID: this.$store.state.user.id,
         sshName:'',
         sshHost:'',
         sshClass:'',
@@ -154,8 +155,9 @@ export default {
   methods: {
     /** 新增按钮操作 */
     handleAdd() {
-        this.open = true;
-        this.title = "添加服务器";
+      this.ID = this.$store.state.user.id;
+      this.open = true;
+      this.title = "添加服务器";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -187,7 +189,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           // if (this.form.userId != undefined) {
-            updateUser(this.form).then(response => {
+          addSSh(this.form).then(response => {
               // this.$modal.msgSuccess("修改成功");
               this.open = false;
               // this.getList(); 记得以后加上

@@ -48,7 +48,7 @@ export default {
   -webkit-transition: width .28s;
   transition: width .28s;
   width: 200px!important;
-  background-color: #c19465;
+  background-color: rgb(52, 55, 68);
   height: 100%;
   position: fixed;
   font-size: 0;
