@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import MenuSidebar from "./element/MenuSidebar.vue";
+import MenuSidebar from "../../element/MenuSidebar.vue";
 import Terminal from "./Terminal.vue";
 
 export default {

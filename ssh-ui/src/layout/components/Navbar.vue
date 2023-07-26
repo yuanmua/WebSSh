@@ -1,12 +1,13 @@
 <template>
   <div class="navbar">
-
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
   </div>
 </template>
 
 <script>
 // import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import Hamburger from '@/components/Hamburger/index.vue'
+import {mapGetters} from "vuex";
 // import RuoYiGit from '@/components/RuoYi/Git/index.vue'
 
 export default {
@@ -14,7 +15,17 @@ export default {
     Hamburger,
     // RuoYiGit,
   },
+  computed: {
+    ...mapGetters([
+      'sidebar',
+    ]),
+  },
+  methods: {
+    toggleSideBar() {
+      this.$store.dispatch('app/toggleSideBar')
+    },
 
+  }
 }
 </script>
 

@@ -32,7 +32,6 @@
         >删除</el-button>
       </el-col>
     </el-row>
-      <Terminal></Terminal>
 
 
     <!-- 添加或修改用户配置对话框 -->
@@ -96,8 +95,8 @@
 </template>
 
 <script>
-import {addSSh, updateUser} from "@/api/SSH_c";
-import Terminal from "@/views/Terminal.vue";
+import {addSSh, listSSh, updateUser} from "@/api/SSH_c";
+import Terminal from "@/views/page/terminal/Terminal.vue";
 
 export default {
   name: "Main",
@@ -110,6 +109,27 @@ export default {
       multiple: true,
       // 弹出层标题
       title: "",
+      // 服务器数据
+      userList:  [
+        {
+          "sshName": "我的",
+          "sshHost": "192.168.1.1",
+          "sshClass": "123",
+          "sshPort": "1234",
+          "sshUserName": "yuanmua",
+          "sshPassword": "123123",
+          "remark": "没有"
+        },
+        {
+          "sshName": "我的2",
+          "sshHost": "192.168.10.1",
+          "sshClass": "1231",
+          "sshPort": "1234",
+          "sshUserName": "yuanmu",
+          "sshPassword": "123123zwy",
+          "remark": "没有"
+        }
+      ],
       // 表单参数
       form: {
         ID: this.$store.state.user.id,
@@ -153,6 +173,15 @@ export default {
     }
   },
   methods: {
+    /** 查询服务器列表 */
+    getList() {
+      listSSh(this.$store.state.user.id).then(response => {
+            this.userList = response.rows;
+          }
+      );
+    },
+
+
     /** 新增按钮操作 */
     handleAdd() {
       this.ID = this.$store.state.user.id;

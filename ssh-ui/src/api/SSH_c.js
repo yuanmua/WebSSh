@@ -1,11 +1,11 @@
 import request from '@/js/request'
 
 // 查询用户列表
-export function listUser(query) {
+export function listSSh(data) { //这个接口马上要用，请先写一下谢谢，是服务器列表，全部的服务器信息
     return request({
-        url: '/system/user/list',
+        url: '/system/list',
         method: 'get',
-        params: query
+        params: data
     })
 }
 

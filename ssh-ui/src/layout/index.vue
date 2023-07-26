@@ -4,7 +4,7 @@
 
   <app-main/>-->
 
-  <div  class="app-wrapper" >
+  <div :class="classObj" class="app-wrapper" >
 <!--    <div  class="drawer-bg" />-->
     <sidebar  class="sidebar-container"/>
     <div  class="main-container">
@@ -19,14 +19,26 @@
 
 <script>
 import { AppMain , Navbar ,Sidebar} from './components'
+import {mapState} from "vuex";
 export default {
   name: 'Layout',
   components: {
     AppMain,
     Navbar,
     Sidebar,
-
   },
+  computed: {
+    ...mapState({
+      sidebar: state => state.app.sidebar,
+
+    }),
+    classObj() {
+      return {
+        hideSidebar: !this.sidebar.opened,
+        openSidebar: this.sidebar.opened,
+      }
+    },
+  }
 }
 
 </script>
@@ -103,4 +115,54 @@ export default {
   .mobile .fixed-header {
     width: 100%;
   }
+.hideSidebar {
+  .sidebar-container {
+    width: 54px !important;
+  }
+
+  .main-container {
+    margin-left: 54px;
+  }
+
+  .submenu-title-noDropdown {
+    padding: 0 !important;
+    position: relative;
+
+    .el-tooltip {
+      padding: 0 !important;
+
+      .svg-icon {
+        margin-left: 20px;
+      }
+    }
+  }
+
+  .el-submenu {
+    overflow: hidden;
+
+    &>.el-submenu__title {
+      padding: 0 !important;
+
+      .svg-icon {
+        margin-left: 20px;
+      }
+
+    }
+  }
+
+  .el-menu--collapse {
+    .el-submenu {
+      &>.el-submenu__title {
+        &>span {
+          height: 0;
+          width: 0;
+          overflow: hidden;
+          visibility: hidden;
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
 </style>

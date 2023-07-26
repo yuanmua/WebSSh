@@ -1,14 +1,11 @@
 <script setup>
-import Terminal from "./views/Terminal.vue";
+import Terminal from "./views/page/terminal/Terminal.vue";
 import FormView from "@/views/Formview.vue";
-import ElFormAbc from "@/views/ElFormabc.vue";
 import MenuSidebar from "@/views/element/MenuSidebar.vue";
 import LoginVive from "./views/page/login/login.vue";
 </script>
 
-<template><!--
- <ElFormAbc></ElFormAbc>
- <FormView></FormView>-->
+<template>
 <!-- <div class="sidebar">-->
 <!--  <MenuSidebar></MenuSidebar>-->
 <!-- </div>-->

@@ -100,5 +100,5 @@ var term = new Terminal({
 </script>
 
 <style scoped>
-@import "../assets/webssh.css";
+@import "../../../assets/webssh.css";
 </style>
