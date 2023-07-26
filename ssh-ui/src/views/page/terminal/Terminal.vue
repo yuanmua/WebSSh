@@ -69,8 +69,19 @@ export default {
 
     },
     mounted() {
-        init(client)
-        console.log("连接开启");
+      init(client)
+      console.log("连接开启");
+
+      console.log(this.sshIdList);
+
+      this.options.host = this.sshIdList.sshHost;
+      this.options.port = this.sshIdList.sshPort;
+      this.options.username = this.sshIdList.sshUserName;
+      this.options.password = this.sshIdList.sshPassword
+      ;
+
+      console.log(this.options);
+
     },
     methods:{
         OnClick(){
@@ -85,7 +96,24 @@ export default {
             else console.log("没有开连接");
         }
 
+    } ,
+
+    computed:{
+
+      sshId(){
+        return this.$route.params.sshId
+      },
+
+      sshIdList(){
+      console.log(this.sshId)
+      return this.$store.state.ssh.sshList.find(
+          sshIdList => sshIdList.sshId==this.sshId
+      )
     }
+
+  }
+
+
 
 }/*
 var term = new Terminal({

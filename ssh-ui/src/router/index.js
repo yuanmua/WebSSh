@@ -34,7 +34,11 @@ const routes = [
         path: '/addSSH',
         component: () => import('@/views/page/Main/SSh_config/addSSH.vue'),
         name: 'addSSH',
-      }
+      },
+      {
+        path: '/index/ssh/:sshId',
+        component: ()=>import ("@/views/page/terminal/TerView.vue"),
+      },
 
     ]
   },
