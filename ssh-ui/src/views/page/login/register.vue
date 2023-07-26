@@ -101,13 +101,21 @@ export default {
         if (valid) {
           this.loading = true;
           register(this.registerForm).then(res => {
-            const username = this.registerForm.username;
-            this.$alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", '系统提示', {
-              dangerouslyUseHTMLString: true,
-              type: 'success'
-            }).then(() => {
-              this.$router.push("/login");
-            }).catch(() => {});
+            if (String(res.code) === '1') {//1表示登录成功
+              const username = this.registerForm.username;
+              this.$alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", '系统提示', {
+                dangerouslyUseHTMLString: true,
+                type: 'success'
+              }).then(() => {
+                this.$router.push("/#/login");
+              }).catch(() => {
+              });
+            }
+            else {
+              this.$message.error(res.msg+",请重新输入用户名")
+              this.loading = false
+            }
+
           }).catch(() => {
             this.loading = false;
             if (this.captchaEnabled) {

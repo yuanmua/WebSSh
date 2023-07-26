@@ -27,9 +27,15 @@ const routes = [
     children: [
       {
         path: '/index',
-        component: () => import('@/views/Terminal.vue'),
+        component: () => import('@/views/page/Main/index.vue'),
         name: 'Index',
+      },
+      {
+        path: '/addSSH',
+        component: () => import('@/views/page/Main/SSh_config/addSSH.vue'),
+        name: 'addSSH',
       }
+
     ]
   },
 ]

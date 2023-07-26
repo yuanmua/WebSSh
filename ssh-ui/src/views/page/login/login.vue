@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import { loginApi } from '@/api/login'
+import { login } from '@/api/login'
+import store from "@/store";
 export default {
   name: "loginVive",
   data() {
@@ -69,15 +70,17 @@ export default {
     }
   },
   created() {
+    console.log(this.$store)
   },
   methods: {
     async handleLogin() {
-      console.log(123)
       // window.location.href= '/#/index'
       await this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
           this.loading = true
-          let res = await loginApi(this.loginForm)
+          let res = await login(this.loginForm.username,this.loginForm.password)
+          store.commit('SET_ID',res.data.id)
+          console.log(this.$store.state.user.id)
           if (String(res.code) === '1') {//1表示登录成功
             localStorage.setItem('userInfo', JSON.stringify(res.data))
             window.location.href = '/#/index'

@@ -1,6 +1,24 @@
 import request from "../../src/js/request";
 
 // 登录方法
+export function login(username, password, code, uuid) {
+  const data = {
+    username,
+    password,
+/*    code,
+    uuid*/
+  }
+  return request({
+    url: '/employee/login',
+    headers: {
+      isToken: false
+    },
+    method: 'post',
+    data: data
+  })
+}
+/*
+
 export function loginApi(data) {
   return request({
     url: '/employee/login',
@@ -8,6 +26,7 @@ export function loginApi(data) {
     data: data
   })
 }
+*/
 
 // 注册方法
 export function register(data) {
