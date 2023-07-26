@@ -91,8 +91,6 @@ public class EmployeeController {
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
 
-
-
         //这些字段均无用，应当在数据库中删去
         employee.setCreateUser((long)1);
         employee.setUpdateUser((long)1);
