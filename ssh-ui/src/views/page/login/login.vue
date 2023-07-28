@@ -70,7 +70,8 @@ export default {
     }
   },
   created() {
-    console.log(this.$store)
+
+      console.log(this.$store)
   },
   methods: {
     async handleLogin() {

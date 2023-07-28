@@ -6,12 +6,10 @@ import com.star.webssh.pojo.SshServer;
 import com.star.webssh.service.ServerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Mr.Wang
@@ -25,6 +23,11 @@ public class ServerController {
     @Autowired
     private ServerService serverService;
 
+    /**
+     * 新增连接ssh信息
+     * @param server
+     * @return
+     */
     @PostMapping("addSSh")
     public R<String> add(@RequestBody SshServer server){
         log.info("serverInfo:{}",server);
@@ -52,6 +55,46 @@ public class ServerController {
             return R.success("添加成功");
         }
         return R.error("已有该主机，添加失败");
+
+    }
+
+    /**
+     * 查询所有录入信息
+     * @return
+     */
+    @GetMapping("/list")
+    public R<List> list(){
+
+        List<SshServer> list = serverService.list();
+        return R.success(list);
+    }
+
+    /**
+     * 根据id来修改信息
+     * @param sshServer
+     * @return
+     */
+    @PutMapping
+    public R<String> updateById(@RequestBody SshServer sshServer){
+        //设置更新时间
+        sshServer.setUpdateTime(LocalDateTime.now());
+
+        serverService.updateById(sshServer);
+        return R.success("修改成功");
+
+
+    }
+
+    /**
+     * 批量删除/删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping()
+    public R<String> deleteById(@RequestParam(value = "ids") List<Long> ids){
+
+        serverService.removeByIds(ids);
+        return R.success("删除成功");
 
     }
 }

@@ -182,7 +182,17 @@ export default {
           "sshUserName": "yuanmu",
           "sshPassword": "123123zwy",
           "remark": "没有"
-        }
+        },
+          {
+              "sshId":"1",
+              "sshName": "我的",
+              "sshHost": "192.168.1.1",
+              "sshClass": "123",
+              "sshPort": "1234",
+              "sshUserName": "yuanmua",
+              "sshPassword": "123123",
+              "remark": "没有"
+          },
       ],
       // 表单参数
       form: {
@@ -226,6 +236,10 @@ export default {
       }
     }
   },
+    created() {
+        this.getList()
+        //console.log(this.getList())
+    },
   methods: {
     /** 查询服务器列表 */
     getList() {
