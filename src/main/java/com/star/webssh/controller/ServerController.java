@@ -30,13 +30,13 @@ public class ServerController {
      */
     @PostMapping("addSSh")
     public R<String> add(@RequestBody SshServer server){
-        log.info("serverInfo:{}",server);
 
         //设置默认值为0
         server.setStatus(0);
         //server.setId((long)1);
         server.setCreate_time(LocalDateTime.now());
         server.setUpdateTime(LocalDateTime.now());
+        server.setUserId(0L);
         /*
         if(连接上了){
         保存到数据库里面
@@ -45,16 +45,17 @@ public class ServerController {
             throw new CustomExcepion("连接失败“）
         }
          */
-        LambdaQueryWrapper<SshServer> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(server.getSshName()!=null,SshServer::getSshName,server.getSshName());
+//        LambdaQueryWrapper<SshServer> lqw = new LambdaQueryWrapper<>();
+//        lqw.eq(server.getSshName()!=null,SshServer::getSshName,server.getSshName());
 
-        SshServer serviceOne = serverService.getOne(lqw);
-        if(serviceOne==null){
+//        SshServer serviceOne = serverService.getOne(lqw);
+//        if(serviceOne==null){
             //如果改连接主机表中没有则添加信息
-            serverService.save(server);
+        log.info("serverInfo:{}",server);
+        serverService.save(server);
             return R.success("添加成功");
-        }
-        return R.error("已有该主机，添加失败");
+//        }
+//        return R.error("已有该主机，添加失败");
 
     }
 

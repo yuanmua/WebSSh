@@ -29,9 +29,9 @@ export function updateUser(data) {
 }
 
 // 删除用户
-export function delUser(userId) {
+export function delSSh(sshId) {
     return request({
-        url: '/system/user/' + userId,
+        url: '/system/ssh/' + sshId,
         method: 'delete'
     })
 }

@@ -82,6 +82,7 @@ public class WebSSHServiceImpl implements WebSSHService {
                     try {
                         connectToSSH(sshConnectInfo, finalWebSSHData, session);
                     } catch (JSchException | IOException e) {
+
                         logger.error("webssh连接异常");
                         logger.error("异常信息:{}", e.getMessage());
                         close(session);

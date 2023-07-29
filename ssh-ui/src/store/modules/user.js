@@ -8,7 +8,7 @@ const user = {
     avatar: '',
     roles: [],
     permissions: [],
-    id: ''
+    id: undefined
   },
 
   mutations: {

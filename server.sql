@@ -11,11 +11,11 @@ create table ssh_server
     ssh_class     varchar(255)          null comment '服务器类型',
     update_time   datetime              not null comment '更新时间',
     create_time   datetime              not null comment '创建时间',
-    `default`     int unsigned zerofill not null comment '默认连接账号，1表示默认连接，0表示不是',
+    `status`     int unsigned zerofill not null comment '默认连接账号，1表示默认连接，0表示不是',
     primary key (id, ssh_user_name)
 );
-INSERT INTO `ssh_server` (`id`, `user_id`, `ssh_user_name`, `ssh_host`, `ssh_port`, `ssh_password`, `ssh_name`, `remark`, `ssh_class`, `update_time`, `create_time`, `status`) VALUES (00000000000000000001, 1, '张三', '192.168.0.1', 22, '123456', 'admin', '五', 'linux', '2023-07-27 00:04:29', '2023-07-27 00:04:29', NULL);
-INSERT INTO `ssh_server` (`id`, `user_id`, `ssh_user_name`, `ssh_host`, `ssh_port`, `ssh_password`, `ssh_name`, `remark`, `ssh_class`, `update_time`, `create_time`, `status`) VALUES (01684237748880265217, 1, '比尔盖茨', '192.168.0.1', 22, '123456', '4444', '五', 'linux', '2023-07-27 00:22:07', '2023-07-27 00:22:03', 0000000000);
+INSERT INTO `ssh_server` (`id`, `user_id`, `ssh_user_name`, `ssh_host`, `ssh_port`, `ssh_password`, `ssh_name`, `remark`, `ssh_class`, `update_time`, `create_time`, `status`) VALUES (00000000000000000001, 1, '张三', '192.168.0.1', 22, '123456', 'admin', '五', 'linux', '2023-07-27 00:04:29', '2023-07-27 00:04:29', 1);
+INSERT INTO `ssh_server` (`id`, `user_id`, `ssh_user_name`, `ssh_host`, `ssh_port`, `ssh_password`, `ssh_name`, `remark`, `ssh_class`, `update_time`, `create_time`, `status`) VALUES (01684237748880265217, 1, '比尔盖茨', '192.168.0.1', 22, '123456', '4444', '五', 'linux', '2023-07-27 00:22:07', '2023-07-27 00:22:03', 0);
 
 
 

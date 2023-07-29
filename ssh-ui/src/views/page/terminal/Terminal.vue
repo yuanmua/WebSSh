@@ -10,7 +10,7 @@
 import { Terminal } from "xterm";
 import "xterm/css/xterm.css";
 import "xterm/lib/xterm.js";
-import WSSHClient from '/public/js/webssh.js'
+import WSSHClient from '@/js/webssh.js'
 let term = new Terminal({
     cols: 97,
         rows: 37,
