@@ -3,17 +3,16 @@ package com.star.webssh.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.star.webssh.common.R;
 import com.star.webssh.pojo.Employee;
+import com.star.webssh.pojo.SshServer;
 import com.star.webssh.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Mr.Wang
@@ -81,6 +80,8 @@ public class EmployeeController {
         return R.success("退出成功");
     }
 
+    /*
+    * 注册操作*/
     @PostMapping("/register")
     public R<String> register(@RequestBody Employee employee){
         log.info("注册");
@@ -104,4 +105,36 @@ public class EmployeeController {
 
         return R.success("注册成功");
     }
+
+    /*删除用户操作*/
+    @DeleteMapping("/delete")
+    public R<String> deleteById(@RequestParam(value = "ids") List<Long> ids){
+        log.info("删除员工"+ids);
+        empService.removeByIds(ids);
+        return R.success("删除成功");
+
+    }
+    /*
+    * 修改用户操作*/
+    @PutMapping("/update")
+    public R<String> updateById(HttpServletRequest request,@RequestBody Employee employee){
+        log.info("修改员工信息"+employee.toString());
+        //设置更新时间
+        employee.setUpdateTime(LocalDateTime.now());
+        Long id=(Long) request.getSession().getAttribute("employee");
+        employee.setUpdateUser(id);
+        empService.updateById(employee);
+        return R.success("修改成功");
+
+
+    }
+    /*
+    * 查询用户信息*/
+    @GetMapping("/list")
+    public R<List> list(){
+        log.info("查询所有用户信息");
+        List<Employee> list = empService.list();
+        return R.success(list);
+    }
+
 }
