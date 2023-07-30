@@ -17,7 +17,7 @@ import java.io.IOException;
  * @author Mr.Wang
  * @create 2023-05-24-11:25
  */
-@WebFilter(urlPatterns = "/*")
+//@WebFilter(urlPatterns = "/*")
 @Slf4j
 public class loginFilter implements Filter {
 

@@ -6,21 +6,28 @@ package com.star.webssh.common;
  * @create 2023-06-12-16:59
  */
 public class BaseContext {
-   private static ThreadLocal<Long> threadLocal= new ThreadLocal<>();
+
+    private static Long id;
+    //private static ThreadLocal<Long> threadLocal= new ThreadLocal<>();
 
     /**
      * 设置值
      * @param id
      */
-   public static void setCurrentId(Long id){
-       threadLocal.set(id);
-   }
+    public static void setCurrentId(Long id){
+        //threadLocal.set(id);
+        BaseContext.id=id;
+    }
 
     /**
      * 获取值
      * @return
      */
-   public static Long getCurrentId(){
-       return threadLocal.get();
-   }
+    public static Long getCurrentId(){
+
+        return id;
+        //return threadLocal.get();
+
+    }
+
 }

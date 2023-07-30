@@ -18,7 +18,7 @@ import java.util.List;
  * @create 2023-07-26-23:18
  */
 @RestController
-@RequestMapping("system")
+@RequestMapping("/system")
 @Slf4j
 public class ServerController {
 
@@ -30,7 +30,7 @@ public class ServerController {
      * @param server
      * @return
      */
-    @PostMapping("addSSh")
+    @PostMapping("/addSSh")
     public R<String> add(@RequestBody SshServer server){
 
         //设置默认值为0
@@ -38,6 +38,7 @@ public class ServerController {
         //server.setId((long)1);
         server.setCreate_time(LocalDateTime.now());
         server.setUpdateTime(LocalDateTime.now());
+        server.setUserId(BaseContext.getCurrentId());
 
         //将密码进行加密
         String password = DigestUtils.md5DigestAsHex(server.getSshPassword().getBytes());
@@ -71,7 +72,11 @@ public class ServerController {
     @GetMapping("/list")
     public R<List> list(){
 
-        List<SshServer> list = serverService.list();
+        //设置条件
+        LambdaQueryWrapper<SshServer> lqw = new LambdaQueryWrapper<>();
+        Long userId = BaseContext.getCurrentId();
+        lqw.eq(SshServer::getUserId,userId);
+        List<SshServer> list = serverService.list(lqw);
         return R.success(list);
     }
 
