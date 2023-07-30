@@ -9,4 +9,5 @@ import com.star.webssh.pojo.Employee;
  * @create 2023-06-05-20:46
  */
 public interface EmployeeService extends IService<Employee> {
+
 }

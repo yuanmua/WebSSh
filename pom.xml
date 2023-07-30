@@ -103,6 +103,19 @@
             <version>0.1.54</version>
         </dependency>
 
+<!--        JWT-->
+        <!-- JWT依赖-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+<!--以便在Java 9及更高版本中使用javax.xml.bind.DatatypeConverter类：-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author Mr.Wang
  * @create 2023-06-08-19:14
  */
-@WebFilter(urlPatterns = "/*",filterName = "loginCheckFilter")
+//@WebFilter(urlPatterns = "/*",filterName = "loginCheckFilter")
 @Slf4j
 public class LoginCheckFilter implements Filter {
     //用于判断url路径中**通配符的比较，如backend/**与backend/index.html

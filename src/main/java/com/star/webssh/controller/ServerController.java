@@ -1,11 +1,13 @@
 package com.star.webssh.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.star.webssh.common.BaseContext;
 import com.star.webssh.common.R;
 import com.star.webssh.pojo.SshServer;
 import com.star.webssh.service.ServerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -36,7 +38,10 @@ public class ServerController {
         //server.setId((long)1);
         server.setCreate_time(LocalDateTime.now());
         server.setUpdateTime(LocalDateTime.now());
-        server.setUserId(0L);
+
+        //将密码进行加密
+        String password = DigestUtils.md5DigestAsHex(server.getSshPassword().getBytes());
+        server.setSshPassword(password);
         /*
         if(连接上了){
         保存到数据库里面
@@ -91,8 +96,8 @@ public class ServerController {
      * @param ids
      * @return
      */
-    @DeleteMapping()
-    public R<String> deleteById(@RequestParam(value = "ids") List<Long> ids){
+    @DeleteMapping("/ssh/{ids}")
+    public R<String> deleteById(@PathVariable List<Long> ids){
 
         serverService.removeByIds(ids);
         return R.success("删除成功");

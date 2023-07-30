@@ -12,10 +12,13 @@ com:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ssh?user=root
+    url: jdbc:mysql://localhost:3306/ssh_project?user=root
     username: root
-    password: 123s123S@
+    password: abc123
 
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
