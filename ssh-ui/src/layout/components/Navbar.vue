@@ -1,6 +1,38 @@
 <template>
   <div class="navbar">
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+
+    <div class="right-menu">
+<!--      <template v-if="device!=='mobile'">-->
+<!--&lt;!&ndash;        <search id="header-search" class="right-menu-item" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <el-tooltip content="源码地址" effect="dark" placement="bottom">&ndash;&gt;-->
+<!--&lt;!&ndash;          <ruo-yi-git id="" class="right-menu-item hover-effect" />&ndash;&gt;-->
+<!--&lt;!&ndash;        </el-tooltip>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <screenfull id="screenfull" class="right-menu-item hover-effect" />&ndash;&gt;-->
+
+
+<!--      </template>-->
+
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+        <div class="avatar-wrapper">
+          <img src="/public/images/用户.png" class="user-avatar" alt="">
+          <i class="el-icon-caret-bottom" />
+        </div>
+        <template #dropdown>
+        <el-dropdown-menu slot="dropdown">
+<!--          <router-link to="/user/profile">-->
+<!--            <el-dropdown-item>个人中心</el-dropdown-item>-->
+<!--          </router-link>-->
+          <el-dropdown-item divided @click.native="logout">
+            <span>退出登录</span>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+
   </div>
 </template>
 
@@ -21,15 +53,28 @@ export default {
     ]),
   },
   methods: {
+    //这个是右边的开关
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
+    async logout() {
+      this.$confirm('确定注销并退出系统吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('LogOut').then(() => {
+          window.location.href = '/'
+        })
+      }).catch(() => {});
+    }
 
   }
 }
 </script>
 
 <style >
+
 .navbar {
   height: 50px;
   overflow: hidden;

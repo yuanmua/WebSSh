@@ -1,7 +1,11 @@
 import axios from "axios";
+import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus'
+
 import store from '@/store'
 import {getToken} from "@/js/auth";
 
+// 是否显示重新登录
+export let isRelogin = { show: false };
   axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
   // 创建axios实例
   const service = axios.create({
@@ -51,14 +55,15 @@ import {getToken} from "@/js/auth";
   service.interceptors.response.use(res => {
       console.log('---响应拦截器---',res)
       // 未设置状态码则默认成功状态
-      const code = res.data.code;
+      const code = res.data.code ;
       // 获取错误信息
       const msg = res.data.msg
       console.log('---code---',code)
-      if (res.data.code === 0 && res.data.msg === 'NOTLOGIN') {// 返回登录页面
-        console.log('---/backend/page/login/login.html---',code)
-        localStorage.removeItem('userInfo')
-        window.top.location.href = '/backend/page/login/login.html'
+      if (code === 0 && res.data.msg === 'NOTLOGIN') {// 返回登录页面
+
+      }  else if (code === 0) {
+        ElMessage({ message: msg, type: 'error' })
+        return Promise.reject(new Error(msg))
       } else {
         return res.data
       }

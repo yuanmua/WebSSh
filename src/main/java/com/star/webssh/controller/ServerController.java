@@ -85,7 +85,7 @@ public class ServerController {
      * @param sshServer
      * @return
      */
-    @PutMapping
+    @PutMapping("/updateSSh")
     public R<String> updateById(@RequestBody SshServer sshServer){
         //设置更新时间
         sshServer.setUpdateTime(LocalDateTime.now());

@@ -91,8 +91,10 @@ export default {
             Cookies.remove('rememberMe');
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
+            // this.router.push({ path: this.redirect || "/" }).catch(()=>{});
             window.location.href = '/#/index'
-
+          }).catch(() => {
+            this.loading = false;
           });
         }
       });

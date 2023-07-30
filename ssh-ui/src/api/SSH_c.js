@@ -20,9 +20,9 @@ export function addSSh(data) {
 }
 
 // 修改用户
-export function updateUser(data) {
+export function updateSSh(data) {
     return request({
-        url: '/system/user',
+        url: '/system/updateSSh',
         method: 'put',
         data: data
     })

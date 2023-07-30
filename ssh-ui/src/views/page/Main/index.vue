@@ -45,7 +45,7 @@
 
     <el-row v-if="!loading">
       <el-col
-          v-for="(item, index) in userList"
+          v-for="(item, index) in sshList"
           :key="item"
           :span="8"
           :offset="index > 0 ? 2 : 0"
@@ -116,11 +116,10 @@
 </template>
 
 <script>
-import {addSSh, listSSh, updateUser} from "@/api/SSH_c";
+import {addSSh, listSSh, updateSSh} from "@/api/SSH_c";
 import Terminal from "@/views/page/terminal/Terminal.vue";
 import store from "@/store";
 import SshCard from "@/views/page/Main/SSh_config/sshCard.vue";
-
 export default {
   name: "Main",
   components: {SshCard, Terminal},
@@ -131,10 +130,11 @@ export default {
       single: true,
       // 非多个禁用
       multiple: true,
+      // 服务器数据
+      sshList: undefined,
+
       // 弹出层标题
       title: "",
-      // 服务器数据
-      userList: undefined,
       // 表单参数
       form: {
         ID: this.$store.state.user.id,
@@ -177,22 +177,29 @@ export default {
       }
     }
   },
-  created() {
-    this.getList()
-    this.userList = this.$store.state.ssh.sshList
+
+    created() {
+        this.loading = true;
+        this.getList()
   },
+
   methods: {
     /** 查询服务器列表 */
     getList() {
-      this.loading = true;
-
       this.$store.dispatch("GetList")
-      this.userList = this.$store.state.ssh.sshList
-      console.log(this.$store.state.ssh.sshList)
-
-      this.loading = false;
+      this.getListLoading()
     },
-
+    getListLoading(){
+      this.sshList = this.$store.state.ssh.sshList
+      if ( this.sshList.length===0){
+        setTimeout(() => {
+          this.getList()
+        }, 1);
+      }else{
+        this.loading = false;
+        console.log('1')
+      }//不加这个会很神奇地加载不出来
+    },
 
     /** 新增按钮操作 */
     handleAdd() {

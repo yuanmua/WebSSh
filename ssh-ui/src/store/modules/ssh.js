@@ -17,8 +17,8 @@ const ssh = {
 
         GetList({commit}) {
             listSSh().then(response => {
-                console.log(response.data)
                 commit('SET_SSH_LIST', response.data)
+                return true
                 }
             );
         },

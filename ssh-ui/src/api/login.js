@@ -50,7 +50,7 @@ export function getInfo() {
 // 退出方法
 export function logout() {
   return request({
-    url: '/logout',
+    url: '/employee/logout',
     method: 'post'
   })
 }

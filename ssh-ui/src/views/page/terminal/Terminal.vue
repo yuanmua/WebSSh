@@ -72,6 +72,9 @@ export default {
       init(client)
       console.log("连接开启");
 
+      if (this.sshIdList===undefined){
+        window.location.href = '/#/index'
+      }
       console.log(this.sshIdList);
 
       this.options.host = this.sshIdList.sshHost;
@@ -100,14 +103,13 @@ export default {
 
     computed:{
 
-      sshId(){
-        return this.$route.params.sshId
+      id(){
+        return this.$route.params.id
       },
 
       sshIdList(){
-      console.log(this.sshId)
       return this.$store.state.ssh.sshList.find(
-          sshIdList => sshIdList.sshId==this.sshId
+          sshIdList => sshIdList.id==this.id
       )
     }
 

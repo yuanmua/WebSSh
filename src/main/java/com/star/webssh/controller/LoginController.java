@@ -9,12 +9,10 @@ import com.star.webssh.pojo.Employee;
 import com.star.webssh.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +25,11 @@ public class LoginController {
     @Autowired
     private EmployeeService empService;
 
-
+    @RequestMapping("/logout")
+    public String logout() {
+        return "退出成功";
+    }
+    //我乱加的用于测试
 
     @PostMapping("/login")
     public R login(@RequestBody Employee e) {
