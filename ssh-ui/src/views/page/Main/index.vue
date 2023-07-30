@@ -43,7 +43,7 @@
       </el-col>
     </el-row>
 
-    <el-row>
+    <el-row v-if="!loading">
       <el-col
           v-for="(item, index) in userList"
           :key="item"
@@ -126,6 +126,7 @@ export default {
   components: {SshCard, Terminal},
   data() {
     return {
+      loading: true,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -176,16 +177,20 @@ export default {
       }
     }
   },
-  mounted() {
-        this.getList()
+  created() {
+    this.getList()
+    this.userList = this.$store.state.ssh.sshList
   },
   methods: {
     /** 查询服务器列表 */
     getList() {
-      console.log(this.$store.state.user.id)
-      this.$store.dispatch("GetList",this.$store.state.user.id)
+      this.loading = true;
+
+      this.$store.dispatch("GetList")
       this.userList = this.$store.state.ssh.sshList
       console.log(this.$store.state.ssh.sshList)
+
+      this.loading = false;
     },
 
 

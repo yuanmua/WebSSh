@@ -36,13 +36,16 @@
 <script>
 import { login } from '@/api/login'
 import store from "@/store";
+import Cookies from "js-cookie";
+
 export default {
   name: "loginVive",
   data() {
     return {
       loginForm:{
         username: 'admin',
-        password: '123456'
+        password: '123456',
+        rememberMe: false,
       },
       loading: false
     }
@@ -74,7 +77,28 @@ export default {
       console.log(this.$store)
   },
   methods: {
-    async handleLogin() {
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          if (this.loginForm.rememberMe) {
+            Cookies.set("username", this.loginForm.username, { expires: 30 });
+            Cookies.set("password", this.loginForm.password, { expires: 30 });
+            Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 });
+          } else {
+            Cookies.remove("username");
+            Cookies.remove("password");
+            Cookies.remove('rememberMe');
+          }
+          this.$store.dispatch("Login", this.loginForm).then(() => {
+            window.location.href = '/#/index'
+
+          });
+        }
+      });
+    }
+
+   /* async handleLogin() {
       // window.location.href= '/#/index'
       await this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
@@ -90,7 +114,8 @@ export default {
           }
         }
       })
-    }
+    }*/
+
   }
 }
 </script>

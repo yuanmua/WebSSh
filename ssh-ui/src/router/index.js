@@ -4,6 +4,7 @@ import MainView from "../views/page/terminal/TerView.vue";
 
 import Layout from '@/layout/index.vue'
 import Register from "@/views/page/login/register.vue";
+import Main from "@/views/page/Main/index.vue";
 
 
 // 2. 定义一些路由
@@ -27,14 +28,10 @@ const routes = [
     children: [
       {
         path: '/index',
-        component: () => import('@/views/page/Main/index.vue'),
+        component: Main,
         name: 'Index',
       },
-      {
-        path: '/addSSH',
-        component: () => import('@/views/page/Main/SSh_config/addSSH.vue'),
-        name: 'addSSH',
-      },
+
       {
         path: '/index/ssh/:sshId',
         component: ()=>import ("@/views/page/terminal/TerView.vue"),

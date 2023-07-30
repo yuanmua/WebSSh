@@ -5,7 +5,7 @@ import {listSSh} from "@/api/SSH_c";
 const ssh = {
     state: {
         // 服务器数据
-        sshList: [ ],
+        sshList: [],
     },
     mutations: {
         SET_SSH_LIST:(state, sshList) => {
@@ -15,8 +15,8 @@ const ssh = {
 
     actions: {
 
-        GetList({commit},userInfo) {
-            listSSh(userInfo).then(response => {
+        GetList({commit}) {
+            listSSh().then(response => {
                 console.log(response.data)
                 commit('SET_SSH_LIST', response.data)
                 }
