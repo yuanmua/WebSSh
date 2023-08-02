@@ -22,7 +22,7 @@ export default {
 <style scoped>
 .sidebar{
   float: left;
-  width: 20%;
+  width: 30%;
 }
 .terminal-main{
 

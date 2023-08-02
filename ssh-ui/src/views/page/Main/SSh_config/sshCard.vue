@@ -194,6 +194,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete() {
       delSSh(this.sshData.id)
+      this.getList();
+
     },
 
     /** 提交表单按钮 */

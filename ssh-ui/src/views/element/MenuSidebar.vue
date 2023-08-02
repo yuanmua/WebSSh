@@ -1,67 +1,157 @@
 <template>
-    <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-        <el-radio-button :label="false">expand</el-radio-button>
-        <el-radio-button :label="true">collapse</el-radio-button>
-    </el-radio-group>
-    <el-menu
-        default-active="2"
-        class="el-menu-vertical-demo"
-        :collapse="isCollapse"
-        @open="handleOpen"
-        @close="handleClose"
+  <div class="Sidebar">
+    <el-upload
+        class="upload-demo"
+        drag
+        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        multiple
     >
-        <el-sub-menu index="1">
-            <template #title>
-                <el-icon><location /></el-icon>
-                <span>Navigator One</span>
-            </template>
-            <el-menu-item-group>
-                <template #title><span>Group One</span></template>
-                <el-menu-item index="1-1">item one</el-menu-item>
-                <el-menu-item index="1-2">item two</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="Group Two">
-                <el-menu-item index="1-3">item three</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="1-4">
-                <template #title><span>item four</span></template>
-                <el-menu-item index="1-4-1">item one</el-menu-item>
-            </el-sub-menu>
-        </el-sub-menu>
-        <el-menu-item index="2">
-            <el-icon><icon-menu /></el-icon>
-            <template #title>Navigator Two</template>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-            <el-icon><document /></el-icon>
-            <template #title>Navigator Three</template>
-        </el-menu-item>
-        <el-menu-item index="4">
-            <el-icon><setting /></el-icon>
-            <template #title>Navigator Four</template>
-        </el-menu-item>
-    </el-menu>
+      <el-icon class="el-icon--upload">
+        <upload-filled/>
+      </el-icon>
+      <div class="el-upload__text">
+        Drop file here or <em>click to upload</em>
+      </div>
+      <template #tip>
+        <div class="el-upload__tip">
+          jpg/png files with a size less than 500kb
+        </div>
+      </template>
+    </el-upload>
+
+    <div>
+      <h2>快捷键</h2>
+      <el-table :data="tableData" style="width: 100%; height: 500px">
+        <el-table-column label="日期" width="100">
+          <template #default="scope">
+            <div style="display: flex; align-items: center">
+              <el-icon>
+                <timer/>
+              </el-icon>
+              <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Name" width="80">
+          <template #default="scope">
+            <el-popover effect="light" trigger="hover" placement="top" width="auto">
+              <template #default>
+                <div>name: {{ scope.row.name }}</div>
+                <div>address: {{ scope.row.address }}</div>
+              </template>
+              <template #reference>
+                <el-tag>{{ scope.row.name }}</el-tag>
+              </template>
+            </el-popover>
+          </template>
+        </el-table-column>
+        <el-table-column label="命令" width="180">
+          <template #default="scope">
+               {{ scope.row.name }}
+          </template>
+        </el-table-column>
+        <el-table-column label="Operations">
+          <template #default="scope">
+            <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
+            >Edit
+            </el-button
+            >
+            <el-button
+                size="small"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+            >Delete
+            </el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+  </div>
 </template>
 <script>
-import { ref } from 'vue'
+import {ref} from 'vue'
+import {UploadFilled} from '@element-plus/icons-vue'
+import {Timer} from '@element-plus/icons-vue'
+
 export default {
-    name: "MenuSidebar",
-        data() {
-            return {
-                isCollapse: true
-            };
+  name: "MenuSidebar",
+  components: {
+    UploadFilled,
+    Timer,
+    ref
+  },
+  data() {
+    return {
+      isCollapse: true,
+      tableData: [
+
+        {
+          date: '2016-05-02',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles',
         },
-        methods: {
-            handleOpen(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            handleClose(key, keyPath) {
-                console.log(key, keyPath);
-            }
-        }
+        {
+          date: '2016-05-04',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+        {
+          date: '2016-05-01',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+        {
+          date: '2016-05-03',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+        {
+          date: '2016-05-02',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+        {
+          date: '2016-05-04',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+        {
+          date: '2016-05-01',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+      ]
+    };
+  },
+  methods: {
+    handleEdit(index, row) {
+      console.log(index, row);
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
+    },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    }
+  }
 }
 </script>
 
 <style scoped>
+.Sidebar {
+}
 
+.upload-demo .el-icon--upload {
+  width: 100%;
+}
+
+.el-icon--upload .el-upload__text {
+  width: 100%;
+
+}
 </style>
