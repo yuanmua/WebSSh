@@ -1,16 +1,16 @@
 import request from '@/js/request'
 
-// 查询用户列表
+// 查询快捷键
 export function listCommand(data) {
     return request({
-        url: '/system/list',
+        url: '/system/listCommand',
         method: 'get',
         params: data
     })
 }
 
 
-// 新增用户
+// 新增快捷键
 export function addCommand(data) {
     return request({
         url: '/system/addSSh',
@@ -19,7 +19,7 @@ export function addCommand(data) {
     })
 }
 
-// 修改用户
+// 修改快捷键
 export function updateCommand(data) {
     return request({
         url: '/system/updateSSh',
@@ -28,10 +28,10 @@ export function updateCommand(data) {
     })
 }
 
-// 删除用户
-export function delCommand(sshId) {
+// 删除快捷键
+export function delCommand(CommandId) {
     return request({
-        url: '/system/ssh/' + sshId,
+        url: '/system/delCommand/' + CommandId,
         method: 'delete'
     })
 }

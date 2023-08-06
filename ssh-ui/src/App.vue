@@ -1,7 +1,7 @@
 <script setup>
 import Terminal from "./views/page/terminal/Terminal.vue";
 import FormView from "@/views/Formview.vue";
-import MenuSidebar from "@/views/element/MenuSidebar.vue";
+import MenuSidebar from "@/views/page/terminal/MenuSidebar.vue";
 import LoginVive from "./views/page/login/login.vue";
 </script>
 

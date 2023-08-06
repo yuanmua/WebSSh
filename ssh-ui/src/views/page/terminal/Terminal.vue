@@ -2,7 +2,9 @@
     <div>
         <button @click="OnClick" type="submit">连接到SSH</button>
         <button @click="close" type="button" id="close">关闭连接</button>
-        <div id="terminal"></div>
+        <el-button type="primary" @click="back">返回</el-button>
+
+      <div id="terminal"></div>
     </div>
 </template>
 
@@ -97,7 +99,10 @@ export default {
                 client.close()
             }
             else console.log("没有开连接");
-        }
+        },
+      back(){
+        window.location.href = '/#/index'
+      }
 
     } ,
 
