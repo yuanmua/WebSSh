@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.Wang
@@ -39,10 +40,12 @@ public class ServerController {
         server.setCreate_time(LocalDateTime.now());
         server.setUpdateTime(LocalDateTime.now());
         server.setUserId(BaseContext.getCurrentId());
+        Long userId = BaseContext.getCurrentId();
+        server.setUserId(userId);
 
         //将密码进行加密
-        String password = DigestUtils.md5DigestAsHex(server.getSshPassword().getBytes());
-        server.setSshPassword(password);
+        //String password = DigestUtils.md5DigestAsHex(server.getSshPassword().getBytes());
+       // server.setSshPassword(password);
         /*
         if(连接上了){
         保存到数据库里面
@@ -76,7 +79,15 @@ public class ServerController {
         LambdaQueryWrapper<SshServer> lqw = new LambdaQueryWrapper<>();
         Long userId = BaseContext.getCurrentId();
         lqw.eq(SshServer::getUserId,userId);
+
         List<SshServer> list = serverService.list(lqw);
+
+//        //将密码解密后返回前端
+//        List<SshServer> serverList=list.stream().map((item)->{
+//            String password = DigestUtils.md5DigestAsHex(item.getSshPassword().getBytes());
+//            item.setSshPassword(password);
+//            return item;
+//        }).collect(Collectors.toList());
         return R.success(list);
     }
 

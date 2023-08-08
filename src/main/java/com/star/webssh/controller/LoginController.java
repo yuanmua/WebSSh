@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +27,25 @@ import java.util.Map;
 public class LoginController {
     @Autowired
     private EmployeeService empService;
+    @Autowired
+    private HttpServletRequest request;
+    @Autowired
+    private HttpServletResponse response;
 
     @RequestMapping("/logout")
-    public String logout() {
-        return "退出成功";
+    public R<String> logout() {
+
+        // 清除cookie，并且退出
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+        return R.success("推出成功");
+
+
     }
-    //我乱加的用于测试
+
 
     @PostMapping("/login")
     public R login(@RequestBody Employee e) {

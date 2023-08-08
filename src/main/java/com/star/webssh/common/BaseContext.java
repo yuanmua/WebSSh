@@ -7,16 +7,16 @@ package com.star.webssh.common;
  */
 public class BaseContext {
 
-    private static Long id;
-    //private static ThreadLocal<Long> threadLocal= new ThreadLocal<>();
+    //private static Long id;
+    private static ThreadLocal<Long> threadLocal= new ThreadLocal<>();
 
     /**
      * 设置值
      * @param id
      */
     public static void setCurrentId(Long id){
-        //threadLocal.set(id);
-        BaseContext.id=id;
+        threadLocal.set(id);
+        //BaseContext.id=id;
     }
 
     /**
@@ -25,8 +25,8 @@ public class BaseContext {
      */
     public static Long getCurrentId(){
 
-        return id;
-        //return threadLocal.get();
+        //return id;
+        return threadLocal.get();
 
     }
 

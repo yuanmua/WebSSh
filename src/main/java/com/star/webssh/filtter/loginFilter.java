@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.io.IOException;
  * @author Mr.Wang
  * @create 2023-05-24-11:25
  */
-//@WebFilter(urlPatterns = "/*")
+@WebFilter(urlPatterns = "/*")
 @Slf4j
 public class loginFilter implements Filter {
 
@@ -33,9 +34,27 @@ public class loginFilter implements Filter {
             filterChain.doFilter(servletRequest,servletResponse);
             return;
         }
-        //拿到token
-        String jwt = httpServletRequest.getHeader("Token");
-        boolean b = StringUtils.hasLength(jwt);
+        //从cookie中拿到token
+
+        //===============================
+        Cookie[] cookies = httpServletRequest.getCookies();
+
+
+        if (cookies == null || cookies.length == 0) {
+            return ;
+        }
+        String jwt=null;
+        for (Cookie cookie : cookies) {
+            String name = cookie.getName();
+            if (name.equals("Admin-Token")) {
+                jwt = cookie.getValue();
+                break;
+            }
+        }
+
+        //====================================================
+//        String jwt = httpServletRequest.getHeader("Token");
+
 
         if(!StringUtils.hasLength(jwt)){
             log.info("密钥为：{}",jwt);
