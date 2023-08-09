@@ -39,7 +39,7 @@ export function delSSh(sshId) {
 // 查询ssh
 export function getSsh(id) {
     return request({
-        url: '/system/getSsh' + id,
+        url: '/system/getSsh/' + id,
         method: 'get'
     })
 }

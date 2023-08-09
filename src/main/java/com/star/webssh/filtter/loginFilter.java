@@ -43,6 +43,10 @@ public class loginFilter implements Filter {
 
 
         if (cookies == null || cookies.length == 0) {
+            R error = R.error("NOT_LOGIN");
+            //将Result转为json将其相应回去
+            String jsonString = JSONObject.toJSONString(error);
+            servletResponse.getWriter().write(jsonString);
             return ;
         }
         String jwt=null;
@@ -74,13 +78,6 @@ public class loginFilter implements Filter {
             String s_id = String.valueOf(id);
             Long user_id = Long.valueOf(s_id);
             BaseContext.setCurrentId(user_id);
-
-//            BaseContext.setCurrentId(emp.getId());
-//            Long userId = BaseContext.getCurrentId();
-            log.info("ccc");
-
-
-
 
         } catch (Exception e) {
             e.printStackTrace();

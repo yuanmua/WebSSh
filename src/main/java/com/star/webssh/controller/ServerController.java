@@ -124,4 +124,18 @@ public class ServerController {
         return R.success("删除成功");
 
     }
+
+
+    /**
+     * 通过id查询服务器信息
+     * 连接ssh时查询服务器信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/getSsh/{id}")
+    public R<SshServer> getById(@PathVariable Long id){
+        SshServer sshServer = serverService.getById(id);
+        return R.success(sshServer);
+
+    }
 }
