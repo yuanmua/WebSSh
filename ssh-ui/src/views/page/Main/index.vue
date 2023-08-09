@@ -12,32 +12,32 @@
         >新增
         </el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="success"
-            plain
-            icon="el-icon-edit"
-            size="small"
-            :disabled="single"
-            @click="handleUpdate"
-        >修改
-        </el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="danger"
-            plain
-            icon="el-icon-delete"
-            size="small"
-            :disabled="multiple"
-            @click="handleDelete"
-        >删除
-        </el-button>
-      </el-col>
+      <!--      <el-col :span="1.5">
+              <el-button
+                  type="success"
+                  plain
+                  icon="el-icon-edit"
+                  size="small"
+                  :disabled="single"
+                  @click="handleUpdate"
+              >修改
+              </el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                  type="danger"
+                  plain
+                  icon="el-icon-delete"
+                  size="small"
+                  :disabled="multiple"
+                  @click="handleDelete"
+              >删除
+              </el-button>
+            </el-col>-->
 
       <el-col :span="1.5">
         <el-button
-            type="danger"
+            type="warning"
             plain
             icon="el-icon-delete"
             size="small"
@@ -54,7 +54,7 @@
           :span="8"
           :offset="index > 0 ? 2 : 0"
       >
-        <sshCard :sshData="item"></sshCard>
+        <sshCard :sshData="item" @getList="getList"></sshCard>
       </el-col>
     </el-row>
 
@@ -157,8 +157,8 @@ export default {
       // 表单校验
       rules: {
         sshName: [
-          {required: true, message: "服务器称不能为空", trigger: "blur"},
-          {min: 2, max: 20, message: '服务器称长度必须在 2 和 20 之间', trigger: 'blur'}
+          {required: true, message: "服务器名称不能为空", trigger: "blur"},
+          {min: 2, max: 20, message: '服务器名称长度必须在 2 和 20 之间', trigger: 'blur'}
         ],
         sshHost: [
           {required: true, message: "服务器IP不能为空", trigger: "blur"},
@@ -192,6 +192,7 @@ export default {
   methods: {
     /** 查询服务器列表 */
     getList() {
+      this.loading = true;
       listSSh().then(response => {
             this.sshList = response.data
             this.loading = false;
@@ -214,11 +215,12 @@ export default {
 
     /** 新增按钮操作 */
     handleAdd() {
+      this.reset();
       this.ID = this.$store.state.user.id;
       this.open = true;
       this.title = "添加服务器";
     },
-    /** 修改按钮操作 */
+   /* /!** 修改按钮操作 *!/
     handleUpdate(row) {
       this.reset();
       const userId = row.userId || this.ids;
@@ -233,7 +235,7 @@ export default {
         this.form.password = "";
       });
     },
-    /** 删除按钮操作 */
+    /!** 删除按钮操作 *!/
     handleDelete(row) {
       const userIds = row.userId || this.ids;
       this.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function () {
@@ -244,7 +246,7 @@ export default {
       }).catch(() => {
       });
     },
-
+*/
     /** 提交表单按钮 */
     submitForm: function () {
       this.$refs["form"].validate(valid => {
@@ -268,7 +270,21 @@ export default {
     /** 表单取消按钮*/
     cancel() {
       this.open = false;
-      // this.reset();
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        ID: undefined,
+        sshName:'',
+        sshHost:'',
+        sshClass:'',
+        sshPort:'',
+        sshUserName:'',
+        sshPassword:'',
+        remark: undefined,
+      };
+      this.title = "form";
     },
 
   }

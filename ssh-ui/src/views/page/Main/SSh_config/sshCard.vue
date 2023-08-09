@@ -129,6 +129,8 @@
 
 <script>
 import {addSSh, delSSh, updateSSh} from "@/api/SSH_c";
+import {ElMessage, ElMessageBox} from "element-plus";
+import {delCommand} from "@/api/ShortcutKeys";
 
 export default {
   name: "sshCard",
@@ -155,8 +157,8 @@ export default {
       // 表单校验
       rules: {
         sshName: [
-          { required: true, message: "服务器称不能为空", trigger: "blur" },
-          { min: 2, max: 20, message: '服务器称长度必须在 2 和 20 之间', trigger: 'blur' }
+          { required: true, message: "服务器名称不能为空", trigger: "blur" },
+          { min: 2, max: 20, message: '服务器名称长度必须在 2 和 20 之间', trigger: 'blur' }
         ],
         sshHost: [
           { required: true, message: "服务器IP不能为空", trigger: "blur" },
@@ -184,18 +186,35 @@ export default {
   methods: {
     /** 修改按钮操作 */
     handleUpdate() {
-      // this.reset();
-        this.form = this.sshData;
+      this.reset();
+      this.form = this.sshData;
         this.open = true;
         this.title = "修改用服务器";
         // this.form.password = "";
+
     },
 
     /** 删除按钮操作 */
     handleDelete() {
-      delSSh(this.sshData.id)
-      this.getList();
-
+      ElMessageBox.confirm('此操作将永久删除"'+ this.sshData.name+'"的快捷键, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delSSh(this.sshData.id).then(res=>{
+          this.$emit('getList');
+        });
+        // this.getList();
+        ElMessage({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
 
     /** 提交表单按钮 */
@@ -205,7 +224,8 @@ export default {
           updateSSh(this.form).then(response => {
             // this.$modal.msgSuccess("修改成功");
             this.open = false;
-            this.getList();
+            this.$emit('getList');
+
           });
           /*   } else {
            addUser(this.form).then(response => {
@@ -220,7 +240,21 @@ export default {
     /** 表单取消按钮*/
     cancel() {
       this.open = false;
-      // this.reset();
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        ID: undefined,
+        sshName:'',
+        sshHost:'',
+        sshClass:'',
+        sshPort:'',
+        sshUserName:'',
+        sshPassword:'',
+        remark: undefined,
+      };
+      this.title = "form";
     },
 
   }

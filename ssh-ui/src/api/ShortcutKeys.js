@@ -13,7 +13,7 @@ export function listCommand(data) {
 // 新增快捷键
 export function addCommand(data) {
     return request({
-        url: '/system/addSSh',
+        url: '/system/addCommand',
         method: 'post',
         data: data
     })
@@ -22,7 +22,7 @@ export function addCommand(data) {
 // 修改快捷键
 export function updateCommand(data) {
     return request({
-        url: '/system/updateSSh',
+        url: '/system/updateCommand',
         method: 'put',
         data: data
     })
