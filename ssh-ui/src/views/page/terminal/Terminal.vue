@@ -13,6 +13,8 @@ import { Terminal } from "xterm";
 import "xterm/css/xterm.css";
 import "xterm/lib/xterm.js";
 import WSSHClient from '@/js/webssh.js'
+import {listCommand} from "@/api/ShortcutKeys";
+import {getSsh} from "@/api/SSH_c";
 let term = new Terminal({
     cols: 97,
         rows: 37,
@@ -60,6 +62,7 @@ export default {
     name: "Terminal",
     data (){
         return {
+          sshIdList:{},
             options:{
                 operate: 'connect',
                 host: '192.168.130.128',//IP
@@ -102,12 +105,20 @@ export default {
         },
       back(){
         window.location.href = '/#/index'
-      }
+      },
+      GetSsh() {
+        getSsh(this.$route.params.id).then(response => {
+              this.sshIdList = response.data
+            }
+        );
+      },
 
     } ,
+  created() {
+    this.GetSsh()
 
-    computed:{
-
+  },
+/*    computed:{
       id(){
         return this.$route.params.id
       },
@@ -117,11 +128,8 @@ export default {
           sshIdList => sshIdList.id==this.id
       )
     }
-
   }
-
-
-
+  */
 }/*
 var term = new Terminal({
     cursorBlink: true, // 光标闪烁

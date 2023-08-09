@@ -116,7 +116,6 @@ export default {
       );
     },
     handleAdd() {
-      this.ID = this.$store.state.user.id;
       this.open = true;
       this.title = "添加服务器";
     },

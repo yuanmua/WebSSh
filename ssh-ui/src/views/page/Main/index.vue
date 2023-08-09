@@ -192,8 +192,13 @@ export default {
   methods: {
     /** 查询服务器列表 */
     getList() {
-      this.$store.dispatch("GetList")
-      this.getListLoading()
+      listSSh().then(response => {
+            this.sshList = response.data
+            this.loading = false;
+            console.log(this.sshList)
+
+          }
+      );
     },
     getListLoading() {
       this.sshList = this.$store.state.ssh.sshList

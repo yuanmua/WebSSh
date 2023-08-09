@@ -1,8 +1,8 @@
 import axios from "axios";
 import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus'
-
 import store from '@/store'
 import {getToken} from "@/js/auth";
+import {delCommand} from "@/api/ShortcutKeys";
 
 // 是否显示重新登录
 export let isRelogin = { show: false };
@@ -59,7 +59,20 @@ export let isRelogin = { show: false };
       // 获取错误信息
       const msg = res.data.msg
       console.log('---code---',code)
-      if (code === 0 && res.data.msg === 'NOTLOGIN') {// 返回登录页面
+      if (code === 0 && res.data.msg === 'NOT_LOGIN') {// 返回登录页面
+
+        ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '提示', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          location.href = '/';
+        }).catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '已取消'
+          });
+        });
 
       }  else if (code === 0) {
         ElMessage({ message: msg, type: 'error' })
