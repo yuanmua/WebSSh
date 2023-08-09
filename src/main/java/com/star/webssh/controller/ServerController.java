@@ -7,6 +7,7 @@ import com.star.webssh.pojo.SshServer;
 import com.star.webssh.service.ServerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class ServerController {
      * @param server
      * @return
      */
+
     @PostMapping("/addSSh")
     public R<String> add(@RequestBody SshServer server){
 
@@ -72,6 +74,7 @@ public class ServerController {
      * 查询所有录入信息
      * @return
      */
+
     @GetMapping("/list")
     public R<List> list(){
 
@@ -96,6 +99,7 @@ public class ServerController {
      * @param sshServer
      * @return
      */
+
     @PutMapping("/updateSSh")
     public R<String> updateById(@RequestBody SshServer sshServer){
         //设置更新时间
@@ -112,6 +116,7 @@ public class ServerController {
      * @param ids
      * @return
      */
+
     @DeleteMapping("/ssh/{ids}")
     public R<String> deleteById(@PathVariable List<Long> ids){
 

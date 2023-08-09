@@ -2,8 +2,10 @@ package com.star.webssh.filtter;
 
 import com.alibaba.fastjson.JSONObject;
 
+import com.star.webssh.common.BaseContext;
 import com.star.webssh.common.JWTUtils;
 import com.star.webssh.common.R;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -18,7 +20,7 @@ import java.io.IOException;
  * @author Mr.Wang
  * @create 2023-05-24-11:25
  */
-@WebFilter(urlPatterns = "/*")
+@WebFilter(urlPatterns = {"/cmd/*","/employee/*","/system/*"})
 @Slf4j
 public class loginFilter implements Filter {
 
@@ -66,7 +68,20 @@ public class loginFilter implements Filter {
         }
         //有密钥，看是否能解析成功
         try {
-            JWTUtils.parseJWT(jwt);
+            Claims claims = JWTUtils.parseJWT(jwt);
+            //将当前用户的id存入工具类中
+            Object id = claims.get("id");
+            String s_id = String.valueOf(id);
+            Long user_id = Long.valueOf(s_id);
+            BaseContext.setCurrentId(user_id);
+
+//            BaseContext.setCurrentId(emp.getId());
+//            Long userId = BaseContext.getCurrentId();
+            log.info("ccc");
+
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
             R error = R.error("NOT_LOGIN");

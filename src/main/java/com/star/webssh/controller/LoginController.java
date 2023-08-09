@@ -65,9 +65,7 @@ public class LoginController {
             claim.put("id",emp.getId());
             claim.put("password",emp.getPassword());
             String jwt = JWTUtils.createJWT(claim);
-            //将当前用户的id存入工具类中
-            BaseContext.setCurrentId(emp.getId());
-            Long userId = BaseContext.getCurrentId();
+
             return R.success(jwt);
         }
         else {
