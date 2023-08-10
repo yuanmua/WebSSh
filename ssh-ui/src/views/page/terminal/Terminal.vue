@@ -1,135 +1,159 @@
 <template>
-    <div>
-        <button @click="OnClick" type="submit">连接到SSH</button>
-        <button @click="close" type="button" id="close">关闭连接</button>
-        <el-button type="primary" @click="back">返回</el-button>
+  <div>
+    <button @click="OnClick" type="submit">连接到SSH</button>
+    <button @click="close" type="button" id="close">关闭连接</button>
+    <el-button type="primary" @click="back">返回</el-button>
 
-      <div id="terminal"></div>
-    </div>
+    <div id="terminal"></div>
+  </div>
 </template>
 
 <script>
-import { Terminal } from "xterm";
+import {Terminal} from "xterm";
 import "xterm/css/xterm.css";
 import "xterm/lib/xterm.js";
 import WSSHClient from '@/js/webssh.js'
 import {listCommand} from "@/api/ShortcutKeys";
 import {getSsh} from "@/api/SSH_c";
+import {ElMessage, ElMessageBox} from "element-plus";
+
 let term = new Terminal({
-    cols: 97,
-        rows: 37,
-        cursorBlink: true, // 光标闪烁
-        cursorStyle: "block", // 光标样式  null | 'block' | 'underline' | 'bar'
-        // scrollback: 800, // 回滚
-        tabStopWidth: 8, // 制表宽度
-        screenKeys: true
+  cols: 97,
+  rows: 37,
+  cursorBlink: true, // 光标闪烁
+  cursorStyle: "block", // 光标样式  null | 'block' | 'underline' | 'bar'
+  // scrollback: 800, // 回滚
+  tabStopWidth: 8, // 制表宽度
+  screenKeys: true
 });
 
 let client = new WSSHClient();
+
 function connect(client, options) {
-    //执行连接操作
-    client.connect({
-        onError: function (error) {
-            //连接失败回调
-            term.write('错误: ' + error + '\r\n');
-        },
-        onConnect: function () {
-            //连接成功回调
-            client.sendInitData(options);
-            //在页面上显示连接中...
-            term.write('连接中...\r\n');
-        },
-        onClose: function () {
-            //连接关闭回调
-            term.write("\r\n连接已关闭\r\n");
-        },
-        onData: function (data) {
-            //收到数据时回调
-            term.write(data);
-        }
-    });
+  //执行连接操作
+  client.connect({
+    onError: function (error) {
+      //连接失败回调
+      term.write('错误: ' + error + '\r\n');
+    },
+    onConnect: function () {
+      //连接成功回调
+      client.sendInitData(options);
+      //在页面上显示连接中...
+      term.write('连接中...\r\n');
+
+    },
+    onClose: function () {
+      //连接关闭回调
+      term.write("\r\n连接已关闭\r\n");
+    },
+    onData: function (data) {
+      //收到数据时回调
+      term.write(data);
+    }
+  });
 }
+
 function init(client) {
-    term.open(document.getElementById('terminal'));
-    term.onData( function (data) {
-        console.log(data);
-        //键盘输入时的回调函数
-        client.sendClientData(data);
-    });
+  term.open(document.getElementById('terminal'));
+  term.onData(function (data) {
+    console.log(data);
+    //键盘输入时的回调函数
+    client.sendClientData(data);
+  });
 }
+
 
 export default {
-    name: "Terminal",
-    data (){
-        return {
-          sshIdList:{},
-            options:{
-                operate: 'connect',
-                host: '192.168.130.128',//IP
-                port: 22,//端口号
-                username: 'yuanmua',//用户名
-                password: '123s123s'//密码
-            }
-        }
-
-    },
-    mounted() {
-      init(client)
-      console.log("连接开启");
-
-      if (this.sshIdList===undefined){
-        window.location.href = '/#/index'
+  name: "Terminal",
+  data() {
+    return {
+      comOpen: false,
+      sshIdList: {},
+      options: {
+        operate: 'connect',
+        host: '192.168.130.128',//IP
+        port: 22,//端口号
+        username: 'yuanmua',//用户名
+        password: '123s123s'//密码
       }
-      console.log(this.sshIdList);
+    }
 
-      this.options.host = this.sshIdList.sshHost;
-      this.options.port = this.sshIdList.sshPort;
-      this.options.username = this.sshIdList.sshUserName;
-      this.options.password = this.sshIdList.sshPassword
-      ;
+  },
+  mounted() {
+    init(client)
+    console.log("连接开启");
 
-      console.log(this.options);
+    if (this.sshIdList === undefined) {
+      window.location.href = '/#/index'
+    }
+    console.log(this.sshIdList);
 
+    this.options.host = this.sshIdList.sshHost;
+    this.options.port = this.sshIdList.sshPort;
+    this.options.username = this.sshIdList.sshUserName;
+    this.options.password = this.sshIdList.sshPassword
+    ;
+
+    console.log(this.options);
+
+  },
+  methods: {
+
+    /*发送快捷键数据*/
+    TerminalSend(data) {
+      console.log(data);
+      if (this.comOpen === false){
+        ElMessageBox.alert('请先开启连接', '提示', {
+          type: 'warning',
+          confirmButtonText: 'OK',
+        })
+
+      }
+      else {
+        client.sendClientData(data);
+        client.sendClientData('\r');
+      }
     },
-    methods:{
-        OnClick(){
-            connect(client, this.options);
-        },
-        close() {
-            if (client!==undefined){
-                console.log(client);
-                console.log("连接开213启");
-                client.close()
-            }
-            else console.log("没有开连接");
-        },
-      back(){
-        window.location.href = '/#/index'
-      },
-      GetSsh() {
-        getSsh(this.$route.params.id).then(response => {
-              this.sshIdList = response.data
-            }
-        );
-      },
+    OnClick() {
+      connect(client, this.options);
+      this.comOpen =true
+    },
+    close() {
+      this.comOpen =false
+      if (client !== undefined) {
+        console.log(client);
+        console.log("连接开213启");
+        client.close()
+      } else console.log("没有开连接");
+    },
+    back() {
+      window.location.href = '/#/index'
+    },
+    GetSsh() {
+      getSsh(this.$route.params.id).then(response => {
+            this.sshIdList = response.data
+          }
+      );
+    },
 
-    } ,
+  },
   created() {
     this.GetSsh()
 
   },
-/*    computed:{
-      id(){
-        return this.$route.params.id
-      },
+  /*    computed:{
+        id(){
+          return this.$route.params.id
+        },
 
-      sshIdList(){
-      return this.$store.state.ssh.sshList.find(
-          sshIdList => sshIdList.id==this.id
-      )
+        sshIdList(){
+        return this.$store.state.ssh.sshList.find(
+            sshIdList => sshIdList.id==this.id
+        )
+      }
     }
-  }
-  */
+    */
 }/*
 var term = new Terminal({
     cursorBlink: true, // 光标闪烁

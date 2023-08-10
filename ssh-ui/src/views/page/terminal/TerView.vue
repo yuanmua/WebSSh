@@ -2,10 +2,10 @@
 <template>
   <div>
     <div class="sidebar">
-      <MenuSidebar></MenuSidebar>
+      <MenuSidebar @send="send"></MenuSidebar>
     </div>
     <div class="terminal-main">
-      <Terminal></Terminal>
+      <Terminal ref="Terminal"></Terminal>
     </div>
   </div>
 </template>
@@ -14,8 +14,14 @@ import MenuSidebar from "./MenuSidebar.vue";
 import Terminal from "./Terminal.vue";
 
 export default {
-  name: "Main.view",
+  name: "TerView",
   components: {Terminal, MenuSidebar},
+  methods: {
+    send(data) {
+      this.$refs.Terminal.TerminalSend(data);
+    },
+  }
+
 }
 </script>
 

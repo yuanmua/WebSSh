@@ -1,24 +1,6 @@
 <template>
   <div class="Sidebar">
-    <el-upload
-        class="upload-demo"
-        drag
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        multiple
-    >
-      <el-icon class="el-icon--upload">
-        <upload-filled/>
-      </el-icon>
-      <div class="el-upload__text">
-        Drop file here or <em>click to upload</em>
-      </div>
-      <template #tip>
-        <div class="el-upload__tip">
-          jpg/png files with a size less than 500kb
-        </div>
-      </template>
-    </el-upload>
-
+    <upLoad/>
     <div class="Sidebar-key">
       <h2>快捷键
         <el-button size="default" type="primary" @click="shortcutAdd()" style="float:right">
@@ -48,7 +30,7 @@
         <el-table-column label="操作" width="150">
           <template #default="scope">
 
-            <el-button size="small" type="success" @click="handleEdit(scope.$index, scope.row)"
+            <el-button size="small" type="success" @click="send(scope.row.command)"
                        style="width: 90%; margin: 10%">
               发送
             </el-button>
@@ -103,16 +85,16 @@
 </template>
 <script>
 import {ref} from 'vue'
-import {UploadFilled} from '@element-plus/icons-vue'
 import {Timer} from '@element-plus/icons-vue'
 import {addCommand, delCommand, listCommand, updateCommand} from "@/api/ShortcutKeys";
 import {listSSh} from "@/api/SSH_c";
 import {ElMessage, ElMessageBox} from 'element-plus'
+import UpLoad from "@/views/page/terminal/upLoad.vue";
 
 export default {
   name: "MenuSidebar",
   components: {
-    UploadFilled,
+    UpLoad,
     Timer,
     ref
   },
@@ -143,6 +125,8 @@ export default {
       title: "",
       // 表单参数
       form: {
+        Id: undefined,
+        server_id: undefined,
         shortcutId: undefined,
         shortcutName: undefined,
         introduce: undefined,
@@ -168,8 +152,12 @@ export default {
   },
 
   methods: {
+    send(command) {
+      this.$emit('send', command);
+
+    },
     getListCommand() {
-      listCommand().then(response => {
+      listCommand(this.$route.params.id).then(response => {
             this.tableData = response.data
             this.loading = false;
           }
@@ -186,7 +174,8 @@ export default {
     submitForm: function () {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.shortcutId !== undefined) {
+          if (this.form.Id !== undefined) {
+            this.form.server_id = this.$route.params.id;
             updateCommand(this.form).then(response => {
               ElMessage({
                 message: '修改成功',
@@ -196,6 +185,7 @@ export default {
               this.getList();
             });
           } else {
+            this.form.server_id = this.$route.params.id;
             addCommand(this.form).then(response => {
               ElMessage({
                 message: '新增成功',
@@ -217,7 +207,7 @@ export default {
     /** 修改按钮操作 */
     handleEdit(index, row) {
       this.reset();
-      this.form.shortcutId = row.id;
+      this.form.Id = row.id;
       this.form.shortcutName = row.name;
       this.form.introduce = row.introduce;
       this.form.shortcutContent = row.command;
@@ -239,17 +229,27 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(index, row) {
-      const userIds = row.id
+      const Id = row.id
       ElMessageBox.confirm('此操作将永久删除"' + row.name + '"的快捷键, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let mes = delCommand(userIds);
-        this.getListCommand();
-        ElMessage({
-          type: 'success',
-          message: '删除成功!'
+        const data = {
+          Id: Id,
+          server_id: this.$route.params.id,
+        }
+        delCommand(data).then(res => {
+          this.getListCommand();
+          ElMessage({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(res => {
+          ElMessage({
+            type: 'error',
+            message: '删除失败!'
+          });
         });
 
       }).catch(() => {
@@ -264,7 +264,7 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        shortcutId: undefined,
+        Id: undefined,
         shortcutName: undefined,
         introduce: undefined,
         shortcutContent: undefined,

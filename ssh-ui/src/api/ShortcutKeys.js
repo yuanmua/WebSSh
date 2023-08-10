@@ -1,11 +1,10 @@
 import request from '@/js/request'
 
 // 查询快捷键
-export function listCommand(data) {
+export function listCommand(id) {
     return request({
-        url: '/system/listCommand',
+        url: '/system/listCommand/' + id,
         method: 'get',
-        params: data
     })
 }
 
@@ -29,9 +28,10 @@ export function updateCommand(data) {
 }
 
 // 删除快捷键
-export function delCommand(CommandId) {
+export function delCommand(data) {
     return request({
-        url: '/system/delCommand/' + CommandId,
-        method: 'delete'
+        url: '/system/delCommand/',
+        method: 'delete',
+        data: data
     })
 }

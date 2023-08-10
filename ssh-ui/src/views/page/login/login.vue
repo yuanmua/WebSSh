@@ -5,7 +5,7 @@
       <div class="login-form">
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" >
           <div class="login-form-title">
-            <img src="../../images/login/logo.png" style="width:139px;height:42px;" alt="" />
+            <img src="" style="width:139px;height:42px;" alt="" />
           </div>
           <el-form-item prop="username">
             <el-input v-model="loginForm.username" type="text" />
