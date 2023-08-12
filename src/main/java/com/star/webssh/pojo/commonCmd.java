@@ -22,6 +22,8 @@ public class commonCmd {
 
     private String cmds;//常用指令组
 
+    private String remarks;//备注
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 

@@ -8,6 +8,7 @@ CREATE TABLE `common_cmd` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `cmds` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '指令集',
+  `remarks` varchar(100) COLLATE utf8_bin  COMMENT '备注',
 
   PRIMARY KEY (`id`)
 
