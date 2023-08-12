@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/cmd")
+@RequestMapping("/system")
 public class commonCmdController {
     @Autowired
     private commonCmdService commonCmdService;
@@ -26,7 +26,7 @@ public class commonCmdController {
      * @param commonCmd
      * @return
      */
-    @PostMapping("/add")
+    @PostMapping("/addCommand")
     public R<String> add(@RequestBody commonCmd commonCmd){
         Long useId = BaseContext.getCurrentId();
 
@@ -42,7 +42,7 @@ public class commonCmdController {
      * @param ids
      * @return
      */
-    @DeleteMapping("/delete/{ids}")
+    @DeleteMapping("/delCommand/{ids}")
     public R<String> remove(@PathVariable Long ids){
         commonCmdService.removeById(ids);
 
@@ -54,7 +54,7 @@ public class commonCmdController {
      * @param commonCmd
      * @return
      */
-    @PutMapping("/update")
+    @PutMapping("/updateCommand")
     public R<String> update(@RequestBody commonCmd commonCmd){
            commonCmdService.updateById(commonCmd);
 
@@ -82,7 +82,7 @@ public class commonCmdController {
      * @param ids
      * @return
      */
-    @GetMapping("/list/{ids}")
+    @GetMapping("/listCommand/{ids}")
     public  R<List<commonCmd>> list (@PathVariable Long ids) {
         Long userId = BaseContext.getCurrentId();
         LambdaQueryWrapper<commonCmd> queryWrapper=new LambdaQueryWrapper<>();
