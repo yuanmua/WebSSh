@@ -202,7 +202,7 @@ export default {
         type: 'warning'
       }).then(() => {
         delSSh(this.sshData.id).then(res=>{
-          this.$emit('getList');
+          this.$emit('getList',1);
         });
         // this.getList();
         ElMessage({
@@ -224,7 +224,7 @@ export default {
           updateSSh(this.form).then(response => {
             // this.$modal.msgSuccess("修改成功");
             this.open = false;
-            this.$emit('getList');
+            this.$emit('getList',1);
 
           });
           /*   } else {

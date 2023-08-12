@@ -3,7 +3,7 @@ import request from '@/js/request'
 // 查询ssh列表
 export function listSSh(data) {
     return request({
-        url: '/system/list',
+        url: '/system/list/' + data,
         method: 'get',
         params: data
     })

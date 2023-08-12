@@ -41,7 +41,7 @@
             plain
             icon="el-icon-delete"
             size="small"
-            @click="getList"
+            @click="getList(1)"
         >刷新
         </el-button>
       </el-col>
@@ -186,14 +186,14 @@ export default {
 
   created() {
     this.loading = true;
-    this.getList()
+    this.getList(0)
   },
 
   methods: {
     /** 查询服务器列表 */
-    getList() {
+    getList(data) {
       this.loading = true;
-      listSSh().then(response => {
+      listSSh(data).then(response => {
             this.sshList = response.data
             this.loading = false;
             console.log(this.sshList)
@@ -201,7 +201,7 @@ export default {
           }
       );
     },
-    getListLoading() {
+   /* getListLoading() {
       this.sshList = this.$store.state.ssh.sshList
       if (this.sshList.length === 0) {
         setTimeout(() => {
@@ -211,7 +211,7 @@ export default {
         this.loading = false;
         console.log('1')
       }//不加这个会很神奇地加载不出来
-    },
+    },*/
 
     /** 新增按钮操作 */
     handleAdd() {
@@ -255,7 +255,7 @@ export default {
           addSSh(this.form).then(response => {
             // this.$modal.msgSuccess("修改成功");
             this.open = false;
-            this.getList();
+            this.getList(1);
           });
           /*   } else {
            addUser(this.form).then(response => {
