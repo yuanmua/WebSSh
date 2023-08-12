@@ -1,85 +1,91 @@
 <template>
   <div>
-  <el-card class="box-card">
-    <template #header>
+    <el-card class="box-card">
+      <template #header>
 
-      <div class="card-header">
-        <span>{{ sshData.sshName }}</span>
-        <router-link :to="`index/ssh/${sshData.id}`">
+        <div :class="{ 'active-bar': sshData.status, 'inactive-bar': !sshData.status }" class="card-header">
+          <span>{{ sshData.sshName }}</span>
+          <router-link :to="`index/ssh/${sshData.id}`">
 
-          进入服务器
+            进入服务器
 
-        </router-link>
+          </router-link>
 
+
+        </div>
+      </template>
+
+      <div class="info-item">
+        <span class="info-label">ID:</span>
+        <span>{{ sshData.id }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">IP:</span>
+        <span class="info-span">{{ sshData.sshHost }}</span>
+
+        <span class="info-label">端口:</span>
+        <span>{{ sshData.sshPort }}</span>
 
       </div>
-    </template>
-    <div class="info-item">
-      <span class="info-label">ID:</span>
-      <span>{{ sshData.ID }}</span>
-    </div>
-    <div class="info-item">
-      <span class="info-label">Host:</span>
-      <span>{{ sshData.sshHost }}</span>
-    </div>
-    <div class="info-item">
-      <span class="info-label">Class:</span>
-      <span>{{ sshData.sshClass }}</span>
-    </div>
-    <div class="info-item">
-      <span class="info-label">Port:</span>
-      <span>{{ sshData.sshPort }}</span>
-    </div>
-    <div class="info-item">
-      <span class="info-label">Username:</span>
-      <span>{{ sshData.sshUserName }}</span>
-    </div>
-    <div class="info-item">
-      <span class="info-label">Password:</span>
-      <span>{{ sshData.sshPassword }}</span>
-    </div>
-    <div class="info-item">
-      <span class="info-label">Remark:</span>
-      <span>{{ sshData.remark }}</span>
-    </div>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-            type="success"
-            plain
-            icon="el-icon-edit"
-            size="small"
-            @click="handleUpdate"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="danger"
-            plain
-            icon="el-icon-delete"
-            size="small"
-            @click="handleDelete"
-        >删除</el-button>
-      </el-col>
-    </el-row>
 
-    <div class="status-bar" :class="{ 'active-bar': isActive, 'inactive-bar': !isActive }"></div>
-  </el-card>
+      <div class="info-item">
+        <span class="info-label">分类:</span>
+        <span class="info-span">{{ sshData.sshClass }}</span>
+
+        <span class="info-label">用户名:</span>
+        <span>{{ sshData.sshUserName }}</span>
+
+      </div>
+
+
+      <div class="info-item">
+        <span class="info-label">备注:</span>
+        <div class="remark">
+          <span>{{ sshData.remark }}</span>
+        </div>
+      </div>
+
+      <el-button
+          type="success"
+          plain
+          size="default"
+          @click="handleUpdate"
+          style="margin-right: 20%"
+      >修改
+      </el-button>
+      <el-button
+          type="success"
+          plain
+          size="default"
+          @click="toSsh"
+          style="margin-right: 20%"
+      >进入
+      </el-button>
+      <el-button
+          type="danger"
+          plain
+          size="default"
+          @click="handleDelete"
+      >删除
+      </el-button>
+
+    </el-card>
 
 
     <!-- 添加或修改用户配置对话框 -->
-    <el-dialog :title="title"     v-model="open"  width="600px" append-to-body>
+    <el-dialog :title="title" v-model="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="服务器名称" prop="sshName">
-              <el-input v-model="form.sshName" placeholder="服务器名称" maxlength="30" />
+              <el-input v-model="form.sshName" placeholder="服务器名称" maxlength="30"/>
             </el-form-item>
           </el-col>
           <el-col :span="10">
             <el-form-item label="服务器IP" prop="sshHost">
-              <el-input v-model="form.sshHost" placeholder="服务器IP" maxlength="30" />
+              <el-input v-model="form.sshHost" placeholder="服务器IP" maxlength="30"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -87,12 +93,12 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="服务器分类" prop="sshClass">
-              <el-input v-model="form.sshClass" placeholder="服务器分类" maxlength="30" />
+              <el-input v-model="form.sshClass" placeholder="服务器分类" maxlength="30"/>
             </el-form-item>
           </el-col>
           <el-col :span="10">
             <el-form-item label="服务器端口" prop="sshPort">
-              <el-input v-model="form.sshPort" placeholder="服务器端口" maxlength="30" />
+              <el-input v-model="form.sshPort" placeholder="服务器端口" maxlength="30"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -100,12 +106,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="服务器名" prop="sshUserName">
-              <el-input v-model="form.sshUserName" placeholder="请输入服务器用户名称" maxlength="30" />
+              <el-input v-model="form.sshUserName" placeholder="请输入服务器用户名称" maxlength="30"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="服务器密码" prop="sshPassword">
-              <el-input v-model="form.sshPassword" placeholder="请输入用户密码" type="password" maxlength="20" show-password/>
+              <el-input v-model="form.sshPassword" placeholder="请输入用户密码" type="password" maxlength="20"
+                        show-password/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -134,7 +141,7 @@ import {delCommand} from "@/api/ShortcutKeys";
 
 export default {
   name: "sshCard",
-  props:["sshData"],
+  props: ["sshData"],
   data() {
     return {
       isActive: false,
@@ -144,12 +151,12 @@ export default {
       // 表单参数
       form: {
         ID: this.$store.state.user.id,
-        sshName:'',
-        sshHost:'',
-        sshClass:'',
-        sshPort:'',
-        sshUserName:'',
-        sshPassword:'',
+        sshName: '',
+        sshHost: '',
+        sshClass: '',
+        sshPort: '',
+        sshUserName: '',
+        sshPassword: '',
         remark: undefined,
       },
       // 是否显示弹出层
@@ -157,11 +164,11 @@ export default {
       // 表单校验
       rules: {
         sshName: [
-          { required: true, message: "服务器名称不能为空", trigger: "blur" },
-          { min: 2, max: 20, message: '服务器名称长度必须在 2 和 20 之间', trigger: 'blur' }
+          {required: true, message: "服务器名称不能为空", trigger: "blur"},
+          {min: 2, max: 20, message: '服务器名称长度必须在 2 和 20 之间', trigger: 'blur'}
         ],
         sshHost: [
-          { required: true, message: "服务器IP不能为空", trigger: "blur" },
+          {required: true, message: "服务器IP不能为空", trigger: "blur"},
           {
             pattern: /^(?!0)(?!.*\.$)((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/,
             message: "请输入正确的IP地址",
@@ -169,40 +176,44 @@ export default {
           }
         ],
         sshPort: [
-          { required: true, message: "端口不能为空", trigger: "blur" },
+          {required: true, message: "端口不能为空", trigger: "blur"},
           {
             pattern: /^(\d{1,5})$/,
             message: "请输入正确的端口号",
             trigger: ["blur", "change"]
           }
         ],
-        sshUserName:{ required: true, message: "服务器IP不能为空", trigger: "blur" },
-        sshPassword:{ required: true, message: "服务器IP不能为空", trigger: "blur" },
+        sshUserName: {required: true, message: "服务器IP不能为空", trigger: "blur"},
+        sshPassword: {required: true, message: "服务器IP不能为空", trigger: "blur"},
 
 
       }
     }
   },
   methods: {
+    toSsh(){
+      this.$router.push('index/ssh/'+this.sshData.id)
+
+    },
     /** 修改按钮操作 */
     handleUpdate() {
       this.reset();
       this.form = this.sshData;
-        this.open = true;
-        this.title = "修改用服务器";
-        // this.form.password = "";
+      this.open = true;
+      this.title = "修改用服务器";
+      // this.form.password = "";
 
     },
 
     /** 删除按钮操作 */
     handleDelete() {
-      ElMessageBox.confirm('此操作将永久删除"'+ this.sshData.name+'"的快捷键, 是否继续?', '提示', {
+      ElMessageBox.confirm('此操作将永久删除"' + this.sshData.name + '"的快捷键, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delSSh(this.sshData.id).then(res=>{
-          this.$emit('getList',1);
+        delSSh(this.sshData.id).then(res => {
+          this.$emit('getList', 1);
         });
         // this.getList();
         ElMessage({
@@ -218,13 +229,13 @@ export default {
     },
 
     /** 提交表单按钮 */
-    submitForm: function() {
+    submitForm: function () {
       this.$refs["form"].validate(valid => {
         if (valid) {
           updateSSh(this.form).then(response => {
             // this.$modal.msgSuccess("修改成功");
             this.open = false;
-            this.$emit('getList',1);
+            this.$emit('getList', 1);
 
           });
           /*   } else {
@@ -246,12 +257,12 @@ export default {
     reset() {
       this.form = {
         ID: undefined,
-        sshName:'',
-        sshHost:'',
-        sshClass:'',
-        sshPort:'',
-        sshUserName:'',
-        sshPassword:'',
+        sshName: '',
+        sshHost: '',
+        sshClass: '',
+        sshPort: '',
+        sshUserName: '',
+        sshPassword: '',
         remark: undefined,
       };
       this.title = "form";
@@ -263,9 +274,9 @@ export default {
 </script>
 
 <style scoped>
-.status-bar {
-  height: 10px;
-  background-color: #f0f0f0;
+.remark {
+  height: 70px;
+  overflow: auto;
 }
 
 .active-bar {
@@ -275,6 +286,7 @@ export default {
 .inactive-bar {
   background-color: #bdbdbd; /* Gray color for inactive server */
 }
+
 .box-card {
   width: 400px;
   margin: 20px auto;
@@ -296,12 +308,18 @@ export default {
 .info-item {
   margin: 10px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .info-label {
-  min-width: 100px;
+  min-width: 15%;
   font-weight: bold;
+
+}
+
+.info-span {
+  min-width: 35%;
+
 }
 
 .text {

@@ -13,8 +13,8 @@
             <el-popover effect="light" trigger="hover" placement="top" width="auto">
               <template #default>
                 <div>指令名: {{ scope.row.name }}</div>
-                <div>介绍: {{ scope.row.introduce }}</div>
-                <div>时间: {{ scope.row.date }}</div>
+                <div>介绍: {{ scope.row.remarks }}</div>
+                <div>时间: {{ scope.row.createTime }}</div>
               </template>
               <template #reference>
                 <el-tag>{{ scope.row.name }}</el-tag>
@@ -24,13 +24,13 @@
         </el-table-column>
         <el-table-column label="命令" width="auto">
           <template #default="scope">
-            {{ scope.row.command }}
+            {{ scope.row.cmds }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template #default="scope">
 
-            <el-button size="small" type="success" @click="send(scope.row.command)"
+            <el-button size="small" type="success" @click="send(scope.row.cmds)"
                        style="width: 90%; margin: 10%">
               发送
             </el-button>
@@ -55,21 +55,21 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="指令名称" prop="shortcutName">
-              <el-input v-model="form.shortcutName" placeholder="指令名称" maxlength="30"/>
+            <el-form-item label="指令名称" prop="name">
+              <el-input v-model="form.name" placeholder="指令名称" maxlength="30"/>
             </el-form-item>
           </el-col>
           <el-col :span="10">
             <el-form-item label="备注">
-              <el-input v-model="form.introduce" type="textarea" placeholder="请输入介绍"></el-input>
+              <el-input v-model="form.remarks" type="textarea" placeholder="请输入介绍"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="24">
-            <el-form-item label="指令内容" prop="shortcutContent">
-              <el-input v-model="form.shortcutContent" type="textarea" placeholder="请输入内容"></el-input>
+            <el-form-item label="指令内容" prop="cmds">
+              <el-input v-model="form.cmds" type="textarea" placeholder="请输入内容"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -102,45 +102,29 @@ export default {
     return {
       loading: true,
       isCollapse: true,
-      tableData: [
-        {
-          id: '1',
-          name: '我的',
-          date: '2016-05-02',
-          command: 'ls',
-          introduce: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          id: '2',
-          name: '我的1',
-          date: '2016-05-04',
-          command: 'cd',
-          introduce: 'No. 189, Grove St, Los Angeles',
-        },
-      ],
-
+      tableData: [],
 
       isActive: false,
       // 弹出层标题
       title: "",
       // 表单参数
       form: {
-        Id: undefined,
-        server_id: undefined,
-        shortcutId: undefined,
-        shortcutName: undefined,
-        introduce: undefined,
-        shortcutContent: undefined,
+        id: undefined,
+        userId: this.$store.state.user.id,
+        serverId: undefined,
+        name: undefined,
+        cmds: undefined,
+        remarks: undefined,
       },
       // 是否显示弹出层
       open: false, // 是否显示弹出层
       // 表单校验
       rules: {
-        shortcutName: [
+        name: [
           {required: true, message: "关键字名称不能为空", trigger: "blur"},
           {min: 2, max: 20, message: '关键字名称长度必须在 2 和 20 之间', trigger: 'blur'}
         ],
-        shortcutContent: {required: true, message: "内容不能为空", trigger: "blur"},
+        cmds: {required: true, message: "内容不能为空", trigger: "blur"},
       }
 
     };
@@ -174,25 +158,25 @@ export default {
     submitForm: function () {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.Id !== undefined) {
-            this.form.server_id = this.$route.params.id;
+          if (this.form.id !== undefined) {
+            this.form.serverId = this.$route.params.id;
             updateCommand(this.form).then(response => {
               ElMessage({
                 message: '修改成功',
                 type: 'success',
               })
               this.open = false;
-              this.getList();
+              this.getListCommand();
             });
           } else {
-            this.form.server_id = this.$route.params.id;
+            this.form.serverId = this.$route.params.id;
             addCommand(this.form).then(response => {
               ElMessage({
                 message: '新增成功',
                 type: 'success',
               })
               this.open = false;
-              this.getList();
+              this.getListCommand();
             });
           }
         }
@@ -207,10 +191,10 @@ export default {
     /** 修改按钮操作 */
     handleEdit(index, row) {
       this.reset();
-      this.form.Id = row.id;
-      this.form.shortcutName = row.name;
-      this.form.introduce = row.introduce;
-      this.form.shortcutContent = row.command;
+      this.form.id = row.id;
+      this.form.name = row.name;
+      this.form.remarks = row.remarks;
+      this.form.cmds = row.cmds;
       this.title = "修改快捷键";
       this.open = true;
       console.log(row);
@@ -229,17 +213,13 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(index, row) {
-      const Id = row.id
+      const id = row.id
       ElMessageBox.confirm('此操作将永久删除"' + row.name + '"的快捷键, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const data = {
-          Id: Id,
-          server_id: this.$route.params.id,
-        }
-        delCommand(data).then(res => {
+        delCommand(id).then(res => {
           this.getListCommand();
           ElMessage({
             type: 'success',
@@ -264,10 +244,12 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        Id: undefined,
-        shortcutName: undefined,
-        introduce: undefined,
-        shortcutContent: undefined,
+        id: undefined,
+        userId: this.$store.state.user.id,
+        serverId: undefined,
+        name: undefined,
+        cmds: undefined,
+        remarks: undefined,
       };
       this.title = "form";
     },

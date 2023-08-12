@@ -30,8 +30,7 @@ export function updateCommand(data) {
 // 删除快捷键
 export function delCommand(data) {
     return request({
-        url: '/system/delCommand/',
+        url: '/system/delCommand/'+data,
         method: 'delete',
-        data: data
     })
 }

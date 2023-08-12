@@ -1,14 +1,14 @@
 <template>
-<!--  <sidebar  class="sidebar-container"/>
-  <navbar/>
+  <!--  <sidebar  class="sidebar-container"/>
+    <navbar/>
 
-  <app-main/>-->
+    <app-main/>-->
 
-  <div :class="classObj" class="app-wrapper" >
-<!--    <div  class="drawer-bg" />-->
-    <sidebar  class="sidebar-container"/>
-    <div  class="main-container">
-      <div >
+  <div :class="classObj" class="app-wrapper">
+    <!--    <div  class="drawer-bg" />-->
+    <sidebar class="sidebar-container"/>
+    <div class="main-container">
+      <div>
         <navbar/>
       </div>
       <app-main/>
@@ -18,8 +18,9 @@
 </template>
 
 <script>
-import { AppMain , Navbar ,Sidebar} from './components'
+import {AppMain, Navbar, Sidebar} from './components'
 import {mapState} from "vuex";
+
 export default {
   name: 'Layout',
   components: {
@@ -51,70 +52,71 @@ export default {
   margin-left: 200px;
   position: relative;
 }
+
 .app-wrapper {
   position: relative;
   height: 100%;
   width: 100%;
 }
+
 .sidebar-container {
   -webkit-transition: width .28s;
   transition: width .28s;
-  width: 200px!important;
+  width: 200px !important;
   background-color: rgb(52, 55, 68);
   height: 100%;
   position: fixed;
-  font-size: 0;
   top: 0;
   bottom: 0;
   left: 0;
   z-index: 1001;
   overflow: hidden;
-  -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
-  box-shadow: 2px 0 6px rgba(0,21,41,.35);
+  -webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+  box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
 }
 
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
+.app-wrapper {
+  @include clearfix;
+  position: relative;
+  height: 100%;
+  width: 100%;
 
-    &.mobile.openSidebar {
-      position: fixed;
-      top: 0;
-    }
-  }
-
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
-  }
-
-  .fixed-header {
+  &.mobile.openSidebar {
     position: fixed;
     top: 0;
-    right: 0;
-    z-index: 9;
-    width: calc(100% - #{$base-sidebar-width});
-    transition: width 0.28s;
   }
+}
 
-  .hideSidebar .fixed-header {
-    width: calc(100% - 54px);
-  }
+.drawer-bg {
+  background: #000;
+  opacity: 0.3;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 999;
+}
 
-  .sidebarHide .fixed-header {
-    width: 100%;
-  }
+.fixed-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9;
+  transition: width 0.28s;
+}
 
-  .mobile .fixed-header {
-    width: 100%;
-  }
+.hideSidebar .fixed-header {
+  width: calc(100% - 54px);
+}
+
+.sidebarHide .fixed-header {
+  width: 100%;
+}
+
+.mobile .fixed-header {
+  width: 100%;
+}
+
 .hideSidebar {
   .sidebar-container {
     width: 54px !important;
@@ -140,7 +142,7 @@ export default {
   .el-submenu {
     overflow: hidden;
 
-    &>.el-submenu__title {
+    & > .el-submenu__title {
       padding: 0 !important;
 
       .svg-icon {
@@ -152,8 +154,8 @@ export default {
 
   .el-menu--collapse {
     .el-submenu {
-      &>.el-submenu__title {
-        &>span {
+      & > .el-submenu__title {
+        & > span {
           height: 0;
           width: 0;
           overflow: hidden;

@@ -47,16 +47,25 @@
       </el-col>
     </el-row>
 
-    <el-row v-if="!loading">
+    <el-row
+        v-if="!loading"
+        :gutter="40">
       <el-col
+          :xs="24" :sm="12" :lg="8" :xl="6"
           v-for="(item, index) in sshList"
           :key="item"
-          :span="8"
-          :offset="index > 0 ? 2 : 0"
+          :span="6"
       >
         <sshCard :sshData="item" @getList="getList"></sshCard>
       </el-col>
     </el-row>
+
+
+<!--
+
+    <div  v-for="(item, index) in sshList">
+      <sshCard :sshData="item" @getList="getList" style="float: left"></sshCard>
+    </div>-->
 
 
     <!-- 添加或修改用户配置对话框 -->
@@ -201,17 +210,17 @@ export default {
           }
       );
     },
-   /* getListLoading() {
-      this.sshList = this.$store.state.ssh.sshList
-      if (this.sshList.length === 0) {
-        setTimeout(() => {
-          this.getList()
-        }, 1);
-      } else {
-        this.loading = false;
-        console.log('1')
-      }//不加这个会很神奇地加载不出来
-    },*/
+    /* getListLoading() {
+       this.sshList = this.$store.state.ssh.sshList
+       if (this.sshList.length === 0) {
+         setTimeout(() => {
+           this.getList()
+         }, 1);
+       } else {
+         this.loading = false;
+         console.log('1')
+       }//不加这个会很神奇地加载不出来
+     },*/
 
     /** 新增按钮操作 */
     handleAdd() {
@@ -220,33 +229,33 @@ export default {
       this.open = true;
       this.title = "添加服务器";
     },
-   /* /!** 修改按钮操作 *!/
-    handleUpdate(row) {
-      this.reset();
-      const userId = row.userId || this.ids;
-      getUser(userId).then(response => {
-        this.form = response.data;
-        this.postOptions = response.posts;
-        this.roleOptions = response.roles;
-        this.$set(this.form, "postIds", response.postIds);
-        this.$set(this.form, "roleIds", response.roleIds);
-        this.open = true;
-        this.title = "修改用户";
-        this.form.password = "";
-      });
-    },
-    /!** 删除按钮操作 *!/
-    handleDelete(row) {
-      const userIds = row.userId || this.ids;
-      this.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function () {
-        return delUser(userIds);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      });
-    },
-*/
+    /* /!** 修改按钮操作 *!/
+     handleUpdate(row) {
+       this.reset();
+       const userId = row.userId || this.ids;
+       getUser(userId).then(response => {
+         this.form = response.data;
+         this.postOptions = response.posts;
+         this.roleOptions = response.roles;
+         this.$set(this.form, "postIds", response.postIds);
+         this.$set(this.form, "roleIds", response.roleIds);
+         this.open = true;
+         this.title = "修改用户";
+         this.form.password = "";
+       });
+     },
+     /!** 删除按钮操作 *!/
+     handleDelete(row) {
+       const userIds = row.userId || this.ids;
+       this.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function () {
+         return delUser(userIds);
+       }).then(() => {
+         this.getList();
+         this.$modal.msgSuccess("删除成功");
+       }).catch(() => {
+       });
+     },
+ */
     /** 提交表单按钮 */
     submitForm: function () {
       this.$refs["form"].validate(valid => {
@@ -276,12 +285,12 @@ export default {
     reset() {
       this.form = {
         ID: undefined,
-        sshName:'',
-        sshHost:'',
-        sshClass:'',
-        sshPort:'',
-        sshUserName:'',
-        sshPassword:'',
+        sshName: '',
+        sshHost: '',
+        sshClass: '',
+        sshPort: '',
+        sshUserName: '',
+        sshPassword: '',
         remark: undefined,
       };
       this.title = "form";
