@@ -3,6 +3,7 @@ package com.star.webssh.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.star.webssh.common.BaseContext;
 import com.star.webssh.common.R;
+import com.star.webssh.common.SshSshdUtil;
 import com.star.webssh.pojo.SshServer;
 import com.star.webssh.service.ServerService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class ServerController {
     @PostMapping("/addSSh")
     public R<String> add(@RequestBody SshServer server){
 
-        //设置默认值为0
+        //设置默认值为0，表示新增为连接失败的，检查连接在list中处理
         server.setStatus(0);
         //server.setId((long)1);
         server.setCreate_time(LocalDateTime.now());
@@ -45,52 +46,23 @@ public class ServerController {
         Long userId = BaseContext.getCurrentId();
         server.setUserId(userId);
 
-        //将密码进行加密
-        //String password = DigestUtils.md5DigestAsHex(server.getSshPassword().getBytes());
-       // server.setSshPassword(password);
-        /*
-        if(连接上了){
-        保存到数据库里面
-        }else
-        {
-            throw new CustomExcepion("连接失败“）
-        }
-         */
-//        LambdaQueryWrapper<SshServer> lqw = new LambdaQueryWrapper<>();
-//        lqw.eq(server.getSshName()!=null,SshServer::getSshName,server.getSshName());
 
-//        SshServer serviceOne = serverService.getOne(lqw);
-//        if(serviceOne==null){
-            //如果改连接主机表中没有则添加信息
         log.info("serverInfo:{}",server);
         serverService.save(server);
             return R.success("添加成功");
-//        }
-//        return R.error("已有该主机，添加失败");
 
     }
 
     /**
-     * 查询所有录入信息
+     * 根据登录用户的id查询所连接ssh
+     * status代表是否检查连接情况
      * @return
      */
 
-    @GetMapping("/list")
-    public R<List> list(){
+    @GetMapping("/list/{status}")
+    public R<List<SshServer>> list(@PathVariable Integer status){
 
-        //设置条件
-        LambdaQueryWrapper<SshServer> lqw = new LambdaQueryWrapper<>();
-        Long userId = BaseContext.getCurrentId();
-        lqw.eq(SshServer::getUserId,userId);
-
-        List<SshServer> list = serverService.list(lqw);
-
-//        //将密码解密后返回前端
-//        List<SshServer> serverList=list.stream().map((item)->{
-//            String password = DigestUtils.md5DigestAsHex(item.getSshPassword().getBytes());
-//            item.setSshPassword(password);
-//            return item;
-//        }).collect(Collectors.toList());
+        List<SshServer> list=serverService.getList(status);
         return R.success(list);
     }
 
