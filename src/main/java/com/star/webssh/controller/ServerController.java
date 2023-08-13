@@ -5,7 +5,9 @@ import com.star.webssh.common.BaseContext;
 import com.star.webssh.common.R;
 import com.star.webssh.common.SshSshdUtil;
 import com.star.webssh.pojo.SshServer;
+import com.star.webssh.pojo.commonCmd;
 import com.star.webssh.service.ServerService;
+import com.star.webssh.service.commonCmdService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,9 @@ public class ServerController {
     @Autowired
     private ServerService serverService;
 
+    @Autowired
+    private commonCmdService commonCmdService;
+
     /**
      * 新增连接ssh信息
      * @param server
@@ -44,7 +49,7 @@ public class ServerController {
         server.setUpdateTime(LocalDateTime.now());
         server.setUserId(BaseContext.getCurrentId());
         Long userId = BaseContext.getCurrentId();
-        server.setUserId(userId);
+        server.setUserId((long) 1);
 
 
         log.info("serverInfo:{}",server);
@@ -93,6 +98,13 @@ public class ServerController {
     public R<String> deleteById(@PathVariable List<Long> ids){
 
         serverService.removeByIds(ids);
+
+        LambdaQueryWrapper<commonCmd> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.in(commonCmd::getServerId,ids);
+
+        commonCmdService.remove(queryWrapper);
+
+
         return R.success("删除成功");
 
     }

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,8 @@ public class commonCmdController {
     public R<String> add(@RequestBody commonCmd commonCmd){
         Long useId = BaseContext.getCurrentId();
 
+        commonCmd.setCreateTime(LocalDateTime.now());
+        commonCmd.setUpdateTime(LocalDateTime.now());
         commonCmd.setUserId(useId);
 
         commonCmdService.save(commonCmd);
@@ -56,6 +59,7 @@ public class commonCmdController {
      */
     @PutMapping("/updateCommand")
     public R<String> update(@RequestBody commonCmd commonCmd){
+           commonCmd.setUpdateTime(LocalDateTime.now());
            commonCmdService.updateById(commonCmd);
 
            return R.success("修改常用指令集成功");
