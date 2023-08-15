@@ -1,6 +1,6 @@
 <template>
   <div class="Sidebar">
-    <upLoad/>
+<!--    <upLoad/>-->
     <div class="Sidebar-key">
       <h2>快捷键
         <el-button size="default" type="primary" @click="shortcutAdd()" style="float:right">
@@ -10,7 +10,7 @@
       <el-table :data="tableData" style="width: 100%; height: 500px">
         <el-table-column label="信息" width="80">
           <template #default="scope">
-            <el-popover effect="light" trigger="hover" placement="top" width="auto">
+            <el-popover trigger="hover" placement="top" width="auto">
               <template #default>
                 <div>指令名: {{ scope.row.name }}</div>
                 <div>介绍: {{ scope.row.remarks }}</div>
@@ -87,7 +87,6 @@
 import {ref} from 'vue'
 import {Timer} from '@element-plus/icons-vue'
 import {addCommand, delCommand, listCommand, updateCommand} from "@/api/ShortcutKeys";
-import {listSSh} from "@/api/SSH_c";
 import {ElMessage, ElMessageBox} from 'element-plus'
 import UpLoad from "@/views/page/terminal/upLoad.vue";
 
@@ -273,11 +272,11 @@ export default {
 .Sidebar {
 }
 
-.upload-demo .el-icon--upload {
+.upload-demo {
   width: 100%;
 }
 
-.el-icon--upload .el-upload__text {
+.el-icon--upload {
   width: 100%;
 
 }

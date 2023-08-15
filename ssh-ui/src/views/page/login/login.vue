@@ -34,8 +34,6 @@
 </template>
 
 <script>
-import { login } from '@/api/login'
-import store from "@/store";
 import Cookies from "js-cookie";
 
 export default {
@@ -43,8 +41,8 @@ export default {
   data() {
     return {
       loginForm:{
-        username: 'admin',
-        password: '123456',
+        username: '',
+        password: '',
         rememberMe: false,
       },
       loading: false
@@ -100,23 +98,6 @@ export default {
       });
     }
 
-   /* async handleLogin() {
-      // window.location.href= '/#/index'
-      await this.$refs.loginForm.validate(async (valid) => {
-        if (valid) {
-          this.loading = true
-          let res = await login(this.loginForm.username,this.loginForm.password)
-          store.commit('SET_ID',res.data.id)
-          if (String(res.code) === '1') {//1表示登录成功
-            localStorage.setItem('userInfo', JSON.stringify(res.data))
-            window.location.href = '/#/index'
-          } else {
-            this.$message.error(res.msg)
-            this.loading = false
-          }
-        }
-      })
-    }*/
 
   }
 }
@@ -142,11 +123,6 @@ export default {
   height: auto;
 }
 
-.title {
-  margin: 0px auto 30px auto;
-  text-align: center;
-  color: #707070;
-}
 .login-form {
   background: #ffffff;
   width: 40%;

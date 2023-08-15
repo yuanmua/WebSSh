@@ -1,8 +1,6 @@
 import axios from "axios";
-import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus'
-import store from '@/store'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import {getToken} from "@/js/auth";
-import {delCommand} from "@/api/ShortcutKeys";
 
 // 是否显示重新登录
 export let isRelogin = { show: false };
@@ -53,12 +51,12 @@ export let isRelogin = { show: false };
 
   // 响应拦截器
   service.interceptors.response.use(res => {
-      console.log('---响应拦截器---',res)
+      // console.log('---响应拦截器---',res)
       // 未设置状态码则默认成功状态
       const code = res.data.code ;
       // 获取错误信息
       const msg = res.data.msg
-      console.log('---code---',code)
+      // console.log('---code---',code)
       if (code === 0 && res.data.msg === 'NOT_LOGIN') {// 返回登录页面
 
         ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '提示', {

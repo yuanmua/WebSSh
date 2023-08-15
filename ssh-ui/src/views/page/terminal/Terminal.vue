@@ -13,23 +13,13 @@ import {Terminal} from "xterm";
 import "xterm/css/xterm.css";
 import "xterm/lib/xterm.js";
 import WSSHClient from '@/js/webssh.js'
-import {listCommand} from "@/api/ShortcutKeys";
 import {getSsh} from "@/api/SSH_c";
-import {ElMessage, ElMessageBox} from "element-plus";
+import { ElMessageBox} from "element-plus";
 
-let term = new Terminal({
-  cols: 97,
-  rows: 37,
-  cursorBlink: true, // 光标闪烁
-  cursorStyle: "block", // 光标样式  null | 'block' | 'underline' | 'bar'
-  // scrollback: 800, // 回滚
-  tabStopWidth: 8, // 制表宽度
-  screenKeys: true
-});
 
 let client = new WSSHClient();
 
-function connect(client, options) {
+function connect(client, options ,term) {
   //执行连接操作
   client.connect({
     onError: function (error) {
@@ -45,7 +35,8 @@ function connect(client, options) {
     },
     onClose: function () {
       //连接关闭回调
-      term.write("\r\n连接已关闭\r\n");
+
+
     },
     onData: function (data) {
       //收到数据时回调
@@ -54,20 +45,20 @@ function connect(client, options) {
   });
 }
 
-function init(client) {
-  term.open(document.getElementById('terminal'));
-  term.onData(function (data) {
-    console.log(data);
-    //键盘输入时的回调函数
-    client.sendClientData(data);
-  });
-}
-
 
 export default {
   name: "Terminal",
   data() {
     return {
+      term : new Terminal({
+        cols: 97,
+        rows: 37,
+        cursorBlink: true, // 光标闪烁
+        cursorStyle: "block", // 光标样式  null | 'block' | 'underline' | 'bar'
+        // scrollback: 800, // 回滚
+        tabStopWidth: 8, // 制表宽度
+        screenKeys: true
+      }),
       comOpen: false,
       sshIdList: {},
       options: {
@@ -81,13 +72,12 @@ export default {
 
   },
   mounted() {
-    init(client)
+    this.init(client)
     console.log("连接开启");
 
     if (this.sshIdList === undefined) {
       window.location.href = '/#/index'
     }
-    console.log(this.sshIdList);
 
     this.options.host = this.sshIdList.sshHost;
     this.options.port = this.sshIdList.sshPort;
@@ -95,10 +85,17 @@ export default {
     this.options.password = this.sshIdList.sshPassword
     ;
 
-    console.log(this.options);
 
   },
   methods: {
+    init(client) {
+      this.term.open(document.getElementById('terminal'));
+      this.term.onData(function (data) {
+        console.log(data);
+        //键盘输入时的回调函数
+        client.sendClientData(data);
+      });
+    },
 
     /*发送快捷键数据*/
     TerminalSend(data) {
@@ -116,18 +113,36 @@ export default {
       }
     },
     OnClick() {
-      connect(client, this.options);
+      connect(client, this.options ,this.term);
       this.comOpen =true
     },
     close() {
-      this.comOpen =false
-      if (client !== undefined) {
+      if (this.comOpen !== false) {
         console.log(client);
-        console.log("连接开213启");
+        console.log("连接关闭");
         client.close()
+
+        this.term.write("\r\n连接已关闭\r\n");
+
+        this.comOpen =false
+
+      } else console.log("没有开连接");
+    },
+    close2() {
+      this.term.clear()
+      if (this.comOpen !== false) {
+        console.log(client);
+        console.log("连接关闭");
+
+        client.close()
+        console.log("close被执行")
+
+        this.comOpen =false
+
       } else console.log("没有开连接");
     },
     back() {
+      this.close2();
       window.location.href = '/#/index'
     },
     GetSsh() {
@@ -142,6 +157,15 @@ export default {
     this.GetSsh()
 
   },
+  beforeDestroy() {
+    this.close2();
+    console.log("beforeDestroy被执行")
+  },
+
+  destroyed(){
+    this.close2();
+    console.log("destroyed被执行")
+  }
   /*    computed:{
         id(){
           return this.$route.params.id

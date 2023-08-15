@@ -1,6 +1,5 @@
 import {createRouter, createWebHashHistory} from "vue-router";
-import login from "../views/page/login/login.vue";
-import MainView from "../views/page/terminal/TerView.vue";
+
 
 import Layout from '@/layout/index.vue'
 import Register from "@/views/page/login/register.vue";

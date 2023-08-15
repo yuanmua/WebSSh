@@ -1,11 +1,8 @@
 <template>
-  <!--  <sidebar  class="sidebar-container"/>
-    <navbar/>
-
-    <app-main/>-->
 
   <div :class="classObj" class="app-wrapper">
-    <!--    <div  class="drawer-bg" />-->
+
+
     <sidebar class="sidebar-container"/>
     <div class="main-container">
       <div>

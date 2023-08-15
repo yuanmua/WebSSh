@@ -105,7 +105,7 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="服务器名" prop="sshUserName">
+            <el-form-item label="用户名" prop="sshUserName">
               <el-input v-model="form.sshUserName" placeholder="请输入服务器用户名称" maxlength="30"/>
             </el-form-item>
           </el-col>
@@ -135,9 +135,8 @@
 </template>
 
 <script>
-import {addSSh, delSSh, updateSSh} from "@/api/SSH_c";
+import { delSSh, updateSSh} from "@/api/SSH_c";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {delCommand} from "@/api/ShortcutKeys";
 
 export default {
   name: "sshCard",
@@ -213,7 +212,7 @@ export default {
         type: 'warning'
       }).then(() => {
         delSSh(this.sshData.id).then(res => {
-          this.$emit('getList', 1);
+          this.$emit('getList', 0);
         });
         // this.getList();
         ElMessage({

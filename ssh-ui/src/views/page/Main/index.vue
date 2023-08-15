@@ -99,7 +99,7 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="服务器名" prop="sshUserName">
+            <el-form-item label="用户名" prop="sshUserName">
               <el-input v-model="form.sshUserName" placeholder="请输入服务器用户名称" maxlength="30"/>
             </el-form-item>
           </el-col>
@@ -130,9 +130,8 @@
 </template>
 
 <script>
-import {addSSh, listSSh, updateSSh} from "@/api/SSH_c";
+import {addSSh, listSSh} from "@/api/SSH_c";
 import Terminal from "@/views/page/terminal/Terminal.vue";
-import store from "@/store";
 import SshCard from "@/views/page/Main/SSh_config/sshCard.vue";
 
 export default {
@@ -205,22 +204,10 @@ export default {
       listSSh(data).then(response => {
             this.sshList = response.data
             this.loading = false;
-            console.log(this.sshList)
 
           }
       );
     },
-    /* getListLoading() {
-       this.sshList = this.$store.state.ssh.sshList
-       if (this.sshList.length === 0) {
-         setTimeout(() => {
-           this.getList()
-         }, 1);
-       } else {
-         this.loading = false;
-         console.log('1')
-       }//不加这个会很神奇地加载不出来
-     },*/
 
     /** 新增按钮操作 */
     handleAdd() {
@@ -229,33 +216,7 @@ export default {
       this.open = true;
       this.title = "添加服务器";
     },
-    /* /!** 修改按钮操作 *!/
-     handleUpdate(row) {
-       this.reset();
-       const userId = row.userId || this.ids;
-       getUser(userId).then(response => {
-         this.form = response.data;
-         this.postOptions = response.posts;
-         this.roleOptions = response.roles;
-         this.$set(this.form, "postIds", response.postIds);
-         this.$set(this.form, "roleIds", response.roleIds);
-         this.open = true;
-         this.title = "修改用户";
-         this.form.password = "";
-       });
-     },
-     /!** 删除按钮操作 *!/
-     handleDelete(row) {
-       const userIds = row.userId || this.ids;
-       this.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function () {
-         return delUser(userIds);
-       }).then(() => {
-         this.getList();
-         this.$modal.msgSuccess("删除成功");
-       }).catch(() => {
-       });
-     },
- */
+
     /** 提交表单按钮 */
     submitForm: function () {
       this.$refs["form"].validate(valid => {
@@ -266,13 +227,7 @@ export default {
             this.open = false;
             this.getList(1);
           });
-          /*   } else {
-           addUser(this.form).then(response => {
-             this.$modal.msgSuccess("新增成功");
-             this.open = false;
-             this.getList();
-           });
-          }*/
+
         }
       });
     },

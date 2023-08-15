@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@sakitam-gis/mapbox-wind": "^1.1.2",
     "xterm": "^5.2.1"
   }
 }

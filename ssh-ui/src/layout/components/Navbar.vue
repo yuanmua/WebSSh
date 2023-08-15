@@ -3,17 +3,7 @@
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <div class="right-menu">
-<!--      <template v-if="device!=='mobile'">-->
-<!--&lt;!&ndash;        <search id="header-search" class="right-menu-item" />&ndash;&gt;-->
 
-<!--&lt;!&ndash;        <el-tooltip content="源码地址" effect="dark" placement="bottom">&ndash;&gt;-->
-<!--&lt;!&ndash;          <ruo-yi-git id="" class="right-menu-item hover-effect" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </el-tooltip>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <screenfull id="screenfull" class="right-menu-item hover-effect" />&ndash;&gt;-->
-
-
-<!--      </template>-->
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
@@ -22,9 +12,7 @@
         </div>
         <template #dropdown>
         <el-dropdown-menu slot="dropdown">
-<!--          <router-link to="/user/profile">-->
-<!--            <el-dropdown-item>个人中心</el-dropdown-item>-->
-<!--          </router-link>-->
+
           <el-dropdown-item divided @click.native="logout">
             <span>退出登录</span>
           </el-dropdown-item>
@@ -37,15 +25,12 @@
 </template>
 
 <script>
-// import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import Hamburger from '@/components/Hamburger/index.vue'
 import {mapGetters} from "vuex";
-// import RuoYiGit from '@/components/RuoYi/Git/index.vue'
 
 export default {
   components: {
     Hamburger,
-    // RuoYiGit,
   },
   computed: {
     ...mapGetters([
@@ -95,19 +80,6 @@ export default {
     }
   }
 
-  .breadcrumb-container {
-    float: left;
-  }
-
-  .topmenu-container {
-    position: absolute;
-    left: 50px;
-  }
-
-  .errLog-container {
-    display: inline-block;
-    vertical-align: top;
-  }
 
   .right-menu {
     float: right;
