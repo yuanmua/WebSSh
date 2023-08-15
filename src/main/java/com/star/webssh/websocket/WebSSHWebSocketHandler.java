@@ -40,15 +40,8 @@ public class WebSSHWebSocketHandler implements WebSocketHandler {
         //调用初始化连接
         webSSHService.initConnection(webSocketSession);
         //创建日志对象
-        String user = webSocketSession.getAttributes().get(ConstantPool.USER_UUID_KEY).toString();
-        String url = webSocketSession.getUri().toString();
-        String userId = webSocketSession.getId();
 
-        String localAddress = webSocketSession.getLocalAddress().toString();
-        String remoteAddress = webSocketSession.getRemoteAddress().toString();
-        logger.info("localAddress{}",localAddress);
-        logger.info("remoteAddress{}",remoteAddress);
-        SshInfo operatorInfo = new SshInfo(null,userId, user,"连接WebSSH", url,localAddress, remoteAddress,LocalDateTime.now(), LocalDateTime.now());
+        SshInfo operatorInfo=getInfo(webSocketSession,"连接WebSSH");
         infoService.save(operatorInfo);
 
     }
@@ -67,16 +60,8 @@ public class WebSSHWebSocketHandler implements WebSocketHandler {
             webSSHService.recvHandle(((TextMessage) webSocketMessage).getPayload(), webSocketSession);
 
             //创建日志对象
-            String user = webSocketSession.getAttributes().get(ConstantPool.USER_UUID_KEY).toString();
-            String url = webSocketSession.getUri().toString();
-            String userId = webSocketSession.getId();
 
-            String localAddress = webSocketSession.getLocalAddress().getAddress().toString();
-            String remoteAddress = webSocketSession.getRemoteAddress().toString();
-            String operator = webSocketMessage.toString();
-            logger.info("localAddress{}",localAddress);
-            logger.info("remoteAddress{}",remoteAddress);
-            SshInfo operatorInfo = new SshInfo(null,userId, user,operator, url,localAddress, remoteAddress,LocalDateTime.now(), LocalDateTime.now());
+            SshInfo operatorInfo=getInfo(webSocketSession,webSocketMessage.toString());
             infoService.save(operatorInfo);
         } else if (webSocketMessage instanceof BinaryMessage) {
 
@@ -107,19 +92,12 @@ public class WebSSHWebSocketHandler implements WebSocketHandler {
     @Override
 
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
-        logger.info("用户:{}断开webssh连接", String.valueOf(webSocketSession.getAttributes().get(ConstantPool.USER_UUID_KEY)));
+
         //调用service关闭连接
         webSSHService.close(webSocketSession);
         //创建日志对象
-        String user = webSocketSession.getAttributes().get(ConstantPool.USER_UUID_KEY).toString();
-        String url = webSocketSession.getUri().toString();
-        String userId = webSocketSession.getId();
 
-        String localAddress = webSocketSession.getLocalAddress().getAddress().toString();
-        String remoteAddress = webSocketSession.getRemoteAddress().toString();
-        logger.info("localAddress{}",localAddress);
-        logger.info("remoteAddress{}",remoteAddress);
-        SshInfo operatorInfo = new SshInfo(null,userId, user,"断开webssh连接", url,localAddress, remoteAddress,LocalDateTime.now(), LocalDateTime.now());
+        SshInfo operatorInfo=getInfo(webSocketSession,"断开webssh连接");
         infoService.save(operatorInfo);
     }
 
@@ -127,4 +105,22 @@ public class WebSSHWebSocketHandler implements WebSocketHandler {
     public boolean supportsPartialMessages() {
         return false;
     }
+
+
+    /**
+     * 日志函数
+     * @param webSocketSession
+     * @param massage
+     * @return
+     */
+    public  SshInfo getInfo(WebSocketSession webSocketSession,String massage){
+        String user = webSocketSession.getAttributes().get(ConstantPool.USER_UUID_KEY).toString();
+        String url = webSocketSession.getUri().toString();
+        String userId = webSocketSession.getId();
+
+        String localAddress = webSocketSession.getLocalAddress().getAddress().toString();
+        String remoteAddress = webSocketSession.getRemoteAddress().toString();
+        return  new SshInfo(null,userId, user,massage, url,localAddress, remoteAddress, LocalDateTime.now(), LocalDateTime.now());
+    }
 }
+
