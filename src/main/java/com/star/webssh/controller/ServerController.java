@@ -49,12 +49,10 @@ public class ServerController {
         server.setUpdateTime(LocalDateTime.now());
         server.setUserId(BaseContext.getCurrentId());
         Long userId = BaseContext.getCurrentId();
-        server.setUserId((long) 1);
-
-
+        server.setUserId(userId);
         log.info("serverInfo:{}",server);
         serverService.save(server);
-            return R.success("添加成功");
+        return R.success("添加成功");
 
     }
 

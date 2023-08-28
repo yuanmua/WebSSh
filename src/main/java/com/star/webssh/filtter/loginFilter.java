@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Mr.Wang
  * @create 2023-05-24-11:25
  */
-@WebFilter(urlPatterns = {"/cmd/*","/employee/*","/system/*"})
+@WebFilter(urlPatterns = {"/cmd/*","/employee/logout","/employee/login","/system/*"})
 @Slf4j
 public class loginFilter implements Filter {
 

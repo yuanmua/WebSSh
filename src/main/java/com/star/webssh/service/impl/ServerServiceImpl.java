@@ -40,7 +40,7 @@ public class ServerServiceImpl extends ServiceImpl<ServerMapper, SshServer> impl
                 item.setStatus(0);
                 this.updateById(item);
                 //测试连接
-                SshSshdUtil sshdUtil = new SshSshdUtil(item.getSshHost(), item.getSshName(), item.getSshPort(), item.getSshPassword());
+                SshSshdUtil sshdUtil = new SshSshdUtil(item.getSshHost(), item.getSshUserName(), item.getSshPort(), item.getSshPassword());
                 boolean isTrue = sshdUtil.initialSession();
                 if (isTrue){
                     //连接成功
