@@ -2,16 +2,17 @@
   <div class="sidebar-logo-container">
     <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/index">
       <img v-if="logo" :src="logo" class="sidebar-logo-c" alt=""/>
+      <h1 class="font_kun">鲲</h1>
     </router-link>
 
-    <h1 class="font_kun">鲲</h1>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/index">
       <img v-if="logo" :src="logo" class="sidebar-logo"  alt=""/>
+        <div class="sidebar-title">
+          <h1 class="font_kunKun">鲲鲲ssh</h1>
+        </div>
     </router-link>
 
-    <div class="sidebar-title">
-        <h1 class="font_kunKun">鲲鲲ssh</h1>
-      </div>
+
   </div>
 
 </template>
