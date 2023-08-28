@@ -8,7 +8,7 @@
             <img src="../../../assets/logo_b.png" style="width:150px;height:150px;" alt="" />
           </div>
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" type="text" />
+            <el-input v-model="loginForm.username" type="text" placeholder="账号"/>
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="loginForm.password" type="password" placeholder="密码"/>
