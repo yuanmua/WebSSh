@@ -4,6 +4,8 @@ import {createRouter, createWebHashHistory} from "vue-router";
 import Layout from '@/layout/index.vue'
 import Register from "@/views/page/login/register.vue";
 import Main from "@/views/page/Main/index.vue";
+import instructions from "@/views/page/ instructions/instructions.vue";
+import team from "@/views/page/ instructions/team.vue";
 
 
 // 2. 定义一些路由
@@ -52,6 +54,16 @@ const routes = [
       {
         path: '/index/ssh/:id',
         component: ()=>import ("@/views/page/terminal/TerView.vue"),
+      },
+      {
+        path: '/instructions',
+        component: instructions,
+        hidden: true
+      },
+      {
+        path: '/team',
+        component:team,
+        hidden: true
       },
 
     ]

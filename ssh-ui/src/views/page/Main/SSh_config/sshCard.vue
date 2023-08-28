@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <template #header>
 
-        <div :class="{ 'active-bar': sshData.status, 'inactive-bar': !sshData.status }" class="card-header">
+        <div :class="{ 'active-bar': sshData.status===1, 'inactive-bar': sshData.status===0 }" class="card-header">
           <span>{{ sshData.sshName }}</span>
           <router-link :to="`index/ssh/${sshData.id}`">
 
@@ -206,7 +206,7 @@ export default {
 
     /** 删除按钮操作 */
     handleDelete() {
-      ElMessageBox.confirm('此操作将永久删除"' + this.sshData.name + '"的快捷键, 是否继续?', '提示', {
+      ElMessageBox.confirm('此操作将永久删除"' + this.sshData.sshName + '"的服务器, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -214,7 +214,7 @@ export default {
         delSSh(this.sshData.id).then(res => {
           this.$emit('getList', 0);
         });
-        // this.getList();
+        this.getList(0);
         ElMessage({
           type: 'success',
           message: '删除成功!'
@@ -283,7 +283,7 @@ export default {
 }
 
 .inactive-bar {
-  background-color: #bdbdbd; /* Gray color for inactive server */
+  background-color: #f0f0f0; /* Gray color for inactive server */
 }
 
 .box-card {
@@ -296,7 +296,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #f0f0f0;
   font-weight: bold;
 }
 

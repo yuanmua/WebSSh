@@ -1,7 +1,11 @@
 <template>
   <div>
-    <button @click="OnClick" type="submit">连接到SSH</button>
-    <button @click="close" type="button" id="close">关闭连接</button>
+    <el-button @click="OnClick" type="success">连接到SSH</el-button>
+
+    <el-button @click="close" type="warning">关闭连接</el-button>
+
+<!--    <button @click="OnClick" type="submit">连接到SSH</button>-->
+<!--    <button @click="close" type="button" id="close">关闭连接</button>-->
     <el-button type="primary" @click="back">返回</el-button>
 
     <div id="terminal"></div>
@@ -72,19 +76,6 @@ export default {
 
   },
   mounted() {
-    this.init(client)
-    console.log("连接开启");
-
-    if (this.sshIdList === undefined) {
-      window.location.href = '/#/index'
-    }
-
-    this.options.host = this.sshIdList.sshHost;
-    this.options.port = this.sshIdList.sshPort;
-    this.options.username = this.sshIdList.sshUserName;
-    this.options.password = this.sshIdList.sshPassword
-    ;
-
 
   },
   methods: {
@@ -147,7 +138,18 @@ export default {
     },
     GetSsh() {
       getSsh(this.$route.params.id).then(response => {
-            this.sshIdList = response.data
+        this.sshIdList = response.data
+        this.init(client)
+
+        console.log("连接开启");
+        if (this.sshIdList === undefined) {
+          window.location.href = '/#/index'
+        }
+
+        this.options.host = this.sshIdList.sshHost;
+        this.options.port = this.sshIdList.sshPort;
+        this.options.username = this.sshIdList.sshUserName;
+        this.options.password = this.sshIdList.sshPassword;
           }
       );
     },
