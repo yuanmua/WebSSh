@@ -21,6 +21,8 @@ public class commonCmdController {
     @Autowired
     private commonCmdService commonCmdService;
 
+    //与单个服务器绑定的快捷指令
+
     /**
      * 新增常用指令集
      * 需前端传输：服务器id 指令集名字 指令集内容
@@ -37,7 +39,7 @@ public class commonCmdController {
 
         commonCmdService.save(commonCmd);
 
-        return R.success("新增常用指令集成功");
+        return R.success("新增自定义指令集成功");
     }
 
     /**
@@ -49,7 +51,7 @@ public class commonCmdController {
     public R<String> remove(@PathVariable Long ids){
         commonCmdService.removeById(ids);
 
-        return R.success("删除常用指令集成功");
+        return R.success("删除自定义指令集成功");
     }
 
     /**
@@ -62,7 +64,7 @@ public class commonCmdController {
            commonCmd.setUpdateTime(LocalDateTime.now());
            commonCmdService.updateById(commonCmd);
 
-           return R.success("修改常用指令集成功");
+           return R.success("修改自定义指令集成功");
     }
 
     /**
@@ -92,6 +94,78 @@ public class commonCmdController {
         LambdaQueryWrapper<commonCmd> queryWrapper=new LambdaQueryWrapper<>();
         queryWrapper.eq(commonCmd::getUserId,userId);
         queryWrapper.eq(commonCmd::getServerId,ids);
+        List<commonCmd> list = commonCmdService.list(queryWrapper);
+        return R.success(list);
+    }
+
+
+
+
+
+
+
+    //与用户绑定的快捷指令
+    /**
+     * 新增常用指令集
+     * 需前端传输：服务器id 指令集名字 指令集内容
+     * @param commonCmd
+     * @return
+     */
+    @PostMapping("/addCommandCommand")
+    public R<String> uadd(@RequestBody commonCmd commonCmd){
+        Long useId = BaseContext.getCurrentId();
+
+        commonCmd.setCreateTime(LocalDateTime.now());
+        commonCmd.setUpdateTime(LocalDateTime.now());
+        commonCmd.setUserId(useId);
+        commonCmd.setServerId(0L);
+
+        commonCmdService.save(commonCmd);
+
+        return R.success("新增常用指令集成功");
+    }
+
+    /**
+     * 删除常用指令集,未提供批量删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("/delCommandCommand/{ids}")
+    public R<String> uremove(@PathVariable Long ids){
+        commonCmdService.removeById(ids);
+
+        return R.success("删除常用指令集成功");
+    }
+
+    /**
+     * 修改常用指令集
+     * @param commonCmd
+     * @return
+     */
+    @PutMapping("/updateCommandCommand")
+    public R<String> uupdate(@RequestBody commonCmd commonCmd){
+
+        commonCmd.setUpdateTime(LocalDateTime.now());
+        commonCmd.setServerId(0L);
+        commonCmdService.updateById(commonCmd);
+
+        return R.success("修改常用指令集成功");
+    }
+
+
+
+    /**
+     * 根据用户id 和 服务器id 查询该用户的当前服务器下的所有指令集
+     * 需前端提供服务器id
+     * @param ids
+     * @return
+     */
+    @GetMapping("/listCommandCommand/{ids}")
+    public  R<List<commonCmd>> ulist (@PathVariable Long ids) {
+        Long userId = BaseContext.getCurrentId();
+        LambdaQueryWrapper<commonCmd> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(commonCmd::getUserId,userId );
+        queryWrapper.eq(commonCmd::getServerId,0);
         List<commonCmd> list = commonCmdService.list(queryWrapper);
         return R.success(list);
     }
