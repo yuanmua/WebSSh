@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@sakitam-gis/mapbox-wind": "^1.1.2",
+    "vue3-treeselect": "^0.1.10",
     "xterm": "^5.2.1"
   }
 }

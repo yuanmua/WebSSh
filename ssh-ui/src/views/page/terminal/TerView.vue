@@ -29,10 +29,13 @@ export default {
 .sidebar{
   float: left;
   width: 30%;
+  height: 60%;
 }
 .terminal-main{
 
   float: left;
   width: 60%;
+  height: 60px;
+
 }
 </style>

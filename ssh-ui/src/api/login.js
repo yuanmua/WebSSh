@@ -56,7 +56,7 @@ export function logout() {
 }
 
 // 获取验证码
-export function getCodeImg() {
+export function getCode() {
   return request({
     url: '/captchaImage',
     headers: {

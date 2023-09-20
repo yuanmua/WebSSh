@@ -6,6 +6,7 @@ import Register from "@/views/page/login/register.vue";
 import Main from "@/views/page/Main/index.vue";
 import instructions from "@/views/page/ instructions/instructions.vue";
 import team from "@/views/page/ instructions/team.vue";
+import Management from "@/views/page/Management/index.vue";
 
 
 // 2. 定义一些路由
@@ -65,7 +66,11 @@ const routes = [
         component:team,
         hidden: true
       },
-
+      {
+        path: '/Management',
+        component:Management,
+        hidden: true
+      },
     ]
   },
 ]

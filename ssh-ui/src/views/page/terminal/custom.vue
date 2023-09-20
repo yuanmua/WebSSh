@@ -6,7 +6,7 @@
         </el-button>
 
 
-      <el-table :data="tableData" style="width: 100%; height: 500px">
+      <el-table :data="tableData" style="width: 100%; height: 400px">
         <el-table-column label="信息" width="80">
           <template #default="scope">
             <el-popover trigger="hover" placement="top" width="auto">

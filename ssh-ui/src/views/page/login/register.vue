@@ -30,6 +30,27 @@
         </el-input>
       </el-form-item>
 
+      <el-form-item prop="phoneNumber">
+        <el-input v-model="registerForm.phoneNumber" type="text" auto-complete="off" placeholder="手机号">
+          <svg-icon slot="prefix" icon-class="phoneNumber" class="el-input__icon input-icon" />
+        </el-input>
+      </el-form-item>
+
+      <el-form-item prop="code" v-if="captchaEnabled">
+        <el-input
+            v-model="registerForm.code"
+            auto-complete="off"
+            placeholder="验证码"
+            style="width: 63%"
+            @keyup.enter.native="handleRegister"
+        >
+          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
+        </el-input>
+
+          <el-button type="primary" class="register-code" @click=getCode() :loading=loading_c >发送验证码</el-button>
+
+      </el-form-item>
+
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -48,13 +69,13 @@
     </el-form>
     <!--  底部  -->
     <div class="el-register-footer">
-      <span>Copyright © 2018-2023xxxxxxx</span>
+<!--      <span>Copyright © 2018-2023xxxxxxx</span>-->
     </div>
   </div>
 </template>
 
 <script>
-import { register } from "@/api/login";
+import {getCode, register} from "@/api/login";
 
 export default {
   name: "Register",
@@ -67,13 +88,16 @@ export default {
       }
     };
     return {
+      loading_c: false,
       codeUrl: "",
       registerForm: {
         username: "",
         password: "",
         confirmPassword: "",
         code: "",
-        uuid: ""
+        uuid: "",
+        phoneNumber:null
+
       },
       registerRules: {
         username: [
@@ -88,6 +112,14 @@ export default {
           { required: true, trigger: "blur", message: "请再次输入您的密码" },
           { required: true, validator: equalToPassword, trigger: "blur" }
         ],
+        phoneNumber: [
+          { required: true, message: "手机号码不能为空", trigger: "blur" },
+          {
+            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+            message: "请输入正确的手机号码",
+            trigger: "blur"
+          }
+        ],
         code: [{ required: true, trigger: "change", message: "请输入验证码" }]
       },
       loading: false,
@@ -96,6 +128,18 @@ export default {
   },
 
   methods: {
+    getCode() {
+      this.loading_c = true
+          getCode().then(res => {
+        this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
+        if (this.captchaEnabled) {
+          this.registerForm.uuid = res.uuid;
+        }
+      });
+      setTimeout(() =>  this.loading_c = false, 10000)
+
+
+    },
     handleRegister() {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
@@ -170,10 +214,7 @@ export default {
   width: 33%;
   height: 38px;
   float: right;
-  img {
-    cursor: pointer;
-    vertical-align: middle;
-  }
+  margin: 5px;
 }
 .el-register-footer {
   height: 40px;
@@ -190,4 +231,6 @@ export default {
 .register-code-img {
   height: 38px;
 }
+
+
 </style>

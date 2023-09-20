@@ -56,7 +56,7 @@ export default {
     return {
       term : new Terminal({
         cols: 97,
-        rows: 37,
+        rows: 30,
         cursorBlink: true, // 光标闪烁
         cursorStyle: "block", // 光标样式  null | 'block' | 'underline' | 'bar'
         // scrollback: 800, // 回滚
