@@ -12,9 +12,9 @@ com:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ssh?user=root
+    url: jdbc:mysql://116.63.188.39:3306/ssh_project?user=root&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: 123s123S@
+    password: '@KunKun2023'
 
 mybatis:
   configuration:
