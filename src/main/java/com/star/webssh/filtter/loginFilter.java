@@ -42,24 +42,24 @@ public class loginFilter implements Filter {
         Cookie[] cookies = httpServletRequest.getCookies();
 
 
-        if (cookies == null || cookies.length == 0) {
-            R error = R.error("NOT_LOGIN");
-            //将Result转为json将其相应回去
-            String jsonString = JSONObject.toJSONString(error);
-            servletResponse.getWriter().write(jsonString);
-            return ;
-        }
+//        if (cookies == null || cookies.length == 0) {
+//            R error = R.error("NOT_LOGIN");
+//            //将Result转为json将其相应回去
+//            String jsonString = JSONObject.toJSONString(error);
+//            servletResponse.getWriter().write(jsonString);
+//            return ;
+//        }
         String jwt=null;
-        for (Cookie cookie : cookies) {
-            String name = cookie.getName();
-            if (name.equals("Admin-Token")) {
-                jwt = cookie.getValue();
-                break;
-            }
-        }
+//        for (Cookie cookie : cookies) {
+//            String name = cookie.getName();
+//            if (name.equals("Admin-Token")) {
+//                jwt = cookie.getValue();
+//                break;
+//            }
+//        }
 
         //====================================================
-//        String jwt = httpServletRequest.getHeader("Token");
+         jwt = httpServletRequest.getHeader("Admin-Token");
 
 
         if(!StringUtils.hasLength(jwt)){

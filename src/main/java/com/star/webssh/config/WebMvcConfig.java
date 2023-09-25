@@ -33,4 +33,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         converters.add(0,messageConverter);//index设置为0,即将自己设置的该转换器的优先级改为最高
         //super.extendMessageConverters(converters);//springboot默认的消息转换器
     }
+
+
 }

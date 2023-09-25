@@ -30,4 +30,12 @@ public class BaseContext {
 
     }
 
+    public static void removeId(){
+
+        //移除当前线程中的值
+         threadLocal.remove();
+
+    }
+
+
 }

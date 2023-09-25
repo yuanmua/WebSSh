@@ -1,19 +1,26 @@
 package com.star.webssh.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.star.webssh.common.BaseContext;
 import com.star.webssh.common.JWTUtils;
 import com.star.webssh.common.R;
+import com.star.webssh.constant.PasswordSALT;
+import com.star.webssh.constant.RedisConstancts;
+import com.star.webssh.dto.LoginDTO;
 import com.star.webssh.pojo.Employee;
 import com.star.webssh.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +33,8 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/employee")
 public class EmployeeController {
-
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private HttpServletRequest request;
     @Autowired
@@ -36,27 +44,10 @@ public class EmployeeController {
     private EmployeeService empService;
 
     @PostMapping("/register")
-    public R<String> register(@RequestBody Employee employee){
-        log.info("注册");
-        //将密码加密
-        employee.setPassword(DigestUtils.md5DigestAsHex(employee.getPassword().getBytes()));
+    public R<String> register(@RequestBody LoginDTO loginDTO){
 
-        //设置用户创建时间和更新时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+        return empService.register(loginDTO);
 
-        //这些字段均无用，应当在数据库中删去
-        employee.setCreateUser(1L);
-        employee.setUpdateUser(1L);
-        employee.setName(employee.getName());
-        employee.setSex("1");
-        employee.setStatus(1);
-        employee.setPhone("13812312312");
-        employee.setIdNumber("110101199001010047");
-
-        empService.save(employee);
-
-        return R.success("注册成功");
     }
 
     /**
@@ -80,27 +71,24 @@ public class EmployeeController {
 
 
     /**
-     * 登录
+     * 账户密码登录
      * @param e
      * @return
      */
     @PostMapping("/login")
     public R login(@RequestBody Employee e) {
 
-        //将密码加密后进行检验
-        e.setPassword(DigestUtils.md5DigestAsHex(e.getPassword().getBytes()));
+        //将密码加密后进行检验,md5+盐
+        e.setPassword(DigestUtils.md5DigestAsHex((e.getPassword()+PasswordSALT.PASSWORD_SALT).getBytes()));
         LambdaQueryWrapper<Employee> lqw = new LambdaQueryWrapper<>();
         lqw.eq(e.getUsername()!=null,Employee::getUsername,e.getUsername());
-
 
         //查询到当前登录用户在表中的信息
         lqw.eq(e.getPassword()!=null,Employee::getPassword,e.getPassword());
         Employee emp=empService.getOne(lqw);
         if(emp!=null){
             Map<String,Object > claim=new HashMap<>();
-            claim.put("username",emp.getUsername());
             claim.put("id",emp.getId());
-            claim.put("password",emp.getPassword());
             String jwt = JWTUtils.createJWT(claim);
 
             return R.success(jwt);
@@ -108,6 +96,26 @@ public class EmployeeController {
         else {
             return R.error("密码错误或用户名错误");
         }
+
+    }
+
+    /**
+     * 发送手机验证码
+     */
+    @PostMapping("/code")
+    public R<String> sendCode(@RequestParam("phone") String phone) {
+        //  发送短信验证码并保存验证码
+        return empService.sendCode(phone);
+    }
+
+    /**
+     * 短信登陆
+     * @param loginDTO
+     */
+    @PostMapping("/loginWithCode")
+    public R<String> loginWithCode(@RequestBody LoginDTO loginDTO){
+
+        return empService.loginWithCode(loginDTO);
 
     }
 }
