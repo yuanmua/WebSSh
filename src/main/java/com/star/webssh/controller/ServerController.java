@@ -1,9 +1,11 @@
 package com.star.webssh.controller;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.FileUtil;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.star.webssh.common.BaseContext;
-import com.star.webssh.common.R;
-import com.star.webssh.common.SshSshdUtil;
+import com.star.webssh.common.*;
 import com.star.webssh.pojo.SshServer;
 import com.star.webssh.pojo.commonCmd;
 import com.star.webssh.service.ServerService;
@@ -13,9 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +37,9 @@ public class ServerController {
 
     @Autowired
     private commonCmdService commonCmdService;
+
+    @Resource
+    private RedisLimitManager redisLimitManager;
 
     /**
      * 新增连接ssh信息
@@ -119,5 +127,83 @@ public class ServerController {
         SshServer sshServer = serverService.getById(id);
         return R.success(sshServer);
 
+    }
+
+
+    /**
+     * 保存excel中的数据到服务器表中
+     * @return
+     */
+    @PostMapping("/file")
+    public R<String> saveExcel2Db(@RequestPart("file") MultipartFile multipartFile){
+        //todo 1、接收数据
+
+        //todo 2、检验数据
+        String originalFilename = multipartFile.getOriginalFilename();
+        long fileSize = multipartFile.getSize();
+        //2.1 检验传入数据格式
+        String suffix = FileUtil.getSuffix(originalFilename);
+        //定义可通过的文件名后缀
+        final List<String> list = Arrays.asList("xls", "xlsx");
+        if (!list.contains(suffix)){
+            throw new CustomException("文件格式不正确");
+        }
+        //2.2 检验传入数据的大小
+        final Long ONE_MB=1*1024*1024l;
+        if(fileSize>ONE_MB){
+            throw new CustomException("文件大于1MB");
+        }
+
+
+        //todo 3、对每一个用户进行限流处理，减小数据库服务器的压力
+        Long currentId = BaseContext.getCurrentId();
+        if (currentId==null){
+            return R.error("NOT_LOGIN");
+        }
+        redisLimitManager.doRateLimit(String.valueOf(currentId));
+
+
+        //todo 4、读取将excel数据文件，将其转为csv格式
+
+        List<Map<Integer, String>> excelList = null;
+        try {
+            excelList = EasyExcel.read(multipartFile.getInputStream())
+                    .excelType(ExcelTypeEnum.XLSX)
+                    .sheet()
+                    .headRowNumber(0)
+                    .doReadSync();
+        } catch (IOException e) {
+            log.error("表格处理错误",e);
+        }
+        if(CollUtil.isEmpty(list)){
+            return R.error("数据处理失败");
+        }
+
+        ArrayList<SshServer> serverList = new ArrayList<>();
+        //todo 5、读出的数据存入server表中
+        for (int i = 1; i < excelList.size(); i++) {
+            SshServer sshServer = new SshServer();
+            LinkedHashMap<Integer, String> integerStringMap = (LinkedHashMap<Integer, String>) excelList.get(i);
+            sshServer.setSshName(integerStringMap.get(0));
+            sshServer.setSshHost(integerStringMap.get(1));
+            sshServer.setSshClass(integerStringMap.get(2));
+            sshServer.setSshPort(Integer.parseInt(integerStringMap.get(3)));
+            sshServer.setSshUserName(integerStringMap.get(4));
+            sshServer.setSshPassword(integerStringMap.get(5));
+            sshServer.setRemark(integerStringMap.get(6));
+            sshServer.setUserId(currentId);
+            sshServer.setUserId(currentId);
+            sshServer.setUpdateTime(LocalDateTime.now());
+            sshServer.setCreate_time(LocalDateTime.now());
+            serverList.add(sshServer);
+
+        }
+        boolean b = serverService.saveBatch(serverList);
+        if (!b){
+            throw new CustomException("数据保存失败");
+        }
+
+        //6、返回
+        return R.success("导入成功");
     }
 }

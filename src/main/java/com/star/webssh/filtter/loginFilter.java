@@ -50,16 +50,16 @@ public class loginFilter implements Filter {
 //            return ;
 //        }
         String jwt=null;
-//        for (Cookie cookie : cookies) {
-//            String name = cookie.getName();
-//            if (name.equals("Admin-Token")) {
-//                jwt = cookie.getValue();
-//                break;
-//            }
-//        }
+        for (Cookie cookie : cookies) {
+            String name = cookie.getName();
+            if (name.equals("Admin-Token")) {
+                jwt = cookie.getValue();
+                break;
+            }
+        }
 
         //====================================================
-         jwt = httpServletRequest.getHeader("Admin-Token");
+//         jwt = httpServletRequest.getHeader("Admin-Token");
 
 
         if(!StringUtils.hasLength(jwt)){
