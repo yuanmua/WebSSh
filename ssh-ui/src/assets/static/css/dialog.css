@@ -1,0 +1,165 @@
+.flex-layout {
+    display: flex;
+    display: -ms-flexbox;
+    display: -webkit-flex
+}
+
+.dialog-wrapper {
+    display: flex;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    justify-content: center;
+    align-items: center;
+    z-index: 495594;
+    background: #0000008f;
+    display: none
+}
+
+.dialog-wrapper .dialog-loading {
+    display: none
+}
+
+.dialog-wrapper .dialog-loading .loading {
+    display: flex;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    flex-direction: column
+}
+
+.dialog-wrapper .dialog-loading .loading .grp {
+    border-radius: 50%;
+    padding: 36px;
+    background-color: #0c80b5
+}
+
+.dialog-wrapper .dialog-loading .loading .progress {
+    text-align: center;
+    color: #ffffff;
+    font-weight: 900;
+    margin-top: 20px;
+    font-size: 20px
+}
+
+.dialog-wrapper .dialog-loading img {
+    width: 47px
+}
+
+.dialog-wrapper .alert-dialog {
+    z-index: 495595;
+    border-radius: 6px;
+    border-radius: 10px;
+    width: 319px;
+    position: relative;
+    display: none
+}
+
+.dialog-wrapper .alert-dialog header {
+    height: 36px;
+    background: #279ace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px
+}
+
+.dialog-wrapper .alert-dialog .message {
+    height: 50px;
+    padding: 12px;
+    font-weight: 900;
+    font-size: 14px;
+    color: #777777;
+    background: #ffffff
+}
+
+.dialog-wrapper .alert-dialog .buttons {
+    display: flex
+}
+
+.dialog-wrapper .alert-dialog .buttons button:nth-of-type(1) {
+    border-bottom-left-radius: 10px
+}
+
+.dialog-wrapper .alert-dialog .buttons button:nth-last-of-type(1) {
+    border-bottom-right-radius: 10px
+}
+
+.dialog-wrapper .alert-dialog .buttons button {
+    flex: 1;
+    border: none;
+    padding: 9px 0px;
+    cursor: pointer;
+    color: #ffffff;
+    background: #2183af;
+    font-size: 15px;
+    font-weight: 700
+}
+
+.dialog-wrapper .alert-dialog .buttons button:nth-of-type(1), .dialog-wrapper .alert-dialog .buttons button:nth-of-type(2), .dialog-wrapper .alert-dialog .buttons button:nth-of-type(3) {
+    border-right: 1px #c7c7c78f solid
+}
+
+.dialog-wrapper .alert-dialog .buttons .delete {
+    background: #8a2020
+}
+
+.dialog-wrapper .alert-dialog .buttons .more {
+    position: relative
+}
+
+.dialog-wrapper .alert-dialog .buttons .more .menu {
+    display: none;
+    position: absolute;
+    background: #ffffff;
+    z-index: 49559466;
+    color: #000000;
+    width: 99px
+}
+
+.dialog-wrapper .alert-dialog .buttons .more .menu li {
+    text-align: center;
+    padding: 10px
+}
+
+.dialog-wrapper .alert-dialog .buttons .more:hover .menu {
+    display: block
+}
+.dialog-wrapper .dialog-edit{
+    display: none;
+    height: 89%;
+}
+.dialog-wrapper textarea{
+    width: 1195px;
+    min-height: 80%;
+    padding: 14px;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+.dialog-wrapper header{
+    text-align: center;
+    color: #ffffff;
+    font-size: 19px;
+    padding: 9px;
+    background: #03a9f4;
+}
+.dialog-wrapper .opt-buttons{
+    background: #03a9f4;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.dialog-wrapper .opt-buttons button{
+    background: #cacaca;
+    width: 60px;
+    margin-right: 21px;
+    color: #000000;
+    border-radius: 4px;
+    cursor: pointer;
+}

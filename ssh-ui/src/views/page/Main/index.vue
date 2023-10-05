@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
@@ -12,6 +11,18 @@
         >新增
         </el-button>
       </el-col>
+
+      <el-col :span="1.5">
+        <el-button
+            type="primary"
+            plain
+            icon="el-icon-delete"
+            size="small"
+            @click="ExAdd"
+        >表格一键导入
+        </el-button>
+      </el-col>
+
       <!--      <el-col :span="1.5">
               <el-button
                   type="success"
@@ -45,6 +56,8 @@
         >刷新
         </el-button>
       </el-col>
+
+
     </el-row>
 
     <el-row
@@ -67,6 +80,13 @@
       <sshCard :sshData="item" @getList="getList" style="float: left"></sshCard>
     </div>-->
 
+    <el-dialog title="表格一键导入" v-model="open2" width="600px" append-to-body>
+      <exUpLoad></exUpLoad>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitExAdd">确 定</el-button>
+        <el-button @click="cancelExAdd">取 消</el-button>
+      </div>
+    </el-dialog>
 
     <!-- 添加或修改用户配置对话框 -->
     <el-dialog :title="title" v-model="open" width="600px" append-to-body>
@@ -133,10 +153,11 @@
 import {addSSh, listSSh} from "@/api/SSH_c";
 import Terminal from "@/views/page/terminal/Terminal.vue";
 import SshCard from "@/views/page/Main/SSh_config/sshCard.vue";
+import ExUpLoad from "@/views/page/Main/SSh_config/ExUpLoad.vue";
 
 export default {
   name: "Main",
-  components: {SshCard, Terminal},
+  components: {ExUpLoad, SshCard, Terminal},
   data() {
     return {
       loading: true,
@@ -162,6 +183,8 @@ export default {
       },
       // 是否显示弹出层
       open: false, // 是否显示弹出层
+      open2: false, // 是否显示弹出层
+
       // 表单校验
       rules: {
         sshName: [
@@ -215,6 +238,18 @@ export default {
       this.ID = this.$store.state.user.id;
       this.open = true;
       this.title = "添加服务器";
+    },
+    /** 表格导入操作 */
+    ExAdd() {
+      this.open2 = true;
+    },
+    submitExAdd()  {
+      this.open2 = false;
+    },
+    /** 表单取消按钮*/
+    cancelExAdd() {
+      this.open2 = false;
+
     },
 
     /** 提交表单按钮 */

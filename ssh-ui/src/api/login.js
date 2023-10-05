@@ -17,6 +17,16 @@ export function login(username, password, code, uuid) {
     data: data
   })
 }
+export function login2(data) {
+  return request({
+    url: '/employee/loginWithCode',
+    headers: {
+      isToken: false
+    },
+    method: 'post',
+    data: data
+  })
+}
 /*
 
 export function loginApi(data) {
@@ -56,13 +66,13 @@ export function logout() {
 }
 
 // 获取验证码
-export function getCode() {
+export function getCode(data) {
   return request({
-    url: '/captchaImage',
+    url: '/employee/code?' + data,
     headers: {
       isToken: false
     },
-    method: 'get',
-    timeout: 20000
+    method: 'post',
+
   })
 }

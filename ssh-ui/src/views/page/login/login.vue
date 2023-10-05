@@ -7,21 +7,45 @@
           <div class="login-form-title">
             <img src="../../../assets/logo_b.png" style="width:150px;height:150px;" alt="" />
           </div>
-          <el-form-item prop="username">
-            <el-input v-model="loginForm.username" type="text" placeholder="账号"/>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input v-model="loginForm.password" type="password" placeholder="密码"/>
-          </el-form-item>
-          <el-form-item style="width:100%;margin-bottom: 10px;">
-            <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
-                       @click.native.prevent="handleLogin">
-              <span v-if="!loading">登录</span>
-              <span v-else>登录中...</span>
-            </el-button>
-          </el-form-item>
+          <el-tabs type="border-card">
+            <el-tab-pane label="登录">
+              <el-form-item prop="username">
+                <el-input v-model="loginForm.username" type="text" placeholder="账号"/>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input v-model="loginForm.password" type="password" placeholder="密码"/>
+              </el-form-item>
+              <el-form-item style="width:100%;margin-bottom: 10px;">
+                <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
+                           @click.native.prevent="handleLogin">
+                  <span v-if="!loading">登录</span>
+                  <span v-else>登录中...</span>
+                </el-button>
+              </el-form-item>
 
-          <el-form-item style="width:100%;">
+            </el-tab-pane>
+
+            <el-tab-pane label="手机号登录">
+              <el-form-item prop="phoneNumber">
+                <el-input v-model="loginForm2.phoneNumber" type="text" placeholder="手机号"/>
+              </el-form-item>
+              <el-form-item prop="code">
+                <el-input v-model="loginForm2.code" type="password" style="width: 63%" placeholder="验证码"/>
+                <el-button type="primary" class="login-code" @click=getCode() >发送</el-button>
+              </el-form-item>
+              <el-form-item style="width:100%;margin-bottom: 10px;">
+                <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
+                           @click.native.prevent="handleLogin2">
+                  <span v-if="!loading">登录</span>
+                  <span v-else>登录中...</span>
+                </el-button>
+              </el-form-item>
+
+            </el-tab-pane>
+          </el-tabs>
+
+
+          <el-form-item style="width:90%; margin-left: 5%">
             <el-button  class="login-btn" size="default" type="primary" style="width:100%;"
                         onclick='window.open("/#/register")'>
               <span>注册</span>
@@ -35,14 +59,24 @@
 
 <script>
 import Cookies from "js-cookie";
+import Custom from "@/views/page/terminal/custom.vue";
+import Comks from "@/views/page/terminal/comks.vue";
+import {getCode, login, login2} from "@/api/login";
+import {setToken} from "@/js/auth";
 
 export default {
   name: "loginVive",
+  components: {Comks, Custom},
   data() {
     return {
       loginForm:{
         username: '',
         password: '',
+        rememberMe: false,
+      },
+      loginForm2:{
+        code: "",
+        phoneNumber:null,
         rememberMe: false,
       },
       loading: false
@@ -75,6 +109,24 @@ export default {
       console.log(this.$store)
   },
   methods: {
+    getCode() {
+      this.loading_c = true
+      getCode( "phone="+this.loginForm2.phoneNumber).then(res => {
+        this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
+        if (this.captchaEnabled) {
+          this.loginForm2.uuid = res.uuid;
+        }
+      });
+      setTimeout(() =>  this.loading_c = false, 10000)
+
+
+    },
+    handleLogin2() {
+      login2(this.loginForm2).then(res => {
+        setToken(res.data)
+      })
+    },
+
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -104,12 +156,18 @@ export default {
 </script>
 
 <style scoped>
+
 .login {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   background-color: #333;
+}
+.login-code {
+  width: 30%;
+  float: right;
+  margin: 5px;
 }
 .login-box {
   width: 1000px;

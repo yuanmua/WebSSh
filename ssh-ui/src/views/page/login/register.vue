@@ -130,7 +130,7 @@ export default {
   methods: {
     getCode() {
       this.loading_c = true
-          getCode().then(res => {
+          getCode( "phone="+this.registerForm.phoneNumber).then(res => {
         this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
         if (this.captchaEnabled) {
           this.registerForm.uuid = res.uuid;
