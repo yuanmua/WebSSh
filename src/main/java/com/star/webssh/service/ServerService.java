@@ -16,4 +16,11 @@ public interface ServerService extends IService<SshServer> {
      * @param status
      */
     List<SshServer> getList(Integer status);
+
+    /**
+     * 根据用户id查询ssh连接信息，
+     * status表示是否检查连接
+     * @param data
+     */
+    List<SshServer> getList(Long data,Integer status);
 }

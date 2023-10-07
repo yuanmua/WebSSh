@@ -57,6 +57,20 @@
         </el-button>
       </el-col>
 
+      <el-col :span="1.5" v-if="fan" style="float: left">
+        <el-button
+            type="primary"
+            plain
+            icon="el-icon-delete"
+            size="large"
+        >
+          <router-link to="/Management/">
+
+            返回
+          </router-link>
+
+        </el-button>
+      </el-col>
 
     </el-row>
 
@@ -150,16 +164,18 @@
 </template>
 
 <script>
-import {addSSh, listSSh} from "@/api/SSH_c";
+import {addSSh, listSSh, listSSh2} from "@/api/SSH_c";
 import Terminal from "@/views/page/terminal/Terminal.vue";
 import SshCard from "@/views/page/Main/SSh_config/sshCard.vue";
 import ExUpLoad from "@/views/page/Main/SSh_config/ExUpLoad.vue";
+import {timeUnits} from "element-plus";
 
 export default {
   name: "Main",
   components: {ExUpLoad, SshCard, Terminal},
   data() {
     return {
+      fan: false,
       loading: true,
       // 非单个禁用
       single: true,
@@ -220,16 +236,37 @@ export default {
     this.getList(0)
   },
 
+  watch: {
+    // 监听路由变化
+    "$route.path": function(newVal, oldVal) {
+      console.log(`new_path = ${newVal}, old_path = ${oldVal}`);
+      this.getList(0)
+    }
+
+  },
+
   methods: {
     /** 查询服务器列表 */
     getList(data) {
+      console.log((this.$route.params.ID));
       this.loading = true;
-      listSSh(data).then(response => {
-            this.sshList = response.data
-            this.loading = false;
+      if (this.$route.params.ID===undefined){
+        this.fan=false;
+        listSSh(data).then(response => {
+          this.sshList = response.data
+          this.loading = false;
+        });
+      }
+      else {
+        this.fan=true;
+        listSSh2(data,this.$route.params.ID).then(response => {
+          this.sshList = response.data
+          this.loading = false;
+        });
 
-          }
-      );
+      }
+
+
     },
 
     /** 新增按钮操作 */

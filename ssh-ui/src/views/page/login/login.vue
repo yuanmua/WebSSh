@@ -27,7 +27,7 @@
 
             <el-tab-pane label="手机号登录">
               <el-form-item prop="phoneNumber">
-                <el-input v-model="loginForm2.phoneNumber" type="text" placeholder="手机号"/>
+                <el-input v-model="loginForm2.phone" type="text" placeholder="手机号"/>
               </el-form-item>
               <el-form-item prop="code">
                 <el-input v-model="loginForm2.code" type="password" style="width: 63%" placeholder="验证码"/>
@@ -76,7 +76,7 @@ export default {
       },
       loginForm2:{
         code: "",
-        phoneNumber:null,
+        phone:null,
         rememberMe: false,
       },
       loading: false
@@ -111,7 +111,7 @@ export default {
   methods: {
     getCode() {
       this.loading_c = true
-      getCode( "phone="+this.loginForm2.phoneNumber).then(res => {
+      getCode( "phone="+this.loginForm2.phone).then(res => {
         this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
         if (this.captchaEnabled) {
           this.loginForm2.uuid = res.uuid;
@@ -124,6 +124,7 @@ export default {
     handleLogin2() {
       login2(this.loginForm2).then(res => {
         setToken(res.data)
+        window.location.href = '/#/index'
       })
     },
 
