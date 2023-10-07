@@ -206,4 +206,135 @@ public class ServerController {
         //6、返回
         return R.success("导入成功");
     }
+
+    @GetMapping("/user/list")
+    public String list(){
+
+        return "{\n" +
+                "    \"total\": 2,\n" +
+                "    \"rows\": [\n" +
+                "        {\n" +
+                "            \"createBy\": \"admin\",\n" +
+                "            \"createTime\": \"2023-04-23 16:11:38\",\n" +
+                "            \"updateBy\": null,\n" +
+                "            \"updateTime\": null,\n" +
+                "            \"remark\": \"管理员\",\n" +
+                "            \"userId\": 1,\n" +
+                "            \"deptId\": 103,\n" +
+                "            \"userName\": \"admin\",\n" +
+                "            \"nickName\": \"若依\",\n" +
+                "            \"email\": \"ry@163.com\",\n" +
+                "            \"phonenumber\": \"15888888888\",\n" +
+                "            \"sex\": \"1\",\n" +
+                "            \"avatar\": \"\",\n" +
+                "            \"password\": null,\n" +
+                "            \"status\": \"0\",\n" +
+                "            \"delFlag\": \"0\",\n" +
+                "            \"loginIp\": \"123.129.121.118\",\n" +
+                "            \"loginDate\": \"2023-10-07T22:40:19.000+08:00\",\n" +
+                "            \"dept\": {\n" +
+                "                \"createBy\": null,\n" +
+                "                \"createTime\": null,\n" +
+                "                \"updateBy\": null,\n" +
+                "                \"updateTime\": null,\n" +
+                "                \"remark\": null,\n" +
+                "                \"deptId\": 103,\n" +
+                "                \"parentId\": null,\n" +
+                "                \"ancestors\": null,\n" +
+                "                \"deptName\": \"研发部门\",\n" +
+                "                \"orderNum\": null,\n" +
+                "                \"leader\": \"若依\",\n" +
+                "                \"phone\": null,\n" +
+                "                \"email\": null,\n" +
+                "                \"status\": null,\n" +
+                "                \"delFlag\": null,\n" +
+                "                \"parentName\": null,\n" +
+                "                \"children\": []\n" +
+                "            },\n" +
+                "            \"roles\": [],\n" +
+                "            \"roleIds\": null,\n" +
+                "            \"postIds\": null,\n" +
+                "            \"roleId\": null,\n" +
+                "            \"admin\": true\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"createBy\": \"admin\",\n" +
+                "            \"createTime\": \"2023-04-23 16:11:38\",\n" +
+                "            \"updateBy\": null,\n" +
+                "            \"updateTime\": null,\n" +
+                "            \"remark\": \"测试员\",\n" +
+                "            \"userId\": 2,\n" +
+                "            \"deptId\": 105,\n" +
+                "            \"userName\": \"ry\",\n" +
+                "            \"nickName\": \"若依\",\n" +
+                "            \"email\": \"ry@qq.com\",\n" +
+                "            \"phonenumber\": \"15666666666\",\n" +
+                "            \"sex\": \"1\",\n" +
+                "            \"avatar\": \"\",\n" +
+                "            \"password\": null,\n" +
+                "            \"status\": \"0\",\n" +
+                "            \"delFlag\": \"0\",\n" +
+                "            \"loginIp\": \"114.254.2.117\",\n" +
+                "            \"loginDate\": \"2023-10-07T19:27:15.000+08:00\",\n" +
+                "            \"dept\": {\n" +
+                "                \"createBy\": null,\n" +
+                "                \"createTime\": null,\n" +
+                "                \"updateBy\": null,\n" +
+                "                \"updateTime\": null,\n" +
+                "                \"remark\": null,\n" +
+                "                \"deptId\": 105,\n" +
+                "                \"parentId\": null,\n" +
+                "                \"ancestors\": null,\n" +
+                "                \"deptName\": \"测试部门\",\n" +
+                "                \"orderNum\": null,\n" +
+                "                \"leader\": \"若依\",\n" +
+                "                \"phone\": null,\n" +
+                "                \"email\": null,\n" +
+                "                \"status\": null,\n" +
+                "                \"delFlag\": null,\n" +
+                "                \"parentName\": null,\n" +
+                "                \"children\": []\n" +
+                "            },\n" +
+                "            \"roles\": [],\n" +
+                "            \"roleIds\": null,\n" +
+                "            \"postIds\": null,\n" +
+                "            \"roleId\": null,\n" +
+                "            \"admin\": false\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"code\": 200,\n" +
+                "    \"msg\": \"查询成功\"\n" +
+                "}";
+    }
+
+    @GetMapping("/user/deptTree")
+    public String deptTree(){
+
+        return "{\n" +
+                "    \"msg\": \"操作成功\",\n" +
+                "    \"code\": 200,\n" +
+                "    \"data\": [\n" +
+                "        {\n" +
+                "            \"id\": 100,\n" +
+                "            \"label\": \"若依科技\",\n" +
+                "            \"children\": [\n" +
+                "                {\n" +
+                "                    \"id\": 101,\n" +
+                "                    \"label\": \"深圳总公司\",\n" +
+                "                    \"children\": [\n" +
+                "                        {\n" +
+                "                            \"id\": 103,\n" +
+                "                            \"label\": \"研发部门\"\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"id\": 104,\n" +
+                "                            \"label\": \"市场部门\"\n" +
+                "                        },\n" +
+                "                        {\n" +
+                "                            \"id\": 105,\n" +
+                "                            \"label\": \"测试部门\"\n" +
+                "                        },\n" +
+                "                        {";
+    }
+
 }
