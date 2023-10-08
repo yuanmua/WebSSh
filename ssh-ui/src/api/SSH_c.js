@@ -9,6 +9,13 @@ export function listSSh(data) {
     })
 }
 
+export function listSSh2(data, data2) {
+    return request({
+        url: '/system/list2/' + data + '/' + data2,
+        method: 'get',
+        params: data
+    })
+}
 
 // 新增ssh
 export function addSSh(data) {

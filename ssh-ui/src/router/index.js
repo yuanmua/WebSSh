@@ -13,77 +13,83 @@ import Management from "@/views/page/Management/index.vue";
 // 每个路由都需要映射到一个组件。
 // 我们后面再讨论嵌套路由。
 const routes = [
-/*  { path: '/',
-    component: login
-  },*/
-  {
-    path: '/',
-    component: () => import('@/views/page/login/login.vue'),
-    hidden: true
-  },
-  /*{ path: '/index',
-    component: MainView
-  },*/
-  {
-    path: '/register',
-    component: Register,
-    hidden: true
-  },
-  // {
-  //   path: '/index',
-  //   component: Layout,
-  //   redirect: 'index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import ("@/views/page/terminal/TerView.vue"),
-  //       name: 'Index',
-  //       meta: { title: '首页', icon: 'dashboard', affix: true }
-  //     }
-  //   ]
-  // },
-  {
-    path: '/index',
-    component: Layout,
-    children: [
-      {
+    /*  { path: '/',
+        component: login
+      },*/
+    {
+        path: '/',
+        component: () => import('@/views/page/login/login.vue'),
+        hidden: true
+    },
+    /*{ path: '/index',
+      component: MainView
+    },*/
+    {
+        path: '/register',
+        component: Register,
+        hidden: true
+    },
+    // {
+    //   path: '/index',
+    //   component: Layout,
+    //   redirect: 'index',
+    //   children: [
+    //     {
+    //       path: 'index',
+    //       component: () => import ("@/views/page/terminal/TerView.vue"),
+    //       name: 'Index',
+    //       meta: { title: '首页', icon: 'dashboard', affix: true }
+    //     }
+    //   ]
+    // },
+    {
         path: '/index',
-        component: Main,
-        name: 'Index',
-      },
+        component: Layout,
+        children: [
+            {
+                path: '/index',
+                component: Main,
+                name: 'Index',
+            },
 
-      {
-        path: '/index/ssh/:id',
-        component: ()=>import ("@/views/page/terminal/TerView.vue"),
-      },
-      {
-        path: '/instructions',
-        component: instructions,
-        hidden: true
-      },
-      {
-        path: '/team',
-        component:team,
-        hidden: true
-      },
-      {
-        path: '/Management',
-        component:Management,
-        hidden: true
-      },
-    ]
-  },
+            {
+                path: '/index/ssh/:id',
+                component: () => import ("@/views/page/terminal/TerView.vue"),
+            },
+            {
+                path: '/instructions',
+                component: instructions,
+                hidden: true
+            },
+            {
+                path: '/team',
+                component: team,
+                hidden: true
+            },
+            {
+                path: '/Management',
+                component: Management,
+                hidden: true
+            },
+            {
+                path: '/Management/:ID',
+                component: Main,
+                hidden: true
+
+            },
+        ]
+    },
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置
 // 你可以在这里输入更多的配置，但我们在这里
 // 暂时保持简单
 const router = createRouter({
-  mode: 'history', // 去掉url中的#
-  // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
-  history: createWebHashHistory(),
-  routes, // `routes: routes` 的缩写
-  linkActiveClass:'active',
+    mode: 'history', // 去掉url中的#
+    // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
+    history: createWebHashHistory(),
+    routes, // `routes: routes` 的缩写
+    linkActiveClass: 'active',
 })
 
 export default router
