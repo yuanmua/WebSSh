@@ -10,6 +10,7 @@
 
     <div id="terminal"></div>
   </div>
+
 </template>
 
 <script>
@@ -55,12 +56,12 @@ export default {
   data() {
     return {
       term : new Terminal({
-        cols: 97,
+        cols: 70,
         rows: 30,
         cursorBlink: true, // 光标闪烁
         cursorStyle: "block", // 光标样式  null | 'block' | 'underline' | 'bar'
         // scrollback: 800, // 回滚
-        tabStopWidth: 8, // 制表宽度
+        tabStopWidth: 2, // 制表宽度
         screenKeys: true
       }),
       comOpen: false,
@@ -70,7 +71,7 @@ export default {
         host: '192.168.130.128',//IP
         port: 22,//端口号
         username: 'yuanmua',//用户名
-        password: '123s123s'//密码
+        password: ''//密码
       }
     }
 
