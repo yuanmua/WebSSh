@@ -21,4 +21,5 @@ public class LoginDTO {
     private String code;
 
     private String password;
+
 }
