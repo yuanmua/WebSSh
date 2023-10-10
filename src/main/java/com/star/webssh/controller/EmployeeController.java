@@ -2,6 +2,7 @@ package com.star.webssh.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.webssh.common.BaseContext;
 import com.star.webssh.common.JWTUtils;
 import com.star.webssh.common.R;
@@ -118,4 +119,16 @@ public class EmployeeController {
         return empService.loginWithCode(loginDTO);
 
     }
+
+
+    //查询所有员工
+    @GetMapping("/user/list/{deptId}")
+    public R<Page<Employee>> list(@PathVariable Long deptId,Long pageNum,Long pageSize){
+
+        Page<Employee> employeePage = new Page<>(pageNum,pageSize);
+
+        Page<Employee> page = empService.page(employeePage);
+        return R.success(page);
+    }
+
 }
