@@ -5,12 +5,17 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.star.webssh.pojo.MemoryInfo;
+import com.star.webssh.pojo.SSDInfo;
+import com.star.webssh.vo.resourceVO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /*** 远程调用Linux shell 命令*/
 //系统资源监控工具类
@@ -36,19 +41,22 @@ public class LinuxStateForShell {
 
             session.setPassword(passwd);
 
-            java.util.Properties config = new java.util.Properties();
+            //java.util.Properties config = new java.util.Properties();
+
+            Properties config = new Properties();
 
             config.put("StrictHostKeyChecking", "no");
 
             session.setConfig(config);
 
-            session.connect();
+            session.connect(30000);//经常报错
 
-        } catch (JSchException e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
 
             System.out.println("connect error !");
+
             return false;
 
         }
@@ -65,6 +73,7 @@ public class LinuxStateForShell {
 
     public static Map runDistanceShell(String[] commands, String user, String passwd, String host) {
         if (!connect(user, passwd, host)) {
+            System.out.println("连接失败");
             return null;
         }
 
@@ -201,9 +210,17 @@ public class LinuxStateForShell {
      *@paramresult shell 返回的信息
      *@return最终处理后的信息*/
 
-    public static String disposeResultMessage(Map result) {
+    public static resourceVO disposeResultMessage(Map result) {
+        double cpu=0;
+        double memoryPercent; //记录内存使用百分比
+        double usedMemory; //记录已用内存 单位为G
+        double allMemory; //记录总内存
+        double freeMemory; //记录剩余内存
+        String tmp;
+        MemoryInfo memoryInfo=null;
+        SSDInfo ssdInfo=null;
 
-        StringBuilder buffer = new StringBuilder();
+        //StringBuilder buffer = new StringBuilder();
         for (String command : COMMANDS) {
 
             String commandResult = result.get(command).toString();
@@ -219,50 +236,59 @@ public class LinuxStateForShell {
 
                     if (line.startsWith("%CPU(S):")) {
 
-                        String cpuStr = "CPU 用户使用占有率:";
+                        String cpuStr = null;
                         try {
 
-                            cpuStr += line.split(":")[1].split(",")[0].replace("US", "");
-                            cpuStr +="%";
+                            cpuStr = line.split(":")[1].split(",")[0].replace("US", "");
+                            cpuStr=cpuStr.trim();
+                            cpu= Double.parseDouble(cpuStr);
 
                         } catch (Exception e) {
 
                             e.printStackTrace();
 
-                            cpuStr += "计算过程出错";
+                            System.out.println("计算过程出错");
 
                         }
 
-                        buffer.append(cpuStr).append(LINE_SEPARATOR);
+                        //buffer.append(cpuStr).append(LINE_SEPARATOR);
 
                         //处理内存 Mem: 66100704k total, 65323404k used, 777300k free, 89940k buffers
                     } else if (line.startsWith("MIB MEM")) {
-
-                        String memStr = "系统物理内存使用情况:";
+                        //String memStr = "系统物理内存使用情况:";
                         try {
 
-                            memStr += line.split(":")[1]
+                            tmp= line.split(":")[1]
 
-                                    .replace("TOTAL", "k 总计")
+                                    .replace("TOTAL,", ",")
 
-                                    .replace("FREE", "k 空闲")
+                                    .replace("FREE,", ",")
 
-                                    .replace("USED", "k 已使用")
+                                    .replace("USED,", ",")
 
-                                    .replace("BUFF/CACHE", "k 缓存");
+                                    .replace("BUFF/CACHE", ",");
+                            tmp=tmp.trim();
+                            String[]  strs=tmp.split(",");
+                            allMemory=Double.parseDouble(strs[0])/1024;
+                            usedMemory=Double.parseDouble(strs[3])/1024;
+                            freeMemory=allMemory-usedMemory;
+                            memoryPercent=(usedMemory/allMemory)*100;
+                            memoryInfo=new MemoryInfo(memoryPercent,usedMemory,allMemory,freeMemory);
+
 
                         } catch (Exception e) {
 
                             e.printStackTrace();
 
-                            memStr += "计算过程出错";
+                            //memStr += "计算过程出错";
 
-                            buffer.append(memStr).append(LINE_SEPARATOR);
+                            //buffer.append(memStr).append(LINE_SEPARATOR);
+                            System.out.println("计算过程出错");
                             continue;
 
                         }
 
-                        buffer.append(memStr).append(LINE_SEPARATOR);
+                        //buffer.append(memStr).append(LINE_SEPARATOR);
 
                     }
 
@@ -270,23 +296,25 @@ public class LinuxStateForShell {
 
             } else if (command.equals(FILES_SHELL)) {//处理系统磁盘状态
 
-                buffer.append("系统磁盘状态:");
+                //buffer.append("系统磁盘状态:");
                 try {
 
-                    buffer.append(disposeFilesSystem(commandResult)).append(LINE_SEPARATOR);
+                    ssdInfo=disposeFilesSystem(commandResult);
 
                 } catch (Exception e) {
 
                     e.printStackTrace();
 
-                    buffer.append("计算过程出错").append(LINE_SEPARATOR);
+                    //buffer.append("计算过程出错").append(LINE_SEPARATOR);
 
+                    System.out.println("计算过程出错");
                 }
 
             }
 
         }
-        return buffer.toString();
+
+        return new resourceVO(cpu,memoryInfo,ssdInfo);
 
     }
     //处理系统磁盘状态
@@ -300,13 +328,13 @@ public class LinuxStateForShell {
      *@paramcommandResult 处理系统磁盘状态shell执行结果
      *@return处理后的结果*/
 
-    private static String disposeFilesSystem(String commandResult) {
+    private static SSDInfo disposeFilesSystem(String commandResult) {
 
         String[] strings = commandResult.split(LINE_SEPARATOR);
         //final String PATTERN_TEMPLATE = "([a-zA-Z0-9%_/]*)\\s";
 
-        int size = 0;
-        int used = 0;
+        double size = 0;
+        double used = 0;
         for (int i = 0; i < strings.length - 1; i++) {
             if (i == 0) continue;
             int temp = 0;
@@ -337,9 +365,11 @@ public class LinuxStateForShell {
             }
 
         }
-        return new StringBuilder().append("大小 ").append(size).append("G , 已使用").append(used).append("G ,空闲")
+        double percent=(used/size)*100;
+        //return new StringBuilder().append("大小 ").append(size).append("G , 已使用").append(used).append("G ,空闲")
 
-                .append(size - used).append("G").toString();
+          //      .append(size - used).append("G").toString();
+        return new SSDInfo(percent,used,size,size-used);
 
     }
 
@@ -382,13 +412,13 @@ public class LinuxStateForShell {
 
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         Map result = runDistanceShell(COMMANDS, "root", "Ft8JDaSqZxhWEE8", "116.63.188.39");
 
         System.out.println(disposeResultMessage(result));
 
-    }
+    }*/
 
 
 }
