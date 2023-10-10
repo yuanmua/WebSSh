@@ -139,16 +139,17 @@
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center"/>
-          <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible"/>
-          <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
+          <el-table-column label="用户编号" align="center" key="userId" prop="id" v-if="columns[0].visible"/>
+          <el-table-column label="用户名称" align="center" key="userName" prop="username" v-if="columns[1].visible"
                            :show-overflow-tooltip="true"/>
-          <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible"
-                           :show-overflow-tooltip="true"/>
+<!--          <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible"
+                           :show-overflow-tooltip="true"/>-->
           <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible"
                            :show-overflow-tooltip="true"/>
-          <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber"
+          <el-table-column label="手机号码" align="center" key="phonenumber" prop="phone"
                            v-if="columns[4].visible" width="120"/>
-          <el-table-column label="状态" align="center" key="slot"  v-if="columns[5].visible">
+<!--
+          <el-table-column label="状态" align="center" key="slot" v-if="columns[5].visible">
 
             <template #default="scope">
               <el-switch
@@ -160,6 +161,7 @@
             </template>
 
           </el-table-column>
+-->
 
           <el-table-column
               label="操作"
@@ -168,15 +170,15 @@
               key="slot"
               class-name="small-padding fixed-width"
           >
-            <template #default="scope" >
+            <template #default="scope">
 
               <el-button
                   size="large"
                   type="text"
                   icon="el-icon-edit"
-                  @click="manage(scope.row.ID)"
+                  @click="manage(scope.row.id)"
                   v-hasPermi="['system:user:edit']"
-                  @change="manage(scope.row.ID)"
+                  @change="manage(scope.row.id)"
 
               >管理
 
@@ -413,7 +415,7 @@ export default {
       form: {},
       defaultProps: {
         children: "children",
-        label: "label"
+        label: "deptName"
       },
       // 用户导入参数
       upload: {
@@ -443,10 +445,10 @@ export default {
       columns: [
         {key: 0, label: `用户编号`, visible: true},
         {key: 1, label: `用户名称`, visible: true},
-        {key: 2, label: `用户昵称`, visible: true},
+        {key: 2, label: `用户昵称`, visible: false},
         {key: 3, label: `部门`, visible: true},
         {key: 4, label: `手机号码`, visible: true},
-        {key: 5, label: `状态`, visible: true},
+        {key: 5, label: `状态`, visible: false},
         {key: 6, label: `创建时间`, visible: true}
       ],
       // 表单校验
@@ -491,8 +493,8 @@ export default {
     this.getDeptTree();
   },
   methods: {
-    manage(Id){
-      window.location.href = '/#/Management/'+Id
+    manage(Id) {
+      window.location.href = '/#/Management/' + Id
 
 
     },
@@ -503,9 +505,9 @@ export default {
       this.loading = true;
       listUser().then(response => {
 
-            this.userList = response.rows;
-
-            this.total = response.total;
+            this.userList = response.data.records;
+            console.log(this.userList);
+            // this.total = response.total;
             this.loading = false;
           }
       );

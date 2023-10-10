@@ -1,13 +1,9 @@
 package com.star.webssh.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.star.webssh.common.BaseContext;
 import com.star.webssh.common.JWTUtils;
 import com.star.webssh.common.R;
 import com.star.webssh.constant.PasswordSALT;
-import com.star.webssh.constant.RedisConstancts;
 import com.star.webssh.dto.LoginDTO;
 import com.star.webssh.pojo.Employee;
 import com.star.webssh.service.EmployeeService;
@@ -21,8 +17,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,16 +113,4 @@ public class EmployeeController {
         return empService.loginWithCode(loginDTO);
 
     }
-
-
-    //查询所有员工
-    @GetMapping("/user/list/{deptId}")
-    public R<Page<Employee>> list(@PathVariable Long deptId,Long pageNum,Long pageSize){
-
-        Page<Employee> employeePage = new Page<>(pageNum,pageSize);
-
-        Page<Employee> page = empService.page(employeePage);
-        return R.success(page);
-    }
-
 }

@@ -15,10 +15,30 @@ export default {
   components: {
     ref
   },
-  data(){
-    return{
-      getInfo:null,
-      zxtoption : {
+
+  data() {
+
+    return {
+
+      loading : false,
+
+
+      getInfo: {
+        "cpu": 3.1,
+        "memoryInfo": {
+          "memoryPercent": 51.91170541593871,
+          "usedMemory": 1.50888671875,
+          "allMemory": 2.906640625,
+          "freeMemory": 1.3977539062500002
+        },
+        "ssdInfo": {
+          "usedSSD": 10.0,
+          "allSSD": 88.0,
+          "freeSSD": 78.0,
+          "ssdpercent": 11.363636363636363
+        }
+      },
+      zxtoption123: {
         visualMap: [{
           show: false,
           type: 'continuous',
@@ -58,7 +78,30 @@ export default {
           data: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
         }
       },
-      ybpOption :{
+      zxtoption: {
+        title: {
+          text: '内存仪表盘'
+        },
+        tooltip: {},
+        toolbox: {
+          feature: {
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        series: [{
+          name: '内存使用率',
+          type: 'gauge',
+          detail: {
+            formatter: '{value}%'
+          },
+          data: [{
+            value: 0,
+          }]
+        }]
+      },
+
+      ybpOption: {
         title: {
           text: 'CPU仪表盘'
         },
@@ -85,43 +128,65 @@ export default {
     }
   },
   mounted() {
-    // 在这里初始化你的图表并设置数据获取
     this.initCharts();
-    this.updateZxtChart()
+
+    // 在这里初始化你的图表并设置数据获取
+    /*
+        this.ups();
+    */
+    /*
+        this.updateZxtChart()
+    */
+    /*this.dataCpuOption = 1;
+    this.zxtoption.series.data = "90";
+    this.ybpOption.series.data = data;
+    console.log( this.ybpOption.series.data);
+
+    console.log( this.ybpOption.series.data.value);*/
+
+    // console.log( this.ybpOption.series.data[1].value);
+    /*
+        this.ups();
+    */
+
   },
   unmounted() {
     // 在这里清理资源（例如清除定时器）
     this.clearIntervals();
+
   },
   methods: {
+
     initCharts() {
+      this.ups2();
       // 在这里初始化你的 echarts 图表并设置数据获取定时器
       this.initYbpChart();
       this.initZxtChart();
+
     },
+
     clearIntervals() {
       // 在这里清除你设置的定时器
 
     },
     // 在这里添加初始化和更新图表的函数
     initYbpChart() {
-
       var zxtDom = document.getElementById("zxt");
       var zxtChart = echarts.init(zxtDom);
       if (this.zxtoption && typeof this.zxtoption === "object") {
         zxtChart.setOption(this.zxtoption, true);
       }
 
-/*
-      setInterval(
-          this.updateZxtChart()
+      /*
+            setInterval(
+                this.updateZxtChart()
 
-          /!* var address = "/sys/info/memoryUsedPerc";
-           $.get(address, "", function(data) {
-             zxtoption.series.data = data;
-             zxtChart.setOption(zxtoption, true);
-           })*!/
-      );*/
+                /!* var address = "/sys/info/memoryUsedPerc";
+                 $.get(address, "", function(data) {
+                   zxtoption.series.data = data;
+                   zxtChart.setOption(zxtoption, true);
+                 })*!/
+            );*/
 
     },
     // 例如：updateYbpChart() { ... },
@@ -132,27 +197,56 @@ export default {
       if (this.ybpOption && typeof this.ybpOption === "object") {
         ybpChart.setOption(this.ybpOption, true);
       }
-     /* setInterval(
-          this.updateZxtChart()
-          /!* var address = "/sys/info/cpuUsedPerc";
-           $.get(address, "", function(data) {
-             ybpOption.series[0].data[0].value = data;
-             ybpChart.setOption(ybpOption, true);
-           })*!/
-      );*/
+      /* setInterval(
+           this.updateZxtChart()
+           /!* var address = "/sys/info/cpuUsedPerc";
+            $.get(address, "", function(data) {
+              ybpOption.series[0].data[0].value = data;
+              ybpChart.setOption(ybpOption, true);
+            })*!/
+       );*/
+    },
+    /*
+          updateZ(this.$route.params.id).then(response => {
+            console.log( this.ybpOption.series.data.value)
+            this.getInfo=response;
+            this.ybpOption.series[0].data[0].value = response.data.cpu;
+            this.zxtoption.series[0].data[0].value= response.memoryInfo.memoryPercent;
+            console.log( this.ybpOption.series.data)
+
+            this.loading2 = true;
+          });
+    */
+    ups2() {
+
+
+      this.ybpOption.series[0].data[0].value = this.getInfo.cpu;
+      console.log(this.ybpOption.series[0].data[0].value);
+      this.zxtoption.series[0].data[0].value = this.getInfo.memoryInfo.memoryPercent.toFixed();
+      console.log(this.zxtoption.series[0].data[0].value)
+
+
+    },
+    ups() {
+      updateZ(this.$route.params.id).then(response => {
+        console.log(response)
+        console.log(this.ybpOption.series.data.value)
+        this.getInfo = response.data;
+        this.getInfo.data.cpu = 20
+        this.ybpOption.series[0].data[0].value = this.getInfo.cpu;
+        console.log(this.ybpOption.series[0].data[0].value);
+        this.zxtoption.series.data = this.getInfo.Memory;
+        console.log(this.ybpOption.series.data)
+
+        this.loading = true;
+      });
     },
     updateZxtChart() {
       setTimeout(() => {
-        updateZ(this.$route.params.id).then(response => {
-          this.getInfo=response;
-          this.zxtoption.series.data = response.Memory;
-          this.ybpOption.series.data = response.cpu;
-
-          this.loading = false;
-        });
+        this.ups();
 
         // 方法区
-      }, 1000);
+      }, 100000000);
 
     },
   },
@@ -237,22 +331,24 @@ export default {
 <template>
   <div class="echarts-box">
 
-    <div id="ybp" style="height: 250px; width: 250PX; float: right;"></div>
-    <div id="zxt" style="height: 250px; width: 250PX;float: right;"></div>
+  <div id="ybp" style="height: 250px; width: 250PX; float: right;"></div>
+  <div id="zxt" style="height: 250px; width: 250PX;float: right;"></div>
+
+
 
     <table align="center" width="100%" class="table xunw_table_form" border="0">
       <tbody>
 
       <tr>
-        <th  class="zxstyle">硬盘</th>
-        <th  class="zxstyle">系统</th>
-        <th  class="zxstyle">版本</th>
+        <th class="zxstyle">硬盘全部</th>
+        <th class="zxstyle">硬盘已用</th>
+        <th class="zxstyle">硬盘剩余</th>
 
       </tr>
       <tr>
-        <td>1</td>
-        <td>1</td>
-        <td>1</td>
+        <td>{{ getInfo.ssdInfo.allSSD }}</td>
+        <td>{{ getInfo.ssdInfo.usedSSD }}</td>
+        <td>{{ getInfo.ssdInfo.freeSSD }}</td>
       </tr>
       </tbody>
     </table>
