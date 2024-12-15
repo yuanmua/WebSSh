@@ -8,7 +8,7 @@
       <router-link v-else key="expand" class="sidebar-logo-link" to="/index">
       <img v-if="logo" :src="logo" class="sidebar-logo"  alt=""/>
         <div class="sidebar-title">
-          <h1 class="font_kunKun">鲲鲲ssh</h1>
+          <h1 class="font_kunKun">Webssh</h1>
         </div>
     </router-link>
 

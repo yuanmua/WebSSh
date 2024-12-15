@@ -160,6 +160,13 @@
         </dependency>
 
 
+<!--        hadoop,HDFS 客户端-->
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>3.1.4</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

@@ -106,15 +106,15 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         //1、判断验证码，手机号，是否正确
         String redisCode = stringRedisTemplate.opsForValue()
                 .get(RedisConstancts.LOGIN_CODE_KEY + phone);
-        if (StrUtil.isBlank(redisCode)){
-            return R.error("验证码已过期");
-        }
-        if (code==null||!code.equals(redisCode)){
-            //2、不对、返回错误
-            //直接判断验证码即可，因为在发短信的时候已经校验了手机号的正确形式，以key的形式存入，value为code
-            //若号码不对，则获取不到对应的code
-            return R.error("验证码错误");
-        }
+//        if (StrUtil.isBlank(redisCode)){
+//            return R.error("验证码已过期");
+//        }
+//        if (code==null||!code.equals(redisCode)){
+//            //2、不对、返回错误
+//            //直接判断验证码即可，因为在发短信的时候已经校验了手机号的正确形式，以key的形式存入，value为code
+//            //若号码不对，则获取不到对应的code
+//            return R.error("验证码错误");
+//        }
 
 
         //3、校验此用户是否已经被注册
