@@ -1,7 +1,7 @@
-create database ssh_project;
+create database if not exists ssh_project;
 
 use ssh_project;
-CREATE TABLE `common_cmd`
+CREATE TABLE if not exists `common_cmd`
 (
     `id`          bigint                       NOT NULL AUTO_INCREMENT COMMENT '主键',
     `name`        varchar(32) COLLATE utf8_bin NOT NULL COMMENT '组名',
@@ -21,7 +21,7 @@ CREATE TABLE `common_cmd`
   COLLATE = utf8_bin COMMENT ='常用命令';
 
 
-create table employee
+create table if not exists employee
 (
     id          bigint      not null comment '主键'
         primary key,
@@ -41,7 +41,7 @@ create table employee
 )
     comment '员工信息' collate = utf8_bin;
 
-create table ssh_info
+create table if not exists ssh_info
 (
     id             bigint(10) unsigned zerofill auto_increment comment 'id'
         primary key,
@@ -57,7 +57,7 @@ create table ssh_info
 
 
 
-create table ssh_server
+create table if not exists ssh_server
 (
     id            bigint auto_increment comment '主键',
     user_id       bigint                not null comment '用户id',

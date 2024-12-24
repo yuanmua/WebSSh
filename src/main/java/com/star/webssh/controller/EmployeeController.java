@@ -67,31 +67,42 @@ public class EmployeeController {
 
     /**
      * 账户密码登录
-     * @param e
      * @return
      */
     @PostMapping("/login")
-    public R login(@RequestBody Employee e) {
-
+    public R<Employee> login(@RequestBody Employee employee, HttpServletRequest request) {
         //将密码加密后进行检验,md5+盐
-        e.setPassword(DigestUtils.md5DigestAsHex((e.getPassword()+PasswordSALT.PASSWORD_SALT).getBytes()));
+        employee.setPassword(DigestUtils.md5DigestAsHex((employee.getPassword()+PasswordSALT.PASSWORD_SALT).getBytes()));
         LambdaQueryWrapper<Employee> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(e.getUsername()!=null,Employee::getUsername,e.getUsername());
+        lqw.eq(employee.getUsername()!=null,Employee::getUsername,employee.getUsername());
 
         //查询到当前登录用户在表中的信息
-        lqw.eq(e.getPassword()!=null,Employee::getPassword,e.getPassword());
-        Employee emp=empService.getOne(lqw);
-        if(emp!=null){
-            Map<String,Object > claim=new HashMap<>();
-            claim.put("id",emp.getId());
+        lqw.eq(employee.getPassword()!=null,Employee::getPassword,employee.getPassword());
+        Employee emp = empService.getOne(lqw);
+        
+        if(emp != null) {
+            Map<String, Object> claim = new HashMap<>();
+            claim.put("id", emp.getId());
             String jwt = JWTUtils.createJWT(claim);
-
-            return R.success(jwt);
-        }
-        else {
+            
+            // 设置cookie
+            Cookie cookie = new Cookie("Admin-Token", jwt);
+            cookie.setPath("/");
+            // 设置cookie的有效期，与JWT的过期时间一致（12小时）
+            cookie.setMaxAge(43200);
+            // 允许跨域访问
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+            
+            // 同时在响应中返回token
+            Map<String, Object> result = new HashMap<>();
+            result.put("token", jwt);
+            result.put("employee", emp);
+            
+            return R.success(emp);
+        } else {
             return R.error("密码错误或用户名错误");
         }
-
     }
 
     /**

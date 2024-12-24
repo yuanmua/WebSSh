@@ -43,6 +43,12 @@
       </template>
     </el-menu-item>
 
+    <el-menu-item index="/netdisk" class="netdisk">
+      <template #title>
+        <span>我的网盘</span>
+      </template>
+    </el-menu-item>
+
   </el-menu>
 </template>
 

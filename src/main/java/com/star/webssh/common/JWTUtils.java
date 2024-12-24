@@ -2,6 +2,7 @@ package com.star.webssh.common;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.JwtBuilder;
 
 import java.util.Date;
 import java.util.Map;
@@ -11,28 +12,31 @@ import java.util.Map;
  * @create 2023-05-23-22:11
  */
 public class JWTUtils {
-    private static String signKey="champion";
-    private static Long expir=360000000L;
+    private static final String signKey = "yuanmu";
+    private static final Long expire = 43200000L; // 12小时
 
     /**
-     * 生成JWT
+     * 生成JWT令牌
+     * @param claims JWT第二部分负载 payload 中存储的内容
+     * @return
      */
-    public static String createJWT(Map<String,Object> cliam){
-        String jwt = Jwts.builder()
-                .addClaims(cliam)
-                .signWith(SignatureAlgorithm.HS256,signKey)
-                .setExpiration(new Date(System.currentTimeMillis() + expir))
-                .compact();
-        return jwt;
-
+    public static String createJWT(Map<String, Object> claims) {
+        JwtBuilder jwtBuilder = Jwts.builder()
+                .setClaims(claims)
+                .signWith(SignatureAlgorithm.HS256, signKey)
+                .setExpiration(new Date(System.currentTimeMillis() + expire));
+        return jwtBuilder.compact();
     }
 
-    public static Claims parseJWT(String jwt){
-        Claims c = Jwts.parser()
+    /**
+     * 解析JWT令牌
+     * @param jwt JWT令牌
+     * @return JWT第二部分负载 payload 中存储的内容
+     */
+    public static Claims parseJWT(String jwt) {
+        return Jwts.parser()
                 .setSigningKey(signKey)
                 .parseClaimsJws(jwt)
                 .getBody();
-        return c;
     }
-
 }

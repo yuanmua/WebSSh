@@ -14,7 +14,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/ssh_project?user=root&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: '123456Ab_'
+    password: '123s123s'
   servlet:
     multipart:
       enabled: true
@@ -45,4 +45,4 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 file:
-  upload-path: src/main/resources/static/uploads
+  upload-path: src/main/resources/static

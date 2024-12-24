@@ -4,9 +4,11 @@ import {createRouter, createWebHashHistory} from "vue-router";
 import Layout from '@/layout/index.vue'
 import Register from "@/views/page/login/register.vue";
 import Main from "@/views/page/Main/index.vue";
-import instructions from "@/views/page/ instructions/instructions.vue";
-import team from "@/views/page/ instructions/team.vue";
+import instructions from "@/views/page/instructions/instructions.vue";
+import team from "@/views/page/instructions/team.vue";
 import Management from "@/views/page/Management/index.vue";
+import Netdisk from "@/views/page/Netdisk/index.vue";
+
 
 
 // 2. 定义一些路由
@@ -69,6 +71,11 @@ const routes = [
             {
                 path: '/Management',
                 component: Management,
+                hidden: true
+            },
+            {
+                path: '/netdisk',
+                component: Netdisk,
                 hidden: true
             },
             {
