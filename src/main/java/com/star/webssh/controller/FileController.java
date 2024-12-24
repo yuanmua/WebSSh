@@ -89,7 +89,7 @@ public class FileController {
         }
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/upload1")
     public Object uploadFile(@RequestParam("multipartFile") MultipartFile file) {
         if (file.isEmpty()) {
             return R.error("文件不能为空！");

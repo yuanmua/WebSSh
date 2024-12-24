@@ -13,18 +13,18 @@
   </div>
 
   <div>
-    <!--    <fileGuan></fileGuan>-->
+        <fileGuan></fileGuan>
   </div>
 </template>
 <script>
 import MenuSidebar from "./MenuSidebar.vue";
 import Terminal from "./Terminal.vue";
 import Echarts from "@/views/page/terminal/tool/Echarts.vue";
-// import FileGuan from "@/views/page/terminal/tool/fileGuan.vue";
+import FileGuan from "@/views/page/terminal/tool/fileGuan.vue";
 
 export default {
   name: "TerView",
-  components: {Echarts, Terminal, MenuSidebar},
+  components: {Echarts, Terminal, MenuSidebar,FileGuan},
   methods: {
     send(data) {
       this.$refs.Terminal.TerminalSend(data);

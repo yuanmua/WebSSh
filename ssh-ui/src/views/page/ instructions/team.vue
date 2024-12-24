@@ -7,53 +7,61 @@
       <div class="team-member" style="margin: auto;  text-align: center;">
         <div class="team-member-info">
           <h2>指导老师</h2>
-          <p style="font-size: large">张明星</p>
+          <p style="font-size: large">吴云</p>
         </div>
       </div>
 
       <div class="team-member">
 <!--        <img src="member1.jpg" alt="成员1">-->
         <div class="team-member-info">
-          <h2>成员1</h2>
-          <p>赵文胤</p>
-          <p>职位：前端开发 组长</p>
+          <h2>组长1</h2>
+          <p>邹子昂</p>
+          <p>职位：人工智能算法实现 资源预测功能 数据分析 整合文档、答辩、PPT工作</p>
         </div>
       </div>
       <div class="team-member">
         <div class="team-member-info">
           <h2>成员2</h2>
-          <p>王东胜</p>
-          <p>职位：后端开发 文档工作</p>
+          <p>赵文胤</p>
+          <p>职位：整体架构实现 前端开发与后端框架</p>
         </div>
       </div>
       <div class="team-member">
         <div class="team-member-info">
           <h2>成员3</h2>
-          <p>曾伟明</p>
-          <p>职位：后端开发 云技术工作</p>
+          <p>章伟平</p>
+          <p>职位：后端开发 服务器使用功能 系统监控功能 快捷指令功能</p>
         </div>
       </div>
       <div class="team-member">
         <div class="team-member-info">
           <h2>成员4</h2>
-          <p>肖童</p>
-          <p>职位：ppt 云技术工作</p>
+          <p>曾嘉怡</p>
+          <p>职位：后端开发 用户认证功能 分权管理功能</p>
         </div>
       </div>
       <div class="team-member">
         <div class="team-member-info">
-          <h2>成员5 6 7</h2>
-          <p>陈铭柯 刘安波 肖宇卓</p>
-          <p>职位：云技术工作</p>
+          <h2>成员5</h2>
+          <p>蔡诗语</p>
+          <p>职位：运维部署 运维与部署 测试与维护 数据分析</p>
         </div>
       </div>
       <div class="team-member">
-      <div class="team-member-info">
-        <h2>成员8 9</h2>
-        <p>肇冠博 胡思雨</p>
+        <div class="team-member-info">
+          <h2>成员6</h2>
+          <p>张爽</p>
+          <p>职位：PPT制作 思维导图与流程图制作</p>
+        </div>
       </div>
-    </div>
-      <!-- 可继续添加更多成员信息 -->
+      <div class="team-member">
+        <div class="team-member-info">
+          <h2>成员7</h2>
+          <p>刘文宇</p>
+          <p>职位：数据库连接、设计 文档撰写</p>
+        </div>
+      </div>
+
     </div>
   </div>
 

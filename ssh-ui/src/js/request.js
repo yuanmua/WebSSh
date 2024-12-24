@@ -8,7 +8,9 @@ export let isRelogin = { show: false };
   // 创建axios实例
   const service = axios.create({
     // axios中请求配置有baseURL选项，表示请求URL公共部分
+    // baseURL: 'http://47.108.227.138/api',
     baseURL: '/api',
+
     // 超时
     timeout: 1000000
   })

@@ -6,10 +6,10 @@
       </h2>
       <el-tabs type="border-card">
         <el-tab-pane label="常用快捷键">
-          <comks></comks>
+          <comks  @send1="send"></comks>
         </el-tab-pane>
         <el-tab-pane label="自定义快捷键">
-          <custom></custom>
+          <custom  @send2="send"></custom>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -32,6 +32,11 @@ export default {
     UpLoad,
     Timer,
     ref
+  },
+  methods:{
+    send(data) {
+      this.$emit('send', data);
+    },
   },
   data() {
     return {}

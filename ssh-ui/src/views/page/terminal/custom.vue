@@ -135,7 +135,7 @@ export default {
 
   methods: {
     send(command) {
-      this.$emit('send', command);
+      this.$emit('send2', command);
 
     },
     getListCommand() {

@@ -116,6 +116,7 @@ export default {
         if (this.captchaEnabled) {
           this.loginForm2.uuid = res.uuid;
         }
+        this.loginForm2.code=res.data;
       });
       setTimeout(() =>  this.loading_c = false, 10000)
 

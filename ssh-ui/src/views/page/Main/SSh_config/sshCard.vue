@@ -214,7 +214,7 @@ export default {
         delSSh(this.sshData.id).then(res => {
           this.$emit('getList', 0);
         });
-        this.getList(0);
+        // this.getList(0);
         ElMessage({
           type: 'success',
           message: '删除成功!'
