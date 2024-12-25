@@ -15,6 +15,7 @@ spring:
     url: jdbc:mysql://localhost/ssh_project?user=root&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: '123s123s'
+#    password: '123456Ab_'
   servlet:
     multipart:
       enabled: true
@@ -46,3 +47,4 @@ mybatis-plus:
 
 file:
   upload-path: src/main/resources/static
+#  upload-path: /home/uploads

@@ -202,7 +202,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.star.webssh.WebSSHApplication</mainClass>
-                    <skip>true</skip>
+<!--                    <skip>true</skip>-->
                 </configuration>
                 <executions>
                     <execution>

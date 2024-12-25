@@ -1,11 +1,14 @@
 package com.star.webssh.controller;
 
-import com.star.webssh.common.BaseContext;
+import com.star.webssh.common.JWTUtils;
 import com.star.webssh.common.R;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.*;
@@ -26,56 +29,61 @@ public class FileController {
     // 在类的开头添加文件名验证的正则表达式
     private static final String VALID_FILENAME_REGEX = "^[^\\\\/:*?\"<>|]+$";
 
-    // 添加文件名验证方法
+    private final HttpServletRequest httpServletRequest;
+
+    public FileController(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
     private boolean isValidFileName(String fileName) {
         return fileName != null && fileName.matches(VALID_FILENAME_REGEX);
     }
 
-    // 添加检查文件是否存在的方法
     private boolean isFileExists(String dirPath, String fileName) {
         Path path = Paths.get(dirPath, fileName);
         return Files.exists(path);
     }
 
-    // 添加一个通用的获取用户ID方法
     private Long getUserId() {
-        Long userId = BaseContext.getCurrentId();
-        if (userId == null) {
-            throw new RuntimeException("用户未登录或会话已过期");
+        Cookie[] cookies = httpServletRequest.getCookies();
+        if (cookies == null) {
+            throw new RuntimeException("NOT_LOGIN");
         }
-        return userId;
+
+        String jwt = Arrays.stream(cookies)
+                .filter(cookie -> "Admin-Token".equals(cookie.getName()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("NOT_LOGIN"));
+
+        Claims claims = JWTUtils.parseJWT(jwt);
+        return Long.valueOf(String.valueOf(claims.get("id")));
     }
 
-    // 添加计算文件夹大小的辅助方法
     private long getFolderSize(Path folder) {
         try {
             return Files.walk(folder)
-                .filter(p -> !Files.isDirectory(p))  // 只计算文件
-                .mapToLong(p -> {
-                    try {
-                        return Files.size(p);
-                    } catch (IOException e) {
-                        return 0L;
-                    }
-                })
-                .sum();
+                    .filter(p -> !Files.isDirectory(p))
+                    .mapToLong(p -> {
+                        try {
+                            return Files.size(p);
+                        } catch (IOException e) {
+                            return 0L;
+                        }
+                    })
+                    .sum();
         } catch (IOException e) {
             return 0L;
         }
     }
 
-    // 获取用户文件列表
     @GetMapping("/list")
     public R list(@RequestParam(required = false) String path) {
         try {
             Long userId = getUserId();
             String userRootPath = uploadPath + "/users/" + userId;
-            String currentPath = userRootPath;
-            if (path != null && !path.isEmpty()) {
-                currentPath = userRootPath + "/" + path;
-            }
+            String currentPath = (path == null || path.isEmpty()) ? userRootPath : userRootPath + "/" + path;
 
-            // 确保用户目录存在
             Files.createDirectories(Paths.get(currentPath));
 
             List<Map<String, Object>> files = new ArrayList<>();
@@ -85,7 +93,6 @@ public class FileController {
                     fileInfo.put("name", entry.getFileName().toString());
                     boolean isDir = Files.isDirectory(entry);
                     fileInfo.put("isDirectory", isDir);
-                    // 根据是否是文件夹来计算大小
                     fileInfo.put("size", isDir ? getFolderSize(entry) : Files.size(entry));
                     fileInfo.put("lastModified", Files.getLastModifiedTime(entry).toMillis());
                     files.add(fileInfo);
@@ -99,62 +106,48 @@ public class FileController {
         }
     }
 
-    // 上传文件
     @PostMapping("/upload")
-    public R upload(@RequestParam("file") MultipartFile file,
-                   @RequestParam(required = false) String path) {
+    public R upload(@RequestParam("file") MultipartFile file, @RequestParam(required = false) String path) {
         try {
             String fileName = file.getOriginalFilename();
-            
-            // 验证文件名
             if (!isValidFileName(fileName)) {
-                return R.error("文件名不能包含特殊字符: \\ / : * ? \" < > |");
+                return R.error("文件名不能包含特殊字符: \\\\ / : * ? \" < > | ");
             }
-            
+
             Long userId = getUserId();
             String userRootPath = uploadPath + "/users/" + userId;
-            String targetPath = userRootPath;
-            
-            if (path != null && !path.isEmpty()) {
-                targetPath = userRootPath + "/" + path;
-            }
-            
-            // 检查文件是否已存在
+            String targetPath = (path == null || path.isEmpty()) ? userRootPath : userRootPath + "/" + path;
+
             if (isFileExists(targetPath, fileName)) {
                 return R.error("文件已存在");
             }
 
-            // 确保目录存在
             Files.createDirectories(Paths.get(targetPath));
-
-            // 保存文件
-            Path filePath = Paths.get(targetPath, fileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), Paths.get(targetPath, fileName), StandardCopyOption.REPLACE_EXISTING);
 
             return R.success("文件上传成功");
+        } catch (RuntimeException e) {
+            return R.error("NOT_LOGIN");
         } catch (IOException e) {
             return R.error("文件上传失败：" + e.getMessage());
         }
     }
 
-    // 下载文件
     @GetMapping("/download")
-    public void download(@RequestParam String path,
-                        HttpServletResponse response) throws IOException {
+    public void download(@RequestParam String path, HttpServletResponse response) throws IOException {
         Long userId = getUserId();
         String filePath = uploadPath + "/users/" + userId + "/" + path;
-        Path path1 = Paths.get(filePath);
-        
-        if (!Files.exists(path1)) {
+        Path pathToDownload = Paths.get(filePath);
+
+        if (!Files.exists(pathToDownload)) {
             throw new FileNotFoundException("文件不存在");
         }
 
         response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename=" + 
-            path1.getFileName().toString());
-
-        Files.copy(path1, response.getOutputStream());
+        response.setHeader("Content-Disposition", "attachment;filename=" + pathToDownload.getFileName().toString());
+        Files.copy(pathToDownload, response.getOutputStream());
     }
+
 
     // 创建文件夹
     @PostMapping("/createFolder")
