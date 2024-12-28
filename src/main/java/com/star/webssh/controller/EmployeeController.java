@@ -10,6 +10,8 @@ import com.star.webssh.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +32,9 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/employee")
 public class EmployeeController {
+    @Autowired
+    private JdbcTemplate jdbcTemplate; // 用于查询Hive的JdbcTemplate
+
     @Resource
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
@@ -73,12 +80,36 @@ public class EmployeeController {
     public R<Employee> login(@RequestBody Employee employee, HttpServletRequest request) {
         //将密码加密后进行检验,md5+盐
         employee.setPassword(DigestUtils.md5DigestAsHex((employee.getPassword()+PasswordSALT.PASSWORD_SALT).getBytes()));
-        LambdaQueryWrapper<Employee> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(employee.getUsername()!=null,Employee::getUsername,employee.getUsername());
+        // 将密码加密后进行检验, md5 + 盐
+        employee.setPassword(DigestUtils.md5DigestAsHex((employee.getPassword() + PasswordSALT.PASSWORD_SALT).getBytes()));
 
-        //查询到当前登录用户在表中的信息
-        lqw.eq(employee.getPassword()!=null,Employee::getPassword,employee.getPassword());
-        Employee emp = empService.getOne(lqw);
+        // 构建SQL查询语句
+        String sql = "SELECT * FROM employee WHERE username = ? AND password = ?";
+
+        // 执行查询
+        Employee emp = jdbcTemplate.queryForObject(
+                sql,
+                new Object[] { employee.getUsername(), employee.getPassword() },
+                new RowMapper<Employee>() {
+                    @Override
+                    public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Employee emp = new Employee();
+                        emp.setId(rs.getLong("id"));
+                        emp.setName(rs.getString("name"));
+                        emp.setUsername(rs.getString("username"));
+                        emp.setPassword(rs.getString("password"));
+                        emp.setPhone(rs.getString("phone"));
+                        emp.setSex(rs.getString("sex"));
+                        emp.setIdNumber(rs.getString("id_number"));
+                        emp.setStatus(rs.getInt("status"));
+                        emp.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+                        emp.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
+                        emp.setCreateUser(rs.getLong("create_user"));
+                        emp.setUpdateUser(rs.getLong("update_user"));
+                        return emp;
+                    }
+                }
+        );
         
         if(emp != null) {
             Map<String, Object> claim = new HashMap<>();
