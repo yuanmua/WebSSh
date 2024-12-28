@@ -49,5 +49,5 @@ file:
 #  upload-path: src/main/resources/static
   upload-path: /home/uploads
 hdfs:
-  uri: hdfs://172.17.0.3:9000
+  uri: hdfs://192.168.88.161:8020
   user: root

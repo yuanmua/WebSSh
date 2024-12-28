@@ -371,14 +371,14 @@ import {
   deptTreeSelect
 } from "@/api/user";
 import {getToken} from "@/js/auth";
-import Treeselect from 'vue3-treeselect'
-import 'vue3-treeselect/dist/vue3-treeselect.css'
+// import Treeselect from 'vue3-treeselect'
+// import 'vue3-treeselect/dist/vue3-treeselect.css'
 import {parseTime} from "element-plus/es/components/time-select/src/utils";
 
 export default {
   name: "User",
   dicts: ['sys_normal_disable', 'sys_user_sex'],
-  components: {Treeselect},
+  // components: {Treeselect},
   data() {
     return {
       // 遮罩层
