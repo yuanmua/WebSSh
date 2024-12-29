@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.star.webssh.mapper.EmployeeMapper">
+
+    <!-- 插入员工 -->
+    <insert id="insertEmployee" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO employee
+        (id , name, username, password, phone, sex, id_number, status, create_time, update_time, create_user, update_user)
+        VALUES
+            (#{id}, #{name}, #{username}, #{password}, #{phone}, #{sex}, #{idNumber}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+
+
+    <!-- 查询所有员工 -->
+    <select id="selectAllEmployee" resultType="com.star.webssh.pojo.Employee">
+        SELECT * FROM employee
+    </select>
+
+    <select id="selectLastInsertId" resultType="java.lang.Long">
+        SELECT LAST_INSERT_ID()
+    </select>
+
+
+<!--    新增根据登录信息查询员工 SQL:-->
+    <select id="selectEmployeeByLogin" resultType="com.star.webssh.pojo.Employee">
+        SELECT
+            id, name, username, password, phone, sex, id_number AS idNumber,
+            status, CAST(create_time AS STRING) AS createTime, CAST(update_time AS STRING) AS updateTime,
+            create_user AS createUser, update_user AS updateUser
+        FROM employee
+        WHERE username = #{username} AND password = #{password}
+    </select>
+
+
+
+    <!-- 根据ID查询单个员工 -->
+    <select id="selectEmployeeById" resultType="com.star.webssh.pojo.Employee">
+        SELECT
+            id,
+            name,
+            username,
+            password,
+            phone,
+            sex,
+            id_number AS idNumber,
+            status,
+            CAST(create_time AS STRING) AS createTime,
+            CAST(update_time AS STRING) AS updateTime,
+            create_user AS createUser,
+            update_user AS updateUser
+        FROM employee
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据ID查询单个员工 -->
+    <select id="selectEmployeeByPhone" resultType="com.star.webssh.pojo.Employee">
+        SELECT
+            id,
+            name,
+            username,
+            password,
+            phone,
+            sex,
+            id_number AS idNumber,
+            status,
+            CAST(create_time AS STRING) AS createTime,
+            CAST(update_time AS STRING) AS updateTime,
+            create_user AS createUser,
+            update_user AS updateUser
+        FROM employee
+        WHERE phone = #{phone}
+    </select>
+
+    <!-- 根据用户名查询员工 -->
+    <select id="selectEmployeeByUsername" resultType="com.star.webssh.pojo.Employee">
+        SELECT * FROM employee WHERE username = #{username}
+    </select>
+
+    <!-- 更新员工信息 -->
+    <update id="updateEmployee">
+        UPDATE employee
+        SET name = #{name}, username = #{username}, password = #{password},
+        phone = #{phone}, sex = #{sex}, id_number = #{idNumber},
+        status = #{status}, create_time = #{createTime}, update_time = #{updateTime},
+        create_user = #{createUser}, update_user = #{updateUser}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除员工 -->
+    <delete id="deleteEmployee">
+        DELETE FROM employee WHERE id = #{id}
+    </delete>
+
+</mapper>

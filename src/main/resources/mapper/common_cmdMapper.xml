@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.star.webssh.mapper.commonCmdMapper">
+
+    <!-- 插入一条数据 -->
+    <insert id="insertCommonCmd" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO common_cmd (name, user_id, server_id, create_time, update_time, cmds, remarks)
+        VALUES (#{name}, #{userId}, #{serverId}, #{createTime}, #{updateTime}, #{cmds}, #{remarks})
+    </insert>
+
+    <!-- 查询所有常用命令 -->
+    <select id="selectAllCommonCmd" resultType="com.star.webssh.pojo.commonCmd">
+        SELECT * FROM common_cmd
+    </select>
+
+    <!-- 根据ID查询单条记录 -->
+    <select id="selectCommonCmdById" resultType="com.star.webssh.pojo.commonCmd">
+        SELECT * FROM common_cmd WHERE id = #{id}
+    </select>
+
+    <!-- 更新常用命令 -->
+    <update id="updateCommonCmd">
+        UPDATE common_cmd
+        SET name = #{name}, user_id = #{userId}, server_id = #{serverId},
+        create_time = #{createTime}, update_time = #{updateTime}, cmds = #{cmds}, remarks = #{remarks}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除常用命令 -->
+    <delete id="deleteCommonCmd">
+        DELETE FROM common_cmd WHERE id = #{id}
+    </delete>
+
+</mapper>

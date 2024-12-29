@@ -14,9 +14,17 @@ spring:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: org.apache.hive.jdbc.HiveDriver
     #    url: jdbc:mysql://localhost/ssh_project?user=root&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-    url: jdbc:hive2://localhost:10000/ssh_project
-    username: root
-    password: '123s123s'
+    url: jdbc:hive2://localhost:10000/ssh_project;user=root;password=your_password
+#    type: org.apache.commons.dbcp2.BasicDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    hikari:
+      connection-test-query: SELECT 1
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: true
+#    username: root
+#    password: '123s123s'
 #    password: '123456Ab_'
   servlet:
     multipart:

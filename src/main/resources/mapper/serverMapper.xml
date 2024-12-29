@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.star.webssh.mapper.ServerMapper">
+    <!-- 插入 SSH 服务器 -->
+    <insert id="insertSshServer" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ssh_server
+        (user_id, ssh_user_name, ssh_host, ssh_port, ssh_password, ssh_name,
+         remark, ssh_class, status, create_time, update_time)
+        VALUES
+            (#{userId}, #{sshUserName}, #{sshHost}, #{sshPort}, #{sshPassword}, #{sshName},
+             #{remark}, #{sshClass}, #{status}, #{createTime}, #{updateTime})
+    </insert>
+
+    <!-- 根据 status 查询 SSH 服务器 -->
+    <select id="selectSshServersByStatus" resultType="com.star.webssh.pojo.SshServer">
+        SELECT id, user_id AS userId, ssh_user_name AS sshUserName, ssh_host AS sshHost,
+               ssh_port AS sshPort, ssh_password AS sshPassword, ssh_name AS sshName,
+               remark, ssh_class AS sshClass, status,
+               CAST(create_time AS STRING) AS createTime, CAST(update_time AS STRING) AS updateTime
+        FROM ssh_server
+        WHERE status = #{status}
+    </select>
+
+    <!-- 根据 ID 查询单个 SSH 服务器 -->
+    <select id="selectSshServerById" resultType="com.star.webssh.pojo.SshServer">
+        SELECT id, user_id AS userId, ssh_user_name AS sshUserName, ssh_host AS sshHost,
+               ssh_port AS sshPort, ssh_password AS sshPassword, ssh_name AS sshName,
+               remark, ssh_class AS sshClass, status,
+               CAST(create_time AS STRING) AS createTime, CAST(update_time AS STRING) AS updateTime
+        FROM ssh_server
+        WHERE id = #{id}
+    </select>
+</mapper>

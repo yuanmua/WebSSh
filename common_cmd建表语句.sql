@@ -3,7 +3,7 @@ create database if not exists ssh_project;
 use ssh_project;
 CREATE TABLE if not exists `common_cmd`
 (
-    `id`          bigint                       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `id`          varchar(32)                  NOT NULL AUTO_INCREMENT COMMENT '主键',
     `name`        varchar(32) COLLATE utf8_bin NOT NULL COMMENT '组名',
     `user_id`     bigint                       NOT NULL COMMENT '用户id',
     `server_id`   bigint                       NOT NULL COMMENT '服务器id',

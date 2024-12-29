@@ -10,4 +10,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface EmployeeMapper extends BaseMapper<Employee> {
+    Employee selectEmployeeById(Long id);
+    Employee selectEmployeeByPhone(String Phone);
+    void insertEmployee(Employee employee);
+    Employee selectEmployeeByLogin(String username,String password);
 }
+

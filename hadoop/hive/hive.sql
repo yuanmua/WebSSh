@@ -6,7 +6,7 @@ USE ssh_project;
 
 -- 创建 common_cmd 表
 CREATE TABLE IF NOT EXISTS common_cmd (
-                                          id BIGINT,
+                                          id STRING,
                                           name STRING,
                                           user_id BIGINT,
                                           server_id BIGINT,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS common_cmd (
 
 -- 创建 employee 表
 CREATE TABLE IF NOT EXISTS employee (
-                                        id BIGINT,
+                                        id STRING,
                                         name STRING,
                                         username STRING,
                                         password STRING,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS employee (
 
 -- 创建 ssh_info 表
 CREATE TABLE IF NOT EXISTS ssh_info (
-                                        id BIGINT,
+                                        id STRING,
                                         user_id STRING,
                                         `user` STRING,
                                         operator STRING,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS ssh_info (
 
 -- 创建 ssh_server 表
 CREATE TABLE IF NOT EXISTS ssh_server (
-                                          id BIGINT,
+                                          id STRING,
                                           user_id BIGINT,
                                           ssh_user_name STRING,
                                           ssh_host STRING,
@@ -81,3 +81,18 @@ CREATE TABLE IF NOT EXISTS ssh_server (
 INSERT INTO TABLE ssh_server VALUES
                                  (00000000000000000001, 1, '张三', '192.168.0.1', 22, '123456', 'admin', '五', 'linux', '2023-07-27 00:04:29', '2023-07-27 00:04:29', 1),
                                  (01684237748880265217, 1, '比尔盖茨', '192.168.0.1', 22, '123456', '4444', '五', 'linux', '2023-07-27 00:22:07', '2023-07-27 00:22:03', 0);
+
+
+
+create external table covid2
+(
+    date_value date,
+    county     string,
+    state      string,
+    fips       string,
+    cases      int,
+    deaths     int
+);
+
+
+select * from covid2;

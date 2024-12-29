@@ -5,13 +5,12 @@ import com.star.webssh.common.JWTUtils;
 import com.star.webssh.common.R;
 import com.star.webssh.constant.PasswordSALT;
 import com.star.webssh.dto.LoginDTO;
+import com.star.webssh.mapper.EmployeeMapper;
 import com.star.webssh.pojo.Employee;
 import com.star.webssh.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +18,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,8 +29,9 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/employee")
 public class EmployeeController {
-    @Autowired
-    private JdbcTemplate jdbcTemplate; // 用于查询Hive的JdbcTemplate
+
+    @Resource
+    EmployeeMapper employeeMapper;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -72,6 +70,8 @@ public class EmployeeController {
     }
 
 
+
+
     /**
      * 账户密码登录
      * @return
@@ -80,36 +80,17 @@ public class EmployeeController {
     public R<Employee> login(@RequestBody Employee employee, HttpServletRequest request) {
         //将密码加密后进行检验,md5+盐
         employee.setPassword(DigestUtils.md5DigestAsHex((employee.getPassword()+PasswordSALT.PASSWORD_SALT).getBytes()));
-        // 将密码加密后进行检验, md5 + 盐
-        employee.setPassword(DigestUtils.md5DigestAsHex((employee.getPassword() + PasswordSALT.PASSWORD_SALT).getBytes()));
+//        LambdaQueryWrapper<Employee> lqw = new LambdaQueryWrapper<>();
+//        lqw.eq(employee.getUsername()!=null,Employee::getUsername,employee.getUsername());
+//
+//        //查询到当前登录用户在表中的信息
+//        lqw.eq(employee.getPassword()!=null,Employee::getPassword,employee.getPassword());
+        String username = employee.getUsername();
+        String password = employee.getPassword();
 
-        // 构建SQL查询语句
-        String sql = "SELECT * FROM employee WHERE username = ? AND password = ?";
+        Employee emp = employeeMapper.selectEmployeeByLogin(username, password);
 
-        // 执行查询
-        Employee emp = jdbcTemplate.queryForObject(
-                sql,
-                new Object[] { employee.getUsername(), employee.getPassword() },
-                new RowMapper<Employee>() {
-                    @Override
-                    public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        Employee emp = new Employee();
-                        emp.setId(rs.getLong("id"));
-                        emp.setName(rs.getString("name"));
-                        emp.setUsername(rs.getString("username"));
-                        emp.setPassword(rs.getString("password"));
-                        emp.setPhone(rs.getString("phone"));
-                        emp.setSex(rs.getString("sex"));
-                        emp.setIdNumber(rs.getString("id_number"));
-                        emp.setStatus(rs.getInt("status"));
-                        emp.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-                        emp.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
-                        emp.setCreateUser(rs.getLong("create_user"));
-                        emp.setUpdateUser(rs.getLong("update_user"));
-                        return emp;
-                    }
-                }
-        );
+//        Employee emp = empService.getOne(lqw);
         
         if(emp != null) {
             Map<String, Object> claim = new HashMap<>();
@@ -144,6 +125,17 @@ public class EmployeeController {
         //  发送短信验证码并保存验证码
         return empService.sendCode(phone);
     }
+
+    /**
+     * 测试
+     */
+    @PostMapping("/csid")
+    public R<Employee> csid(@RequestBody Long id) {
+
+        Employee employee =  employeeMapper.selectEmployeeById(id);
+        return R.success(employee);
+    }
+
 
     /**
      * 短信登陆

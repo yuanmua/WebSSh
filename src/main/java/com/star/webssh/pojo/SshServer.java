@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class SshServer {
 
-    private Long id;
+    private String  id;
     @JsonAlias("ID")
     private Long userId;
     private String sshUserName;
@@ -27,6 +27,6 @@ public class SshServer {
     private String remark;
     private String sshClass;
     private Integer status;
-    private LocalDateTime updateTime;
-    private LocalDateTime create_time;
+    private String updateTime;
+    private String create_time;
 }

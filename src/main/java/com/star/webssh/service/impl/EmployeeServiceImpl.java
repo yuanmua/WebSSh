@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.sql.SQLFeatureNotSupportedException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
+    @Resource
+    EmployeeMapper employeeMapper;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -64,9 +67,9 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
             return R.error("验证码错误");
         }
         // 3、查询是否含有该用户
-        QueryWrapper<Employee> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("phone",phone);
-        Employee employee = this.getOne(queryWrapper);
+//        QueryWrapper<Employee> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("phone",phone);
+        Employee employee =  employeeMapper.selectEmployeeByPhone(phone);
 
         if (employee==null){
             // 4、如果没有返回提示信息
@@ -128,11 +131,24 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         employee.setPassword(DigestUtils.md5DigestAsHex((employee.getPassword()+ PasswordSALT.PASSWORD_SALT).getBytes()));
 
         //设置用户创建时间和更新时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+        employee.setCreateTime(LocalDateTime.now().toString());
+        employee.setUpdateTime(LocalDateTime.now().toString());
+        // 生成唯一ID
+        String uniqueId = UUID.randomUUID().toString();
+        employee.setId(uniqueId);
+        try {
+            employeeMapper.insertEmployee(employee);
+
+        }
+        catch (Exception e)
+        {
+            return R.success("注册成功");
+
+        }
+
 
         //这些字段均无用，应当在数据库中删去
-        this.save(employee);
+//        this.save(employee);
 
         return R.success("注册成功");
     }

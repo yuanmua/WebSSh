@@ -12,7 +12,7 @@ public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private String id;
 
     private String username;
 
@@ -29,10 +29,10 @@ public class Employee implements Serializable {
     private Integer status;
 
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private String createTime;
 
     @TableField(fill=FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+    private String updateTime;
 
     @TableField(fill = FieldFill.INSERT)
     private Long createUser;
